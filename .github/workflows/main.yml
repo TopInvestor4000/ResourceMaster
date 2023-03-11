@@ -2,7 +2,7 @@ name: publish
 
 on:
   push:
-    branches: [ production ]
+    branches: [ master ]
 
 env:
   AZURE_WEBAPP_NAME: DotNetWeb
