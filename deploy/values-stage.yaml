@@ -1,0 +1,6 @@
+namespace: resourcemaster-stage
+
+app:
+  name: dummy
+  route: resourcemaster-stage.pm4.init-lab.ch
+  port: 8000

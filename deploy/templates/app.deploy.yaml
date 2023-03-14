@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.app.name }}-depl
+  namespace: resourcemaster-stage
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.app.name }}-depl
+  replicas: 1
+  revisionHistoryLimit: 2
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app.name }}-depl
+    spec:
+      containers:
+      - name: {{ .Values.app.name }}-depl
+        image: busykoala/dummy_server:latest
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: DUMMY_SECRET
+          value: Blabla
+        ports:
+          - name: http
+            containerPort: {{ .Values.app.port }}
+        resources:
+          limits:
+            memory: 256Mi
+            cpu: 0.2
+          requests:
+            memory: 128Mi
+            cpu: 0.1
