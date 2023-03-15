@@ -1,9 +1,9 @@
 namespace: resourcemaster-prod
 
 app:
-  name: dummy
+  name: resourcemaster
   route: resourcemaster-prod.pm4.init-lab.ch
-  port: 8000
+  port: 80
 
 db:
   name: pg

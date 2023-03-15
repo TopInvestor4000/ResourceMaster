@@ -16,11 +16,8 @@ spec:
     spec:
       containers:
       - name: {{ .Values.app.name }}-depl
-        image: busykoala/dummy_server:latest
+        image: ghcr.io/topinvestor4000/resourcemaster:latest
         imagePullPolicy: IfNotPresent
-        env:
-        - name: DUMMY_SECRET
-          value: Blabla
         ports:
           - name: http
             containerPort: {{ .Values.app.port }}

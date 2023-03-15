@@ -1,0 +1,25 @@
+# .github/workflows/deploy.yml
+name: Deploy Prod
+on: ['deployment']
+
+jobs:
+  deployment:
+    runs-on: 'ubuntu-latest'
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: 'Deploy'
+      uses: 'deliverybot/helm@v1'
+      with:
+        release: 'resourcemaster'
+        namespace: 'resourcemaster-prod'
+        chart: 'deploy'
+        token: '${{ github.token }}'
+        values: |
+          db.password: foobar
+        value-files: >-
+        [
+          "values-prod.yaml"
+        ]
+      env:
+        KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
