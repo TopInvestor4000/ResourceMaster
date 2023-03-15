@@ -4,3 +4,7 @@ app:
   name: dummy
   route: resourcemaster-prod.pm4.init-lab.ch
   port: 8000
+
+db:
+  name: pg
+  # password from env

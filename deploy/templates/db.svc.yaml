@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.db.name }}-svc
+  namespace: {{ .Values.namespace }}
+  labels:
+    name: {{ .Values.db.name }}-svc
+spec:
+  ports:
+  - port: 5432
+    name: http
+  selector:
+    app: {{ .Values.db.name }}-depl
+  type: ClusterIP

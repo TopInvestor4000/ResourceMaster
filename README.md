@@ -25,3 +25,9 @@ according values files for each.
 Helm is only used as a templating engine in this case.
 Until GitOps is put in place deploy manually with either helm or render the
 templates and then deploy with kubectl.
+
+```bash
+# for example render the stage tempates with db.password BLA
+# the namespace should be set everywhere, but still be careful what was set
+helm template -f values-stage.yaml --set db.password=BLA . | k apply -f -
+```

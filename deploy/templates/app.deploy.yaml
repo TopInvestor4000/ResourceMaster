@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Values.app.name }}-depl
-  namespace: resourcemaster-stage
+  namespace: {{ .Values.namespace }}
 spec:
   selector:
     matchLabels:
