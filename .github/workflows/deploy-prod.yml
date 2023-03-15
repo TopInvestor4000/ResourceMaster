@@ -17,9 +17,7 @@ jobs:
         token: '${{ github.token }}'
         values: |
           db.password: foobar
-        value-files: >-
-        [
-          "values-prod.yaml"
-        ]
+        value-files:
+        - 'values-prod.yaml'
       env:
         KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
