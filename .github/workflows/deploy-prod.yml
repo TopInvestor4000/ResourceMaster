@@ -36,5 +36,5 @@ jobs:
     - name: 'Put KUBECONFIG'
       run: |
         cd deploy
-        helm template -f values-prod.yaml --set db.password=BLABLA . | k apply -f -
+        helm template -f values-prod.yaml --set db.password=BLABLA . | kubectl apply -f -
       shell: bash
