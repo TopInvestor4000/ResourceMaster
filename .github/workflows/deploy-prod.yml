@@ -29,6 +29,7 @@ jobs:
 
     - name: 'Put KUBECONFIG'
       run: |
+        mkdir -p ~/.kube/
         echo '${{ secrets.KUBE_CONFIG }}' > ~/.kube/config
       shell: bash
 
