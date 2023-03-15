@@ -9,9 +9,9 @@ on:
       - master
   workflow_dispatch:
 
-    jobs:
-      push-store-image:
-        runs-on: ubuntu-latest
+jobs:
+  push-store-image:
+    runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: '.'

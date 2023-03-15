@@ -1,4 +1,5 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+LABEL org.opencontainers.image.source="https://github.com/topinvestor4000/resourcemaster"
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
