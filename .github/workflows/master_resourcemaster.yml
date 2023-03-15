@@ -28,5 +28,5 @@ jobs:
 
       - name: 'Build Inventory Image'
         run: |
-          docker build . --tag ghcr.io/<your-GitHub-username>/store:latest
-          docker push ghcr.io/<your-GitHub-username>/store:latestr
+          docker build . --tag ghcr.io/TopInvestor4000/store:latest
+          docker push ghcr.io/TopInvestor4000/store:latestr
