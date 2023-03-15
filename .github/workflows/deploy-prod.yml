@@ -26,3 +26,14 @@ jobs:
         echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
         sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
       shell: bash
+
+    - name: 'Put KUBECONFIG'
+      run: |
+        cat '${{ secrets.KUBE_CONFIG }}' > ~/.kube/config
+      shell: bash
+
+    - name: 'Put KUBECONFIG'
+      run: |
+        cd deploy
+        helm template -f values-prod.yaml --set db.password=BLABLA . | k apply -f -
+      shell: bash
