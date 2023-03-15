@@ -1,6 +1,10 @@
 # .github/workflows/deploy.yml
 name: Deploy Stage
-on: ['deployment']
+on:
+  push:
+    branches:
+      - stage
+  workflow_dispatch:
 
 jobs:
   deployment:
