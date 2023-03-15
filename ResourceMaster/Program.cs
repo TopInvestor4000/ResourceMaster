@@ -1,6 +1,3 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using ResourceMaster.Data;
 using ResourceMaster.Models;
 
 var builder = WebApplication.CreateBuilder(args);
