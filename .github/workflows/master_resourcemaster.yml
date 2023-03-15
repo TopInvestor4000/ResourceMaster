@@ -28,5 +28,5 @@ jobs:
 
       - name: 'Build Inventory Image'
         run: |
-          docker build . --tag ghcr.io/TopInvestor4000/resourcemaster:latest
-          docker push ghcr.io/TopInvestor4000/resourcemaster:latest
+          docker build . --tag ghcr.io/topinvestor4000/resourcemaster:latest
+          docker push ghcr.io/topinvestor4000/resourcemaster:latest
