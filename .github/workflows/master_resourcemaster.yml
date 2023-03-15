@@ -9,12 +9,12 @@ on:
       - master
   workflow_dispatch:
 
-jobs:
-  push-store-image:
-    runs-on: ubuntu-latest
+    jobs:
+      push-store-image:
+        runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: './ResourceMaster'
+        working-directory: '.'
     steps:
       - name: 'Checkout GitHub Action'
         uses: actions/checkout@main
