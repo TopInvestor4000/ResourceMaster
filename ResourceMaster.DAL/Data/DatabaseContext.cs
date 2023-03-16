@@ -7,6 +7,7 @@ public class DatabaseContext : DbContext
 {
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+
         var user = Environment.GetEnvironmentVariable("POSTGRES_USER");
         var database = Environment.GetEnvironmentVariable("POSTGRES_DB");
         var password = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD");
