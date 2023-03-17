@@ -1,0 +1,53 @@
+@page "/dummy"
+@using ResourceMaster.Services.MyTableService;
+@using ResourceMaster.ViewModels;
+@inject MyTableService _myTableService;
+
+<h1>My Table</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Age</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in myTableList)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Age</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<form @onsubmit="HandleSubmit">
+   
+    <div>
+        <label for="age">Age:</label>
+        <input type="number" id="age" @bind="newItem.Age" />
+    </div>
+    <button type="submit">Add Item</button>
+</form>
+
+
+@code{
+    private List<MyTableViewModel> myTableList = new List<MyTableViewModel>();
+    private MyTableViewModel newItem = new MyTableViewModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        myTableList = (await _myTableService.GetAllAsync()).ToList();
+    }
+
+    private async Task HandleSubmit()
+    {
+        await _myTableService.AddAsync(newItem);
+        newItem = new MyTableViewModel();
+        myTableList = (await _myTableService.GetAllAsync()).ToList();
+    }
+
+}

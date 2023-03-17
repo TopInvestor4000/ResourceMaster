@@ -1,13 +1,26 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+
+
+using Microsoft.EntityFrameworkCore;
+using ResourceMaster.DAL.Repositories.MyTableRepository;
 using ResourceMaster.Data;
+using ResourceMaster.Services.MyTableService;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
+
+builder.Services.AddSingleton<DatabaseContext>();
+
+//Add Repos
+builder.Services.AddScoped<IMyTableRepository, MyTableRepository>();
+
+//Add services
+builder.Services.AddScoped<MyTableService, MyTableService>();
+
+
+
 
 var app = builder.Build();
 
