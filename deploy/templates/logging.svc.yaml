@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.logging.name }}-svc
+  namespace: {{ .Values.namespace }}
+  labels:
+    name: {{ .Values.logging.name }}-svc
+spec:
+  ports:
+  - port: 3100
+    name: loki
+  - port: 3000
+    name: grafana
+  selector:
+    app: {{ .Values.logging.name }}-depl
+  type: ClusterIP

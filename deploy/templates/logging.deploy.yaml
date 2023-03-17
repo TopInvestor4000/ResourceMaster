@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.logging.name }}-depl
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.logging.name }}-depl
+  replicas: 1
+  revisionHistoryLimit: 2
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.logging.name }}-depl
+    spec:
+      containers:
+      - name: loki
+        image: grafana/loki:main
+        args:
+        - "-config.file=/etc/loki/local-config.yaml"
+        imagePullPolicy: IfNotPresent
+        ports:
+          - name: http
+            containerPort: 3100
+        resources:
+          limits:
+            memory: 256Mi
+            cpu: 0.2
+          requests:
+            memory: 128Mi
+            cpu: 0.1
+      - name: grafana
+        image: grafana/grafana:main
+        imagePullPolicy: IfNotPresent
+        ports:
+          - name: http
+            containerPort: 3000
+        resources:
+          limits:
+            memory: 256Mi
+            cpu: 0.2
+          requests:
+            memory: 128Mi
+            cpu: 0.1

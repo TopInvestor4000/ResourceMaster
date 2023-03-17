@@ -31,5 +31,5 @@ jobs:
 
       - name: 'Build Inventory Image'
         run: |
-          docker build . --tag ghcr.io/topinvestor4000/resourcemaster:latest
-          docker push ghcr.io/topinvestor4000/resourcemaster:latest
+          docker build . --tag ghcr.io/topinvestor4000/resourcemaster:${GITHUB_REF##*/}
+          docker push ghcr.io/topinvestor4000/resourcemaster:${GITHUB_REF##*/}

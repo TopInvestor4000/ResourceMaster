@@ -4,7 +4,11 @@ app:
   name: resourcemaster
   route: resourcemaster-stage.pm4.init-lab.ch
   port: 80
+  tag: stage
 
 db:
   name: pg
   # password from env
+
+logging:
+  name: logging

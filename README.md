@@ -31,3 +31,29 @@ templates and then deploy with kubectl.
 # the namespace should be set everywhere, but still be careful what was set
 helm template -f values-stage.yaml --set db.password=BLA . | k apply -f -
 ```
+
+### Logging
+
+There is loki and grafana for logging in our cluster. Grafana is not exposed
+to the internet but can be portforwarded from the cluster.
+
+```bash
+kubectl port-forward logging-depl-xxxx 3000:3000 -n resourcemaster-stage
+```
+
+**Setup Datasource**
+
+In `settings`, `datasources` choose loki and configure `http://logging-svc:3100`.
+
+**Basic Querying**
+
+Trigger an example query with e.g.
+
+```bash
+curl -X POST -H "Content-Type: application/json" http://logging-svc:3100/loki/api/v1/push --data-binary '{"streams": [{ "stream": { "foo": "bar2" }, "values": [ [ "1679011221215820152", "fizzbuzz" ] ] }]}'
+```
+
+In this example the huge number is a timestamp (`date +%s%N`).
+
+In the `explore` panel running a code query with `{foo="bar2"}` should now return
+this stream.
