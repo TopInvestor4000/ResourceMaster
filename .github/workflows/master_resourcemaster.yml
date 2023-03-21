@@ -3,11 +3,8 @@
 
 name: Build and test
 
-on:
+on: 
   push:
-    branches:
-      - master
-      - stage
   workflow_dispatch:
 
 jobs:
