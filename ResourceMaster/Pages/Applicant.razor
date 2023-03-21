@@ -1,0 +1,47 @@
+@page "/applicant"
+@using ResourceMaster.ViewModels;
+
+<h1>Create new applicant</h1>
+
+
+<form @onsubmit="HandleSubmit">
+    <div>
+        <label>
+            First name:
+            <InputText title="First name" id="firstname" @bind-Value="applicant.firstName"/>
+        </label>
+        <label>
+            surname:
+            <InputText title="Surname" id="surname" @bind-Value="applicant.surname"/>
+        </label>
+    </div>
+    <div>
+        <label>
+            Age:
+            <InputNumber title="Age" id="age" @bind-Value="applicant.age"/>
+        </label>
+        <label>
+            Profession:
+            <InputSelect @bind-Value="applicant.profession">
+                @foreach (var profession in Enum.GetValues(typeof(Professions)))
+                {
+                    <option value="@profession">@profession</option>
+                }
+            </InputSelect>
+        </label>
+    </div>
+    <div>
+        <button type="submit">Add applicant</button>
+    </div>
+</form>
+
+
+@code{
+    private ApplicantViewModel applicant = new ApplicantViewModel();
+
+    private async Task HandleSubmit()
+    {
+    // TODO: implement code to send to db
+    }
+
+}
