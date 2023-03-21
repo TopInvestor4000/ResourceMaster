@@ -1,9 +1,11 @@
 # .github/workflows/deploy.yml
 name: Deploy Stage
 on:
-  push:
-    branches:
-      - stage
+  workflow_run:
+    workflows: ["Build and test"]
+    branches: [stage]
+    types: 
+      - completed
   workflow_dispatch:
 
 jobs:
