@@ -7,15 +7,18 @@ namespace ResourceMaster.Services.MyTableService
     public class MyTableService
     {
         private readonly IMyTableRepository _repository;
+        private readonly ILogger<MyTableService> _logger;
 
-        public MyTableService(IMyTableRepository repository)
+        public MyTableService(IMyTableRepository repository, ILogger<MyTableService> logger)
         {
             _repository = repository;
+            _logger = logger;
         }
 
         public async Task<IEnumerable<MyTableViewModel>> GetAllAsync( )
         {
-            
+
+            _logger.LogInformation("GetAllAsync Method called");
             var myTableList =  await _repository.GetAllAsync();
             List<MyTableViewModel> resultList = new List<MyTableViewModel>();
             foreach (var table in myTableList)

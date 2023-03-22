@@ -1,15 +1,30 @@
-
-
 using Microsoft.EntityFrameworkCore;
 using ResourceMaster.DAL.Repositories.MyTableRepository;
 using ResourceMaster.Data;
 using ResourceMaster.Services.MyTableService;
+using Serilog;
+using Serilog.Formatting.Compact;
+using Serilog.Sinks.Grafana.Loki;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+var logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.File("logs/log.log", rollingInterval: RollingInterval.Day)
+    .WriteTo.GrafanaLoki("http://logging-svc:3100")
+    .CreateLogger();
+
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog(logger);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+
+
 
 builder.Services.AddSingleton<DatabaseContext>();
 
@@ -31,6 +46,7 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
 
 app.UseHttpsRedirection();
 
