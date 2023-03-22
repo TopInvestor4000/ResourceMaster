@@ -1,5 +1,3 @@
-
-
 using ResourceMaster.DAL.Repositories.MyTableRepository;
 using ResourceMaster.Data;
 using ResourceMaster.Services.MyTableService;
@@ -17,6 +15,7 @@ builder.Services.AddScoped<IMyTableRepository, MyTableRepository>();
 
 //Add services
 builder.Services.AddScoped<MyTableService, MyTableService>();
+
 
 
 
