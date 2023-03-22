@@ -1,9 +1,7 @@
-
-
-using Microsoft.EntityFrameworkCore;
 using ResourceMaster.DAL.Repositories.MyTableRepository;
 using ResourceMaster.Data;
 using ResourceMaster.Services.MyTableService;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
