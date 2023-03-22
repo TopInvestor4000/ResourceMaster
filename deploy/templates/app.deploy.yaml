@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: {{ .Values.app.name }}-depl
-        image: ghcr.io/topinvestor4000/resourcemaster:latest
+        image: ghcr.io/topinvestor4000/resourcemaster:stage
         imagePullPolicy: IfNotPresent
         ports:
           - name: http
