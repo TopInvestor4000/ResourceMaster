@@ -36,5 +36,5 @@ jobs:
     - name: 'Put KUBECONFIG'
       run: |
         cd deploy
-        helm template -f values-stage.yaml --set db.password=BLABLA . | kubectl apply -f -
+        helm template -f values-stage.yaml --set db.password=${{ secrets.STAGING }} . | kubectl apply -f -
       shell: bash
