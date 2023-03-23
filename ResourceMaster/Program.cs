@@ -12,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 var logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .Enrich.FromLogContext()
+    .Enrich.WithProperty("app", "resourcemaster")
     .WriteTo.Console()
     .WriteTo.File("logs/log.log", rollingInterval: RollingInterval.Day)
     .WriteTo.GrafanaLoki("http://logging-svc:3100")
