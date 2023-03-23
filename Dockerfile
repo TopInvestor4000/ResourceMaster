@@ -1,10 +1,10 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+﻿FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 LABEL org.opencontainers.image.source="https://github.com/topinvestor4000/resourcemaster"
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["ResourceMaster/ResourceMaster.csproj", "ResourceMaster/"]
 RUN dotnet restore "ResourceMaster/ResourceMaster.csproj"
