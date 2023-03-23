@@ -34,10 +34,11 @@ builder.Services.AddScoped<IMyTableRepository, MyTableRepository>();
 //Add services
 builder.Services.AddScoped<MyTableService, MyTableService>();
 
-
-
-
 var app = builder.Build();
+
+// Apply migrations
+var dbContext = builder.Services.BuildServiceProvider().GetService<DatabaseContext>();
+dbContext.Database.Migrate();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
