@@ -28,3 +28,19 @@ spec:
           requests:
             memory: 128Mi
             cpu: 0.1
+        env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.db.name }}-creds
+              key: user
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.db.name }}-creds
+              key: db
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.db.name }}-creds
+              key: password
