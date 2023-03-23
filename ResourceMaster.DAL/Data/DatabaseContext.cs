@@ -1,4 +1,3 @@
-using dotenv.net;
 using Microsoft.EntityFrameworkCore;
 using ResourceMaster.Models;
 
@@ -8,15 +7,12 @@ public class DatabaseContext : DbContext
 {
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        DotEnv.Load();
-        var envVars = DotEnv.Read();
-
-        var user = Environment.GetEnvironmentVariable(envVars["POSTGRES_USER"]);
-        var database = Environment.GetEnvironmentVariable(envVars["POSTGRES_DB"]);
-        var password = Environment.GetEnvironmentVariable(envVars["POSTGRES_PASSWORD"]);
-
-        var connectionString = $"Host=pg-svc;Port=5432;Database={database};Username={user};Password={password}";
-
+        DotNetEnv.Env.TraversePath().Load();
+        var user = DotNetEnv.Env.GetString("POSTGRES_USER");
+        var database = DotNetEnv.Env.GetString("POSTGRES_DB");
+        var password = DotNetEnv.Env.GetString("POSTGRES_PASSWORD");
+        var host = DotNetEnv.Env.GetString("POSTGRES_HOST", "pg-svc");
+        var connectionString = $"Host={host};Port=5432;Database={database};Username={user};Password={password}";
         optionsBuilder.UseNpgsql(connectionString);
     }
 
