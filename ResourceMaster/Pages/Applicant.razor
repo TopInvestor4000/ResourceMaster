@@ -3,8 +3,7 @@
 
 <h1>Create new applicant</h1>
 
-
-<form @onsubmit="HandleSubmit">
+<EditForm OnSubmit="HandleSubmit" Model="applicant">
     <div>
         <label>
             First name:
@@ -33,7 +32,7 @@
     <div>
         <button type="submit">Add applicant</button>
     </div>
-</form>
+</EditForm>
 
 
 @code{
@@ -41,7 +40,8 @@
 
     private async Task HandleSubmit()
     {
-    // TODO: implement code to send to db
+        applicant = new ApplicantViewModel();
+        // TODO: implement code to send to db
     }
 
 }
