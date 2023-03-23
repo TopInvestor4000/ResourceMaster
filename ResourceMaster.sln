@@ -5,7 +5,9 @@ VisualStudioVersion = 17.5.33424.131
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResourceMaster", "ResourceMaster\ResourceMaster.csproj", "{8C2260A8-D6CB-4639-BEBC-8490A429C021}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceMaster.DAL", "ResourceMaster.DAL\ResourceMaster.DAL.csproj", "{8DDFAE06-B747-4B61-AB4D-41145B515265}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResourceMaster.DAL", "ResourceMaster.DAL\ResourceMaster.DAL.csproj", "{8DDFAE06-B747-4B61-AB4D-41145B515265}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceMaster.Test", "ResourceMaster.Test\ResourceMaster.Test.csproj", "{B573AE05-47D1-4C98-A5B4-F8450581283E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{8DDFAE06-B747-4B61-AB4D-41145B515265}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DDFAE06-B747-4B61-AB4D-41145B515265}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DDFAE06-B747-4B61-AB4D-41145B515265}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B573AE05-47D1-4C98-A5B4-F8450581283E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B573AE05-47D1-4C98-A5B4-F8450581283E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B573AE05-47D1-4C98-A5B4-F8450581283E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B573AE05-47D1-4C98-A5B4-F8450581283E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
