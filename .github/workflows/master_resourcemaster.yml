@@ -16,6 +16,8 @@ jobs:
     permissions:
       packages: write
     steps:
+      - name: Test
+        run:  dotnet test --no-build --verbosity normal
       - name: 'Checkout GitHub Action'
         uses: actions/checkout@main
 
