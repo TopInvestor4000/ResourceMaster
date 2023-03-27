@@ -23,10 +23,10 @@ spec:
             containerPort: {{ .Values.sonar.port }}
         resources:
           limits:
-            memory: 512Mi
+            memory: 2048Mi
             cpu: 0.4
           requests:
-            memory: 256Mi
+            memory: 1024Mi
             cpu: 0.2
         volumeMounts:
         - name: sonar-persistent-storage
