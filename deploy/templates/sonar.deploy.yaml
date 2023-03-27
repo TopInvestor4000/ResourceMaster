@@ -31,6 +31,8 @@ spec:
         volumeMounts:
         - name: sonar-persistent-storage
           mountPath: /opt/sonarqube/data
+      securityContext:
+        runAsUser: 999
       volumes:
       - name: sonar-persistent-storage
         persistentVolumeClaim:
