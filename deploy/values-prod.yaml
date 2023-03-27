@@ -12,8 +12,3 @@ db:
 
 logging:
   name: logging
-
-sonar:
-  name: sonar
-  route: resourcemaster-sonar-prod.pm4.init-lab.ch
-  port: 9000
