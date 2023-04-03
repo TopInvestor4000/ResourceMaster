@@ -16,8 +16,8 @@ spec:
     spec:
       containers:
       - name: {{ .Values.app.name }}-depl
-        image: ghcr.io/topinvestor4000/resourcemaster:stage
-        imagePullPolicy: IfNotPresent
+        image: ghcr.io/topinvestor4000/resourcemaster:{{ .Values.app.tag }}
+        imagePullPolicy: Always
         ports:
           - name: http
             containerPort: {{ .Values.app.port }}
@@ -28,3 +28,19 @@ spec:
           requests:
             memory: 128Mi
             cpu: 0.1
+        env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.db.name }}-creds
+              key: user
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.db.name }}-creds
+              key: db
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.db.name }}-creds
+              key: password
