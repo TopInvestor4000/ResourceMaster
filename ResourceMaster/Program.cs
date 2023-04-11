@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using MudBlazor.Services;
 using ResourceMaster.DAL.Repositories.MyTableRepository;
 using ResourceMaster.Data;
 using ResourceMaster.Services.MyTableService;
@@ -13,6 +14,8 @@ builder.Host
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+
+builder.Services.AddMudServices();
 
 builder.Services.AddSingleton<DatabaseContext>();
 
