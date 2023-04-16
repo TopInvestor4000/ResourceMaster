@@ -1,48 +1,41 @@
 @page "/applicant"
 @using ResourceMaster.ViewModels;
+@using MudBlazor;
 
 <h1>Create new applicant</h1>
 
 
-<EditForm OnSubmit="HandleSubmit" Model="applicant">
-    <div>
-        <label>
-            First name:
-            <InputText title="First name" id="firstname" @bind-Value="applicant.firstName"/>
-        </label>
-        <label>
-            surname:
-            <InputText title="Surname" id="surname" @bind-Value="applicant.surname"/>
-        </label>
-    </div>
-    <div>
-        <label>
-            Age:
-            <InputNumber title="Age" id="age" @bind-Value="applicant.age"/>
-        </label>
-        <label>
-            Profession:
-            <InputSelect @bind-Value="applicant.profession">
-                @foreach (var profession in Enum.GetValues(typeof(Professions)))
+<MudForm OnSubmit="HandleSubmit" Model="applicant">
+    <MudGrid>
+        <MudItem xs="12" sm="6" md="4">
+            <MudField @bind-value="applicant.firstName" Label="First name" id="firstname" Variant="Variant.Text">Some Content follows here</MudField>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="4">
+            <MudField @bind-value="applicant.surname" Label="Surname" id="surname" Variant="Variant.Text">Some Content follows here</MudField>
+        </MudItem>
+        <MudItem xs="12">
+            <MudNumericField @bind-Value="applicant.age" Label="Age" id="age" Variant="Variant.Text" Min="0" Max="99"/>
+        </MudItem>
+        <MudItem xs="12">
+            <MudSelect T="Professions" Label="Profession" AnchorOrigin="Origin.BottomCenter">
+                @foreach (Professions profession in Enum.GetValues(typeof(Professions)))
                 {
-                    <option value="@profession">@profession</option>
+                    <MudSelectItem Value="@profession">@profession</MudSelectItem>
                 }
-            </InputSelect>
-        </label>
-    </div>
-    <div>
-        <button type="submit">Add applicant</button>
-    </div>
-</EditForm>
+            </MudSelect>
+        </MudItem>
+    </MudGrid>
+    <MudButton type="submit">Add applicant</MudButton>
+</MudForm>
 
 
 @code{
-    private ApplicantViewModel applicant = new ApplicantViewModel();
+    private ApplicantViewModel applicant = new();
 
     private async Task HandleSubmit()
     {
         applicant = new ApplicantViewModel();
-        // TODO: implement code to send to db
+    // TODO: implement code to send to db
     }
 
 }
