@@ -1,6 +1,6 @@
-namespace ResourceMaster.ViewModels;
+namespace ResourceMaster.DAL.Models;
 
-public class CustomerViewModel
+public class Customer
 {
     public int id { get; set; }
     public string companyName { get; set; }

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using ResourceMaster.Models;
+using ResourceMaster.DAL.Models;
 
-namespace ResourceMaster.Data;
+namespace ResourceMaster.DAL.Data;
 
 public class DatabaseContext : DbContext
 {
@@ -16,5 +16,8 @@ public class DatabaseContext : DbContext
         optionsBuilder.UseNpgsql(connectionString);
     }
 
-    public DbSet<MyTable> MyTables { get; set; }
+    public DbSet<Customer> Customers { get; set; }
+    public DbSet<Project> Projects { get; set; }
+    public DbSet<Resource> Resources { get; set; }
+    public DbSet<Skill> Skills { get; set; }
 }

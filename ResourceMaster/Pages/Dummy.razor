@@ -1,11 +1,11 @@
 @page "/dummy"
 @using MudBlazor
-@using ResourceMaster.Services.MyTableService;
+@using ResourceMaster.Services.CustomerService;
 @using ResourceMaster.ViewModels;
 @inject CustomerService CustomerService;
 
 <h1>My Table</h1>
-
+@*
 <MudGrid Spacing="2" Justify="Justify.Center">
     <MudItem xs="8">
         <MudPaper>
@@ -55,5 +55,5 @@
         newItem = new MyTableViewModel();
         myTableList = (await CustomerService.GetAllAsync()).ToList();
     }
-
-}
+    }
+    *@
