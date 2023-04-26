@@ -10,3 +10,16 @@ spec:
   resources:
     requests:
       storage: 10Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.db.name }}-backup-pvc
+  namespace: {{ .Values.namespace }}
+spec:
+  storageClassName: "cinder-csi-ssd"
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
