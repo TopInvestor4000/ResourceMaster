@@ -1,8 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
-using ResourceMaster.DAL.Repositories.MyTableRepository;
-using ResourceMaster.Data;
-using ResourceMaster.Services.MyTableService;
+using ResourceMaster.DAL.Data;
+using ResourceMaster.DAL.Repositories.CustomerRepository;
+using ResourceMaster.DAL.Repositories.ProjectRepository;
+using ResourceMaster.DAL.Repositories.ResourceRepository;
+using ResourceMaster.DAL.Repositories.SkillRepository;
+using ResourceMaster.Services.CustomerService;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,10 +23,16 @@ builder.Services.AddMudServices();
 builder.Services.AddSingleton<DatabaseContext>();
 
 //Add Repos
-builder.Services.AddScoped<IMyTableRepository, MyTableRepository>();
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+builder.Services.AddScoped<IResourceRepository, ResourceRepository>();
+builder.Services.AddScoped<ISkillRepository, SkillRepository>();
 
 //Add services
 builder.Services.AddScoped<CustomerService, CustomerService>();
+builder.Services.AddScoped<ProjectService, ProjectService>();
+builder.Services.AddScoped<ResourceService, ResourceService>();
+builder.Services.AddScoped<SkillService, SkillService>();
 
 // Apply migrations
 var dbContext = builder.Services.BuildServiceProvider().GetService<DatabaseContext>();

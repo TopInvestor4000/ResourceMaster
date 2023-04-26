@@ -1,8 +1,6 @@
-using ResourceMaster.DAL.Models;
+namespace ResourceMaster.DAL.Models;
 
-namespace ResourceMaster.ViewModels;
-
-public class ProjectViewModel
+public class Project
 {
     public int id { get; set; }
     public string projectName { get; set; }

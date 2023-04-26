@@ -1,0 +1,55 @@
+﻿using ResourceMaster.DAL.Models;
+using ResourceMaster.DAL.Repositories.CustomerRepository;
+using ResourceMaster.ViewModels;
+
+namespace ResourceMaster.Services.CustomerService
+{
+    public class CustomerService
+    {
+        private readonly ICustomerRepository _repository;
+        private readonly ILogger<CustomerService> _logger;
+
+        public CustomerService(ICustomerRepository repository, ILogger<CustomerService> logger)
+        {
+            _repository = repository;
+            _logger = logger;
+        }
+
+        public async Task<IEnumerable<CustomerViewModel>> GetAllAsync( )
+        {
+
+            _logger.LogInformation("GetAllAsync Method called");
+            var customerList =  await _repository.GetAllAsync();
+            List<CustomerViewModel> resultList = new List<CustomerViewModel>();
+            foreach (var table in customerList)
+            {
+                var viewModel = new CustomerViewModel()
+                {
+                    id = table.id,
+                    companyName = table.companyName,
+                    firstName = table.firstName,
+                    lastName = table.lastName,
+                    address = table.address,
+                    zipCode = table.zipCode
+                };
+                resultList.Add(viewModel);
+            }
+            return resultList;
+        }
+
+        public async Task AddAsync(CustomerViewModel customer)
+        {
+            var newEntry = new Customer()
+            {
+                id = customer.id,
+                companyName = customer.companyName,
+                firstName = customer.firstName,
+                lastName = customer.lastName,
+                address = customer.address,
+                zipCode = customer.zipCode
+            };
+
+            await _repository.AddAsync(newEntry);
+        }
+    }
+}

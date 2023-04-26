@@ -1,8 +1,6 @@
-﻿using ResourceMaster.DAL.Models;
+﻿namespace ResourceMaster.DAL.Models;
 
-namespace ResourceMaster.ViewModels;
-
-public class ResourceViewModel
+public class Resource
 {
     public int id { get; set; }
     public int age { get; set; }
