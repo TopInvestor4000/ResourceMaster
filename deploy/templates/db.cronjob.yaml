@@ -33,6 +33,7 @@ spec:
               volumeMounts:
               - name: pg-persistent-storage
                 mountPath: /backups
+          restartPolicy: OnFailure
           volumes:
           - name: pg-persistent-storage
             persistentVolumeClaim:
