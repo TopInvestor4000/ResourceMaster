@@ -1,0 +1,40 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Values.db.name }}-cronjob
+  namespace: {{ .Values.namespace }}
+spec:
+  schedule: "0 1 1 * *"  # Run every month at 1am
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: pg-backup
+              image: postgres:15
+              command: ["/bin/bash", "-c"]
+              args: ["pg_dump -h {{ .Values.db.name }}-svc -U $PGUSER $PGDB -w -F t -f /backups/db-$(date +%Y-%m-%d_%H-%M-%S).tar"]
+              env:
+              - name: PGUSER
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ .Values.db.name }}-creds
+                    key: user
+              - name: PGDB
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ .Values.db.name }}-creds
+                    key: db
+              - name: PGPASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ .Values.db.name }}-creds
+                    key: password
+              volumeMounts:
+              - name: pg-persistent-storage
+                mountPath: /backups
+          restartPolicy: OnFailure
+          volumes:
+          - name: pg-persistent-storage
+            persistentVolumeClaim:
+              claimName: {{ .Values.db.name }}-backup-pvc

@@ -1,37 +1,43 @@
 @page "/dummy"
+@using MudBlazor
 @using ResourceMaster.Services.MyTableService;
 @using ResourceMaster.ViewModels;
-@inject MyTableService _myTableService;
+@inject CustomerService CustomerService;
 
 <h1>My Table</h1>
 
-<table>
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Age</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in myTableList)
-        {
-            <tr>
-                <td>@item.Id</td>
-                <td>@item.Age</td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-<form @onsubmit="HandleSubmit">
-   
-    <div>
-        <label for="age">Age:</label>
-        <input type="number" id="age" @bind="newItem.Age" />
-    </div>
-    <button type="submit">Add Item</button>
-</form>
+<MudGrid Spacing="2" Justify="Justify.Center">
+    <MudItem xs="8">
+        <MudPaper>
+            <MudSimpleTable Style="overflow-x: auto;">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Age</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in myTableList)
+                    {
+                        <tr>
+                            <td>@item.Id</td>
+                            <td>@item.Age</td>
+                        </tr>
+                    }
+                </tbody>
+            </MudSimpleTable>
+            </MudPaper>
+    </MudItem>
+    <MudItem xs="4">
+        <MudForm Model="@newItem" OnValidSubmit="@HandleSubmit()">
+                <MudTextField @bind-Value="newItem.Age" Immediate="true" Label="Age" />
+                <MudPaper Class="pa-4 mt-4">
+                    <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary" Class="ml-auto">Enter</MudButton>
+                </MudPaper>
+                
+            </MudForm>
+    </MudItem>
+</MudGrid>
 
 
 @code{
@@ -40,14 +46,14 @@
 
     protected override async Task OnInitializedAsync()
     {
-        myTableList = (await _myTableService.GetAllAsync()).ToList();
+        myTableList = (await CustomerService.GetAllAsync()).ToList();
     }
 
     private async Task HandleSubmit()
     {
-        await _myTableService.AddAsync(newItem);
+        await CustomerService.AddAsync(newItem);
         newItem = new MyTableViewModel();
-        myTableList = (await _myTableService.GetAllAsync()).ToList();
+        myTableList = (await CustomerService.GetAllAsync()).ToList();
     }
 
 }

@@ -4,12 +4,12 @@ using ResourceMaster.ViewModels;
 
 namespace ResourceMaster.Services.MyTableService
 {
-    public class MyTableService
+    public class CustomerService
     {
         private readonly IMyTableRepository _repository;
-        private readonly ILogger<MyTableService> _logger;
+        private readonly ILogger<CustomerService> _logger;
 
-        public MyTableService(IMyTableRepository repository, ILogger<MyTableService> logger)
+        public CustomerService(IMyTableRepository repository, ILogger<CustomerService> logger)
         {
             _repository = repository;
             _logger = logger;

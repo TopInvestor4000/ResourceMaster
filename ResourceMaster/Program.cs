@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using MudBlazor.Services;
 using ResourceMaster.DAL.Repositories.MyTableRepository;
 using ResourceMaster.Data;
 using ResourceMaster.Services.MyTableService;
@@ -14,13 +15,15 @@ builder.Host
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
+builder.Services.AddMudServices();
+
 builder.Services.AddSingleton<DatabaseContext>();
 
 //Add Repos
 builder.Services.AddScoped<IMyTableRepository, MyTableRepository>();
 
 //Add services
-builder.Services.AddScoped<MyTableService, MyTableService>();
+builder.Services.AddScoped<CustomerService, CustomerService>();
 
 // Apply migrations
 var dbContext = builder.Services.BuildServiceProvider().GetService<DatabaseContext>();
