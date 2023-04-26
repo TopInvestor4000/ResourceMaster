@@ -29,7 +29,9 @@ namespace ResourceMaster.Services.CustomerService
                     companyName = table.companyName,
                     firstName = table.firstName,
                     lastName = table.lastName,
-                    address = table.address,
+                    street = table.street,
+                    location = table.location,
+                    country = table.country,
                     zipCode = table.zipCode
                 };
                 resultList.Add(viewModel);
@@ -45,7 +47,9 @@ namespace ResourceMaster.Services.CustomerService
                 companyName = customer.companyName,
                 firstName = customer.firstName,
                 lastName = customer.lastName,
-                address = customer.address,
+                street = customer.street,
+                location = customer.location,
+                country = customer.country,
                 zipCode = customer.zipCode
             };
 

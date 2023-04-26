@@ -29,8 +29,10 @@ namespace ResourceMaster.Services.CustomerService
                     age = table.age,
                     firstName = table.firstName,
                     lastName = table.lastName,
-                    address = table.address,
+                    street = table.street,
                     zipCode = table.zipCode,
+                    location = table.location,
+                    country = table.country,
                     skills = table.skills,
                 };
                 resultList.Add(viewModel);
@@ -46,8 +48,10 @@ namespace ResourceMaster.Services.CustomerService
                     age = resource.age,
                     firstName = resource.firstName,
                     lastName = resource.lastName,
-                    address = resource.address,
+                    street = resource.street,
                     zipCode = resource.zipCode,
+                    location = resource.location,
+                    country = resource.country,
                     skills = resource.skills,
             };
 

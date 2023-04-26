@@ -29,7 +29,17 @@ namespace ResourceMaster.Test.ServiceTest
             // Arrange
             var customerList = new List<Customer>()
         {
-            new Customer() { id = 1, firstName = "Peter", lastName = "Meier", address = "Löwengasse 5", zipCode = "3000", companyName = "Bond Agency"},
+            new Customer()
+            {
+                id = 1,
+                firstName = "Peter",
+                lastName = "Meier",
+                street = "Löwengasse 5",
+                zipCode = "3000",
+                location = "Zürich",
+                country = "Schweiz",
+                companyName = "Bond Agency"
+            },
         };
 
             _mockRepository.Setup(repo => repo.GetAllAsync())
@@ -40,8 +50,10 @@ namespace ResourceMaster.Test.ServiceTest
                 id = table.id,
                 firstName = table.firstName,
                 lastName = table.lastName,
-                address = table.address,
+                street = table.street,
                 zipCode = table.zipCode,
+                location = table.location,
+                country = table.country,
                 companyName = table.companyName,
             });
 
@@ -61,8 +73,10 @@ namespace ResourceMaster.Test.ServiceTest
                 id = 1,
                 firstName = "James",
                 lastName = "Bond",
-                address = "Löwengasse 5",
+                street = "Löwengasse 5",
                 zipCode = "3000",
+                location = "Zürich",
+                country = "Schweiz",
                 companyName = "Bond Agency",
             };
 
