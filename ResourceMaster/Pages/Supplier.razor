@@ -1,0 +1,38 @@
+@page "/supplier"
+@using ResourceMaster.ViewModels;
+@using MudBlazor;
+
+<h1>Create new applicant</h1>
+
+
+<MudForm OnSubmit="HandleSubmit" Model="supplier">
+    <MudGrid>
+        <MudItem xs="12" sm="6" md="4">
+            <MudField @bind-value="supplier.corporation" Label="name of corporation" id="corporation" Variant="Variant.Text"></MudField>
+        </MudItem>
+        <MudItem xs="12">
+            <MudNumericField @bind-Value="supplier.neededWorkforce" Label="number of workforce needed" id="age" Variant="Variant.Text" Min="0" Max="99"/>
+        </MudItem>
+        <MudItem xs="12">
+            <MudSelect T="Professions" MultiSelection="true" Label="professions which are needed" AnchorOrigin="Origin.BottomCenter">
+                @foreach (Professions profession in Enum.GetValues(typeof(Professions)))
+                {
+                    <MudSelectItem Value="@profession">@profession</MudSelectItem>
+                }
+            </MudSelect>
+        </MudItem>
+    </MudGrid>
+    <MudButton type="submit">Add supplier</MudButton>
+</MudForm>
+
+
+@code{
+    private SupplierViewModel supplier = new();
+
+    private async Task HandleSubmit()
+    {
+        supplier = new SupplierViewModel();
+    // TODO: implement code to send to db
+    }
+
+}
