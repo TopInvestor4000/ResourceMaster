@@ -6,3 +6,4 @@ riderModule.iml
 /.vs
 *.log
 .env
+/.idea/
