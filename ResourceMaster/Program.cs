@@ -23,7 +23,7 @@ builder.Services.AddSingleton<DatabaseContext>();
 builder.Services.AddScoped<IMyTableRepository, MyTableRepository>();
 
 //Add services
-builder.Services.AddScoped<MyTableService, MyTableService>();
+builder.Services.AddScoped<CustomerService, CustomerService>();
 
 // Apply migrations
 var dbContext = builder.Services.BuildServiceProvider().GetService<DatabaseContext>();

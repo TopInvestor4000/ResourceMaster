@@ -2,7 +2,7 @@
 @using MudBlazor
 @using ResourceMaster.Services.MyTableService;
 @using ResourceMaster.ViewModels;
-@inject MyTableService _myTableService;
+@inject CustomerService CustomerService;
 
 <h1>My Table</h1>
 
@@ -46,14 +46,14 @@
 
     protected override async Task OnInitializedAsync()
     {
-        myTableList = (await _myTableService.GetAllAsync()).ToList();
+        myTableList = (await CustomerService.GetAllAsync()).ToList();
     }
 
     private async Task HandleSubmit()
     {
-        await _myTableService.AddAsync(newItem);
+        await CustomerService.AddAsync(newItem);
         newItem = new MyTableViewModel();
-        myTableList = (await _myTableService.GetAllAsync()).ToList();
+        myTableList = (await CustomerService.GetAllAsync()).ToList();
     }
 
 }

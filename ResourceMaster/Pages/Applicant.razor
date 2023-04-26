@@ -5,16 +5,16 @@
 <h1>Create new applicant</h1>
 
 
-<MudForm OnSubmit="HandleSubmit" Model="applicant">
+<MudForm OnSubmit="HandleSubmit" Model="_resource">
     <MudGrid>
         <MudItem xs="12" sm="6" md="4">
-            <MudField @bind-value="applicant.firstName" Label="First name" id="firstname" Variant="Variant.Text">Some Content follows here</MudField>
+            <MudField @bind-value="_resource.firstName" Label="First name" id="firstname" Variant="Variant.Text">Some Content follows here</MudField>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-            <MudField @bind-value="applicant.surname" Label="Surname" id="surname" Variant="Variant.Text">Some Content follows here</MudField>
+            <MudField @bind-value="_resource.lastName" Label="Surname" id="surname" Variant="Variant.Text">Some Content follows here</MudField>
         </MudItem>
         <MudItem xs="12">
-            <MudNumericField @bind-Value="applicant.age" Label="Age" id="age" Variant="Variant.Text" Min="0" Max="99"/>
+            <MudNumericField @bind-Value="_resource.age" Label="Age" id="age" Variant="Variant.Text" Min="0" Max="99"/>
         </MudItem>
         <MudItem xs="12">
             <MudSelect T="Professions" Label="Profession" AnchorOrigin="Origin.BottomCenter">
@@ -30,11 +30,11 @@
 
 
 @code{
-    private ApplicantViewModel applicant = new();
+    private ResourceViewModel _resource = new();
 
     private async Task HandleSubmit()
     {
-        applicant = new ApplicantViewModel();
+        _resource = new ResourceViewModel();
     // TODO: implement code to send to db
     }
 

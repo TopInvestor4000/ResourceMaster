@@ -13,14 +13,14 @@ namespace ResourceMaster.Test.ServiceTest
     public class MyTableServiceTests
     {
         private Mock<IMyTableRepository> _mockRepository;
-        private Mock<ILogger<MyTableService>> _mockLogger;
-        private MyTableService _service;
+        private Mock<ILogger<CustomerService>> _mockLogger;
+        private CustomerService _service;
 
         [SetUp]
         public void SetUp()
         {
             _mockRepository = new Mock<IMyTableRepository>();
-            _service = new MyTableService(_mockRepository.Object, _mockLogger.Object);
+            _service = new CustomerService(_mockRepository.Object, _mockLogger.Object);
         }
 
         [Test]
