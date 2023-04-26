@@ -5,7 +5,7 @@
 @inject CustomerService CustomerService;
 
 <h1>My Table</h1>
-
+@*
 <MudGrid Spacing="2" Justify="Justify.Center">
     <MudItem xs="8">
         <MudPaper>
@@ -55,5 +55,5 @@
         newItem = new MyTableViewModel();
         myTableList = (await CustomerService.GetAllAsync()).ToList();
     }
-
-}
+    }
+    *@

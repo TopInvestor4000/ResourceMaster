@@ -12,4 +12,5 @@ public class ResourceViewModel
     public string zipCode { get; set; }
     public string location { get; set; }
     public string country { get; set; }
-    public List<Skill> skills { get; set; }}
+    public List<Skill> skills { get; set; }
+}
