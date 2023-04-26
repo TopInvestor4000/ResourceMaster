@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using ResourceMaster.DAL.Repositories.MyTableRepository;
@@ -12,13 +13,14 @@ namespace ResourceMaster.Test.ServiceTest
     public class MyTableServiceTests
     {
         private Mock<IMyTableRepository> _mockRepository;
+        private Mock<ILogger<MyTableService>> _mockLogger;
         private MyTableService _service;
 
         [SetUp]
         public void SetUp()
         {
             _mockRepository = new Mock<IMyTableRepository>();
-            _service = new MyTableService(_mockRepository.Object);
+            _service = new MyTableService(_mockRepository.Object, _mockLogger.Object);
         }
 
         [Test]
