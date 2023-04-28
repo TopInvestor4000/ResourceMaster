@@ -4,44 +4,42 @@
 @using ResourceMaster.DAL.Models
 
 <h1>Create new applicant</h1>
-
-
+<br>
+<h3>Person</h3>
 <MudForm OnSubmit="HandleSubmit" Model="_resource">
     <MudGrid>
-        
-        <!-- Title: Person -->
-        <MudItem xs="12" Class="mb-2">
-            <MudTypography Variant="TypographyVariant.h2">Person</MudTypography>
-        </MudItem>
-        
         <MudItem xs="12" sm="6" md="4">
-            <MudField @bind-value="_resource.firstName" Label="First name" id="firstname" Variant="Variant.Text">Some Content follows here</MudField>
+            <MudTextField @bind-Value="_resource.firstName" Label="First name" id="firstname" Variant="Variant.Outlined" />
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-            <MudField @bind-value="_resource.lastName" Label="Surname" id="surname" Variant="Variant.Text">Some Content follows here</MudField>
+            <MudTextField @bind-Value="_resource.lastName" Label="Last name" id="lastname" Variant="Variant.Outlined" />
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-            <MudNumericField @bind-Value="_resource.age" Label="Age" id="age" Variant="Variant.Text" Min="0" Max="99"/>
+             <MudTextField @bind-Value="_resource.age" Label="Age" id="age" Variant="Variant.Outlined" Min="0" Max="99"/>
         </MudItem>
-        
-        <!-- Title: Address -->
-        <MudItem xs="12" Class="my-4">
-            <MudTypography Variant="TypographyVariant.h2">Address</MudTypography>
-        </MudItem>
-        
+    </MudGrid>
+</MudForm>
+<br>
+<h3>Address</h3>
+<MudForm OnSubmit="HandleSubmit" Model="_resource">
+    <MudGrid>
         <MudItem xs="12" sm="6" md="4">
-            <MudField @bind-value="_resource.street" Label="Street" id="street" Variant="Variant.Text">Somestreet 10</MudField>
-        </MudItem>
-        <MudItem xs="12" sm="6" md="4">
-            <MudField @bind-value="_resource.zipCode" Label="Zip code" id="zipCode" Variant="Variant.Text">123456</MudField>
+            <MudTextField @bind-Value="_resource.street" Label="Street" id="street" Variant="Variant.Outlined"/>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-            <MudField @bind-value="_resource.location" Label="Location" id="location" Variant="Variant.Text">Zürich</MudField>
+            <MudTextField @bind-Value="_resource.zipCode" Label="Zip Code" id="zipCode" Variant="Variant.Outlined"/>
+        </MudItem>        
+        <MudItem xs="12" sm="6" md="4">
+            <MudTextField @bind-Value="_resource.location" Label="Location" id="location" Variant="Variant.Outlined"/>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-            <MudField @bind-value="_resource.country" Label="Country" id="country" Variant="Variant.Text">Switzerland</MudField>
-        </MudItem>
-
+            <MudSelect T="string" @bind-Value="_resource.country" Label="Country" Variant="Variant.Outlined">
+                @foreach (var country in countries)
+                {
+                    <MudSelectItem Value="@country">@country</MudSelectItem>
+                }
+            </MudSelect>
+        </MudItem> 
         <!-- Skills field -->
         @*
         <MudItem xs="12">
@@ -56,7 +54,10 @@
 
     </MudGrid>
     <MudItem xs="12" Class="my-4 text-center">
-        <MudButton Variant="Variant.Filled" Size="Size.Large"  Color="Color.Tertiary" type="submit">Add applicant</MudButton>
+        <MudButton Variant="Variant.Filled" 
+                   Size="Size.Large"  
+                   Color="Color.Primary"
+                   type="submit">Add applicant</MudButton>
     </MudItem>
 </MudForm>
 
@@ -70,4 +71,205 @@
     // TODO: implement code to send to db
     }
 
+}
+
+@code {
+    private List<string> countries = new List<string>
+    {
+        "Afghanistan",
+        "Albania",
+        "Algeria",
+        "Andorra",
+        "Angola",
+        "Antigua and Barbuda",
+        "Argentina",
+        "Armenia",
+        "Australia",
+        "Austria",
+        "Azerbaijan",
+        "Bahamas",
+        "Bahrain",
+        "Bangladesh",
+        "Barbados",
+        "Belarus",
+        "Belgium",
+        "Belize",
+        "Benin",
+        "Bhutan",
+        "Bolivia",
+        "Bosnia and Herzegovina",
+        "Botswana",
+        "Brazil",
+        "Brunei",
+        "Bulgaria",
+        "Burkina Faso",
+        "Burundi",
+        "Côte d'Ivoire",
+        "Cabo Verde",
+        "Cambodia",
+        "Cameroon",
+        "Canada",
+        "Central African Republic",
+        "Chad",
+        "Chile",
+        "China",
+        "Colombia",
+        "Comoros",
+        "Congo (Congo-Brazzaville)",
+        "Costa Rica",
+        "Croatia",
+        "Cuba",
+        "Cyprus",
+        "Czechia (Czech Republic)",
+        "Democratic Republic of the Congo",
+        "Denmark",
+        "Djibouti",
+        "Dominica",
+        "Dominican Republic",
+        "Ecuador",
+        "Egypt",
+        "El Salvador",
+        "Equatorial Guinea",
+        "Eritrea",
+        "Estonia",
+        "Ethiopia",
+        "Fiji",
+        "Finland",
+        "France",
+        "Gabon",
+        "Gambia",
+        "Georgia",
+        "Germany",
+        "Ghana",
+        "Greece",
+        "Grenada",
+        "Guatemala",
+        "Guinea",
+        "Guinea-Bissau",
+        "Guyana",
+        "Haiti",
+        "Holy See",
+        "Honduras",
+        "Hungary",
+        "Iceland",
+        "India",
+        "Indonesia",
+        "Iran",
+        "Iraq",
+        "Ireland",
+        "Israel",
+        "Italy",
+        "Jamaica",
+        "Japan",
+        "Jordan",
+        "Kazakhstan",
+        "Kenya",
+        "Kiribati",
+        "Kuwait",
+        "Kyrgyzstan",
+        "Laos",
+        "Latvia",
+        "Lebanon",
+        "Lesotho",
+        "Liberia",
+        "Libya",
+        "Liechtenstein",
+        "Lithuania",
+        "Luxembourg",
+        "Madagascar",
+        "Malawi",
+        "Malaysia",
+        "Maldives",
+        "Mali",
+        "Malta",
+        "Marshall Islands",
+        "Mauritania",
+        "Mauritius",
+        "Mexico",
+        "Micronesia",
+        "Moldova",
+        "Monaco",
+        "Mongolia",
+        "Montenegro",
+        "Morocco",
+        "Mozambique",
+        "Myanmar (formerly Burma)",
+        "Namibia",
+        "Nauru",
+        "Nepal",
+        "Netherlands",
+        "New Zealand",
+        "Nicaragua",
+        "Niger",
+        "Nigeria",
+        "North Korea",
+        "North Macedonia",
+        "Norway",
+        "Oman",
+        "Pakistan",
+        "Palau",
+        "Palestine State",
+        "Panama",
+        "Papua New Guinea",
+        "Paraguay",
+        "Peru",
+        "Philippines",
+        "Poland",
+        "Portugal",
+        "Qatar",
+        "Romania",
+        "Russia",
+        "Rwanda",
+        "Saint Kitts and Nevis",
+        "Saint Lucia",
+        "Saint Vincent and the Grenadines",
+        "Samoa",
+        "San Marino",
+        "Sao Tome and Principe",
+        "Saudi Arabia",
+        "Senegal",
+        "Serbia",
+        "Seychelles",
+        "Sierra Leone",
+        "Singapore",
+        "Slovakia",
+        "Slovenia",
+        "Solomon Islands",
+        "Somalia",
+        "South Africa",
+        "South Korea",
+        "South Sudan",
+        "Spain",
+        "Sri Lanka",
+        "Sudan",
+        "Suriname",
+        "Swaziland",
+        "Sweden",
+        "Switzerland",
+        "Syria",
+        "Tajikistan",
+        "Tanzania",
+        "Thailand",
+        "Timor-Leste",
+        "Togo",
+        "Tonga",
+        "Trinidad and Tobago",
+        "Tunisia",
+        "Turkey",
+        "Turkmenistan",
+        "Tuvalu",
+        "Uganda",
+        "Ukraine",
+        "United Arab Emirates",
+        "United Kingdom",
+        "United States of America",
+        "Uruguay",
+        "Uzbekistan",
+        "Vanuatu",
+        "Venezuela",
+        "Vietnam",
+        "Yemen",
+        "Zambia",
+        "Zimbabwe"
+    };
 }
