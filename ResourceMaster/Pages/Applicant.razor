@@ -39,28 +39,90 @@
                     <MudSelectItem Value="@country">@country</MudSelectItem>
                 }
             </MudSelect>
-        </MudItem> 
-        <!-- Skills field -->
-        @*
-        <MudItem xs="12">
-            <MudSelect @bind-Value="_resource.skills" Label="Skills" AnchorOrigin="Origin.BottomCenter">
-                @foreach (var skill in _resource.skills)
-                {
-                    <MudSelectItem Value="@skill">@skill.description</MudSelectItem>
-                }
-            </MudSelect>
         </MudItem>
-        *@
-
     </MudGrid>
-    <MudItem xs="12" Class="my-4 text-center">
-        <MudButton Variant="Variant.Filled" 
-                   Size="Size.Large"  
-                   Color="Color.Primary"
-                   type="submit">Add applicant</MudButton>
-    </MudItem>
+</MudForm>
+<br>
+<h3>Skills</h3>
+<br>
+<MudForm OnSubmit="HandleSubmit" Model="_resource">
+    <MudGrid>
+        <MudItem xs="12" sm="4">
+            <MudPaper Elevation="1">
+                <MudList Clickable="true" Class="list-container">
+                    <MudListItem Class="no-can"><MudText Typo="Typo.h6">NO CAN</MudText></MudListItem>
+                    <MudDivider />
+                    @foreach (var item in _noSelected)
+                    {
+                        <MudListItem Clickable="true" OnClick="@((e) => Select(item, e))">@item</MudListItem>
+                    }
+                </MudList>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="4" Direction="Direction.Column">
+            <MudPaper>
+                <MudButton Variant="Variant.Filled"
+                           Size="Size.Large"
+                           Color="Color.Tertiary"
+                           OnClick="SelectAll"
+                           FullWidth="true"
+                           Padding="py-1">
+                    Select all
+                </MudButton>
+                <MudButton Variant="Variant.Filled"
+                           Size="Size.Large"
+                           Color="Color.Secondary"
+                           OnClick="DeselectAll"
+                           FullWidth="true"
+                           Padding="py-1">
+                    Deselect all
+                </MudButton>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="4">
+            <MudPaper Elevation="1">
+                <MudList Clickable="true" Class="list-container">
+                    <MudListItem Class="can"><MudText Typo="Typo.h6">CAN</MudText></MudListItem>
+                    <MudDivider />
+                    @foreach (var item in _selected)
+                    {
+                        <MudListItem Clickable="true" OnClick="@((e) => Deselect(item, e))">@item</MudListItem>
+                    }
+                </MudList>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</MudForm>
+<MudForm OnSubmit="HandleSubmit" Model="_resource">
+    <MudGrid>
+        <MudItem xs="12" Class="my-4 text-center">
+            <MudButton Variant="Variant.Filled" 
+                       Size="Size.Large"  
+                       Color="Color.Primary"
+                       type="submit">Add applicant</MudButton>
+        </MudItem>
+    </MudGrid>
 </MudForm>
 
+<style>
+.list-container {
+    min-height: 50px; /* Adjust the height as needed */
+    height:  auto;
+    overflow-y: auto;
+}
+
+.no-can, .can {
+    padding: 8px 16px;
+}
+
+.no-can {
+    background-color: #e6e6e6; /* Change the background color as needed */
+}
+
+.can {
+    background-color: #e6e6e6; /* Change the background color as needed */
+}
+</style>
 
 @code{
     private ResourceViewModel _resource = new();
@@ -272,4 +334,56 @@
         "Zambia",
         "Zimbabwe"
     };
+}
+
+@code {
+    private List<string> skillsTest = new List<string>
+    {
+        "Java",
+        "JavaScript",
+        "CSS",
+        "Kubernetes"
+    };
+
+    private List<string> _noSelected = new List<string>();
+    private List<string> _selected = new List<string>();
+
+    protected override void OnInitialized()
+    {
+        _noSelected.AddRange(skillsTest);
+        SortLists();
+    }
+
+    private void Select(string s, MouseEventArgs e)
+    {
+        _noSelected.Remove(s);
+        _selected.Add(s);
+        SortLists();
+    }
+
+    private void Deselect(string s, MouseEventArgs e)
+    {
+        _selected.Remove(s);
+        _noSelected.Add(s);
+        SortLists();
+    }
+
+    private void SelectAll()
+    {
+        _selected.AddRange(_noSelected);
+        _noSelected.Clear();
+    }
+    
+    private void DeselectAll()
+    {
+        _noSelected.AddRange(_selected);
+        _selected.Clear();
+    }
+
+    private void SortLists()
+    {
+        _noSelected.Sort();
+        _selected.Sort();
+    }
+
 }
