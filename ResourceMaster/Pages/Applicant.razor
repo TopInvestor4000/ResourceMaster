@@ -1,6 +1,7 @@
 @page "/applicant"
 @using ResourceMaster.ViewModels;
 @using MudBlazor;
+@using System.Linq;
 @using ResourceMaster.DAL.Models
 
 <h1>Create new applicant</h1>
@@ -49,10 +50,9 @@
     <MudGrid>
         <MudItem xs="12" sm="4">
             <MudPaper Elevation="1">
+                <MudTextField @bind-Value="_noSelectedFilter" Label="Search NO CAN" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"/>
                 <MudList Clickable="true" Class="list-container">
-                    <MudListItem Class="no-can"><MudText Typo="Typo.h6">NO CAN</MudText></MudListItem>
-                    <MudDivider />
-                    @foreach (var item in _noSelected)
+                    @foreach (var item in FilteredList(_noSelected, _noSelectedFilter))
                     {
                         <MudListItem Clickable="true" OnClick="@((e) => Select(item, e))">@item</MudListItem>
                     }
@@ -81,10 +81,10 @@
         </MudItem>
         <MudItem xs="12" sm="4">
             <MudPaper Elevation="1">
+
+                <MudTextField @bind-Value="_selectedFilter" Label="Search CAN" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"/>
                 <MudList Clickable="true" Class="list-container">
-                    <MudListItem Class="can"><MudText Typo="Typo.h6">CAN</MudText></MudListItem>
-                    <MudDivider />
-                    @foreach (var item in _selected)
+                    @foreach (var item in FilteredList(_selected, _selectedFilter))
                     {
                         <MudListItem Clickable="true" OnClick="@((e) => Deselect(item, e))">@item</MudListItem>
                     }
@@ -347,6 +347,8 @@
 
     private List<string> _noSelected = new List<string>();
     private List<string> _selected = new List<string>();
+    private string _noSelectedFilter = "";
+    private string _selectedFilter = "";
 
     protected override void OnInitialized()
     {
@@ -386,6 +388,11 @@
     {
         _noSelected.Sort();
         _selected.Sort();
+    }
+
+    private IEnumerable<string> FilteredList(List<string> list, string filter)
+    {
+        return list.Where(x => x.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0);
     }
 
 }
