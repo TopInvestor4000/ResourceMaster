@@ -50,9 +50,9 @@
     <MudGrid>
         <MudItem xs="12" sm="4">
             <MudPaper Elevation="1">
-                <MudTextField @bind-Value="_noSelectedFilter" Label="Search NO CAN" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"/>
+                <MudTextField Value="_noSelectedFilter" Label="Search NO CAN" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" ValueChanged="@((string value) => OnFilterChanged(value, true))" Immediate="true" />
                 <MudList Clickable="true" Class="list-container">
-                    @foreach (var item in FilteredList(_noSelected, _noSelectedFilter))
+                    @foreach (var item in _filteredNoSelected)
                     {
                         <MudListItem Clickable="true" OnClick="@((e) => Select(item, e))">@item</MudListItem>
                     }
@@ -81,10 +81,9 @@
         </MudItem>
         <MudItem xs="12" sm="4">
             <MudPaper Elevation="1">
-
-                <MudTextField @bind-Value="_selectedFilter" Label="Search CAN" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"/>
+                <MudTextField Value="_selectedFilter" Label="Search CAN" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" ValueChanged="@((string value) => OnFilterChanged(value, false))" Immediate="true" />
                 <MudList Clickable="true" Class="list-container">
-                    @foreach (var item in FilteredList(_selected, _selectedFilter))
+                    @foreach (var item in _filteredSelected)
                     {
                         <MudListItem Clickable="true" OnClick="@((e) => Deselect(item, e))">@item</MudListItem>
                     }
@@ -136,6 +135,88 @@
 }
 
 @code {
+    private List<string> skillsTest = new List<string>
+    {
+        "Java",
+        "JavaScript",
+        "CSS",
+        "Kubernetes"
+    };
+
+    private List<string> _noSelected = new List<string>();
+    private List<string> _selected = new List<string>();
+    private string _noSelectedFilter = "";
+    private string _selectedFilter = "";
+    private List<string> _filteredNoSelected = new List<string>();
+    private List<string> _filteredSelected = new List<string>();
+
+    protected override void OnInitialized()
+    {
+        _noSelected.AddRange(skillsTest);
+        SortLists();
+        UpdateFilteredList();
+    }
+
+    private void Select(string s, MouseEventArgs e)
+    {
+        _noSelected.Remove(s);
+        _selected.Add(s);
+        SortLists();
+        UpdateFilteredList();
+    }
+
+    private void Deselect(string s, MouseEventArgs e)
+    {
+        _selected.Remove(s);
+        _noSelected.Add(s);
+        SortLists();
+        UpdateFilteredList();
+    }
+
+    private void SelectAll()
+    {
+        _selected.AddRange(_noSelected);
+        _noSelected.Clear();
+        SortLists();
+        UpdateFilteredList();
+    }
+    
+    private void DeselectAll()
+    {
+        _noSelected.AddRange(_selected);
+        _selected.Clear();
+        SortLists();
+        UpdateFilteredList();
+    }
+
+    private void SortLists()
+    {
+        _noSelected.Sort();
+        _selected.Sort();
+    }
+
+    private void UpdateFilteredList()
+    {
+        _filteredNoSelected = _noSelected.Where(x => x.IndexOf(_noSelectedFilter, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
+        _filteredSelected = _selected.Where(x => x.IndexOf(_selectedFilter, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
+    }
+    
+    private void OnFilterChanged(string value, bool isNoSelected)
+    {
+        if (isNoSelected)
+        {
+            _noSelectedFilter = value;
+        }
+        else
+        {
+            _selectedFilter = value;
+        }
+
+        UpdateFilteredList();
+        StateHasChanged();
+    }
+    
+    @code {
     private List<string> countries = new List<string>
     {
         "Afghanistan",
@@ -335,64 +416,7 @@
         "Zimbabwe"
     };
 }
-
-@code {
-    private List<string> skillsTest = new List<string>
-    {
-        "Java",
-        "JavaScript",
-        "CSS",
-        "Kubernetes"
-    };
-
-    private List<string> _noSelected = new List<string>();
-    private List<string> _selected = new List<string>();
-    private string _noSelectedFilter = "";
-    private string _selectedFilter = "";
-
-    protected override void OnInitialized()
-    {
-        _noSelected.AddRange(skillsTest);
-        SortLists();
-    }
-
-    private void Select(string s, MouseEventArgs e)
-    {
-        _noSelected.Remove(s);
-        _selected.Add(s);
-        SortLists();
-    }
-
-    private void Deselect(string s, MouseEventArgs e)
-    {
-        _selected.Remove(s);
-        _noSelected.Add(s);
-        SortLists();
-    }
-
-    private void SelectAll()
-    {
-        _selected.AddRange(_noSelected);
-        _noSelected.Clear();
-        SortLists();
-    }
     
-    private void DeselectAll()
-    {
-        _noSelected.AddRange(_selected);
-        _selected.Clear();
-        SortLists();
-    }
-
-    private void SortLists()
-    {
-        _noSelected.Sort();
-        _selected.Sort();
-    }
-
-    private IEnumerable<string> FilteredList(List<string> list, string filter)
-    {
-        return list.Where(x => x.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0);
-    }
+    
 
 }
