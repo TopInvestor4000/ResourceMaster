@@ -2,6 +2,7 @@
 @using ResourceMaster.ViewModels;
 @using MudBlazor;
 @using System.Linq;
+@inject ISnackbar Snackbar;
 @using ResourceMaster.DAL.Models
 
 <h1>Create new applicant</h1>
@@ -90,10 +91,13 @@
 <MudForm OnSubmit="HandleSubmit" Model="_resource">
     <MudGrid>
         <MudItem xs="12" Class="my-4 text-center">
-            <MudButton Variant="Variant.Filled" 
-                       Size="Size.Large"  
+            <MudButton Variant="Variant.Filled"
+                       Size="Size.Large"
                        Color="Color.Primary"
-                       type="submit">Add applicant</MudButton>
+                       @onclick="@(() => Snackbar.Add("Successfully added xxx..."))"
+                       type="submit">
+                Add applicant
+            </MudButton>
         </MudItem>
     </MudGrid>
 </MudForm>
