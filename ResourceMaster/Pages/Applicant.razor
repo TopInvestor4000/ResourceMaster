@@ -372,12 +372,14 @@
     {
         _selected.AddRange(_noSelected);
         _noSelected.Clear();
+        SortLists();
     }
     
     private void DeselectAll()
     {
         _noSelected.AddRange(_selected);
         _selected.Clear();
+        SortLists();
     }
 
     private void SortLists()
