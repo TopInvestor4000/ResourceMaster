@@ -34,12 +34,7 @@
             <MudTextField @bind-Value="_resource.location" Label="Location" id="location" Variant="Variant.Outlined"/>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-            <MudSelect T="string" @bind-Value="_resource.country" Label="Country" Variant="Variant.Outlined">
-                @foreach (var country in countries)
-                {
-                    <MudSelectItem Value="@country">@country</MudSelectItem>
-                }
-            </MudSelect>
+            <MudAutocomplete T="string" @bind-Value="_resource.country" Label="Country" Variant="Variant.Outlined" SearchFunc="FilterCountries" />
         </MudItem>
     </MudGrid>
 </MudForm>
@@ -135,6 +130,7 @@
 }
 
 @code {
+
     private List<string> skillsTest = new List<string>
     {
         "Java",
@@ -180,7 +176,7 @@
         SortLists();
         UpdateFilteredList();
     }
-    
+
     private void DeselectAll()
     {
         _noSelected.AddRange(_selected);
@@ -200,7 +196,7 @@
         _filteredNoSelected = _noSelected.Where(x => x.IndexOf(_noSelectedFilter, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
         _filteredSelected = _selected.Where(x => x.IndexOf(_selectedFilter, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
     }
-    
+
     private void OnFilterChanged(string value, bool isNoSelected)
     {
         if (isNoSelected)
@@ -215,9 +211,21 @@
         UpdateFilteredList();
         StateHasChanged();
     }
+}
     
-    @code {
-    private List<string> countries = new List<string>
+ @code {
+        
+     private async Task<IEnumerable<string>> FilterCountries(string value)
+     {
+         if (string.IsNullOrEmpty(value))
+         {
+             return countries;
+         }
+    
+         return await Task.FromResult(countries.Where(x => x.StartsWith(value, StringComparison.OrdinalIgnoreCase)));
+     }
+
+        private List<string> countries = new List<string>
     {
         "Afghanistan",
         "Albania",
@@ -415,8 +423,4 @@
         "Zambia",
         "Zimbabwe"
     };
-}
-    
-    
-
 }
