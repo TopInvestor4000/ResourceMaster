@@ -98,26 +98,6 @@
     </MudGrid>
 </MudForm>
 
-<style>
-.list-container {
-    min-height: 50px; /* Adjust the height as needed */
-    height:  auto;
-    overflow-y: auto;
-}
-
-.no-can, .can {
-    padding: 8px 16px;
-}
-
-.no-can {
-    background-color: #e6e6e6; /* Change the background color as needed */
-}
-
-.can {
-    background-color: #e6e6e6; /* Change the background color as needed */
-}
-</style>
-
 @code{
     private ResourceViewModel _resource = new();
 
@@ -423,4 +403,12 @@
         "Zambia",
         "Zimbabwe"
     };
+ }
+
+<style>
+.list-container {
+    min-height: 50px;
+    height:  auto;
+    overflow-y: auto;
 }
+</style>
