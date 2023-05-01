@@ -3,7 +3,6 @@
 @using MudBlazor;
 @using System.Linq;
 @inject ISnackbar Snackbar;
-@using ResourceMaster.DAL.Models
 
 <h1>Create new applicant</h1>
 <br>
@@ -11,13 +10,13 @@
 <MudForm OnSubmit="HandleSubmit" Model="_resource">
     <MudGrid>
         <MudItem xs="12" sm="6" md="4">
-            <MudTextField @bind-Value="_resource.firstName" Label="First name" id="firstname" Variant="Variant.Outlined" />
+            <MudTextField @bind-Value="_resource.firstName" Label="First name" id="firstname" Variant="Variant.Outlined"/>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-            <MudTextField @bind-Value="_resource.lastName" Label="Last name" id="lastname" Variant="Variant.Outlined" />
+            <MudTextField @bind-Value="_resource.lastName" Label="Last name" id="lastname" Variant="Variant.Outlined"/>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-             <MudTextField @bind-Value="_resource.age" Label="Age" id="age" Variant="Variant.Outlined" Min="0" Max="99"/>
+            <MudTextField @bind-Value="_resource.age" Label="Age" id="age" Variant="Variant.Outlined" Min="0" Max="99"/>
         </MudItem>
     </MudGrid>
 </MudForm>
@@ -30,12 +29,12 @@
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
             <MudTextField @bind-Value="_resource.zipCode" Label="Zip Code" id="zipCode" Variant="Variant.Outlined"/>
-        </MudItem>        
+        </MudItem>
         <MudItem xs="12" sm="6" md="4">
             <MudTextField @bind-Value="_resource.location" Label="Location" id="location" Variant="Variant.Outlined"/>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-            <MudAutocomplete T="string" @bind-Value="_resource.country" Label="Country" Variant="Variant.Outlined" SearchFunc="FilterCountries" />
+            <MudAutocomplete T="string" @bind-Value="_resource.country" Label="Country" Variant="Variant.Outlined" SearchFunc="FilterCountries"/>
         </MudItem>
     </MudGrid>
 </MudForm>
@@ -43,50 +42,7 @@
 <h3>Skills</h3>
 <br>
 <MudForm OnSubmit="HandleSubmit" Model="_resource">
-    <MudGrid>
-        <MudItem xs="12" sm="4">
-            <MudPaper Elevation="1">
-                <MudTextField Value="_noSelectedFilter" Label="Search NO CAN" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" ValueChanged="@((string value) => OnFilterChanged(value, true))" Immediate="true" />
-                <MudList Clickable="true" Class="list-container">
-                    @foreach (var item in _filteredNoSelected)
-                    {
-                        <MudListItem Clickable="true" OnClick="@((e) => Select(item, e))">@item</MudListItem>
-                    }
-                </MudList>
-            </MudPaper>
-        </MudItem>
-        <MudItem xs="12" sm="4" Direction="Direction.Column">
-            <MudPaper>
-                <MudButton Variant="Variant.Filled"
-                           Size="Size.Large"
-                           Color="Color.Tertiary"
-                           OnClick="SelectAll"
-                           FullWidth="true"
-                           Padding="py-1">
-                    Select all
-                </MudButton>
-                <MudButton Variant="Variant.Filled"
-                           Size="Size.Large"
-                           Color="Color.Secondary"
-                           OnClick="DeselectAll"
-                           FullWidth="true"
-                           Padding="py-1">
-                    Deselect all
-                </MudButton>
-            </MudPaper>
-        </MudItem>
-        <MudItem xs="12" sm="4">
-            <MudPaper Elevation="1">
-                <MudTextField Value="_selectedFilter" Label="Search CAN" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" ValueChanged="@((string value) => OnFilterChanged(value, false))" Immediate="true" />
-                <MudList Clickable="true" Class="list-container">
-                    @foreach (var item in _filteredSelected)
-                    {
-                        <MudListItem Clickable="true" OnClick="@((e) => Deselect(item, e))">@item</MudListItem>
-                    }
-                </MudList>
-            </MudPaper>
-        </MudItem>
-    </MudGrid>
+    <Skills OnItemSelected="(skills) => _resource.skills = skills"/>
 </MudForm>
 <MudForm OnSubmit="HandleSubmit" Model="_resource">
     <MudGrid>
@@ -115,101 +71,17 @@
 
 @code {
 
-    private List<string> skillsTest = new List<string>
+    private async Task<IEnumerable<string>> FilterCountries(string value)
     {
-        "Java",
-        "JavaScript",
-        "CSS",
-        "Kubernetes"
-    };
-
-    private List<string> _noSelected = new List<string>();
-    private List<string> _selected = new List<string>();
-    private string _noSelectedFilter = "";
-    private string _selectedFilter = "";
-    private List<string> _filteredNoSelected = new List<string>();
-    private List<string> _filteredSelected = new List<string>();
-
-    protected override void OnInitialized()
-    {
-        _noSelected.AddRange(skillsTest);
-        SortLists();
-        UpdateFilteredList();
-    }
-
-    private void Select(string s, MouseEventArgs e)
-    {
-        _noSelected.Remove(s);
-        _selected.Add(s);
-        SortLists();
-        UpdateFilteredList();
-    }
-
-    private void Deselect(string s, MouseEventArgs e)
-    {
-        _selected.Remove(s);
-        _noSelected.Add(s);
-        SortLists();
-        UpdateFilteredList();
-    }
-
-    private void SelectAll()
-    {
-        _selected.AddRange(_noSelected);
-        _noSelected.Clear();
-        SortLists();
-        UpdateFilteredList();
-    }
-
-    private void DeselectAll()
-    {
-        _noSelected.AddRange(_selected);
-        _selected.Clear();
-        SortLists();
-        UpdateFilteredList();
-    }
-
-    private void SortLists()
-    {
-        _noSelected.Sort();
-        _selected.Sort();
-    }
-
-    private void UpdateFilteredList()
-    {
-        _filteredNoSelected = _noSelected.Where(x => x.IndexOf(_noSelectedFilter, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
-        _filteredSelected = _selected.Where(x => x.IndexOf(_selectedFilter, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
-    }
-
-    private void OnFilterChanged(string value, bool isNoSelected)
-    {
-        if (isNoSelected)
+        if (string.IsNullOrEmpty(value))
         {
-            _noSelectedFilter = value;
-        }
-        else
-        {
-            _selectedFilter = value;
+            return countries;
         }
 
-        UpdateFilteredList();
-        StateHasChanged();
+        return await Task.FromResult(countries.Where(x => x.StartsWith(value, StringComparison.OrdinalIgnoreCase)));
     }
-}
-    
- @code {
-        
-     private async Task<IEnumerable<string>> FilterCountries(string value)
-     {
-         if (string.IsNullOrEmpty(value))
-         {
-             return countries;
-         }
-    
-         return await Task.FromResult(countries.Where(x => x.StartsWith(value, StringComparison.OrdinalIgnoreCase)));
-     }
 
-        private List<string> countries = new List<string>
+    private List<string> countries = new()
     {
         "Afghanistan",
         "Albania",
@@ -407,12 +279,5 @@
         "Zambia",
         "Zimbabwe"
     };
- }
 
-<style>
-.list-container {
-    min-height: 50px;
-    height:  auto;
-    overflow-y: auto;
 }
-</style>
