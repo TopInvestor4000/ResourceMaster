@@ -17,6 +17,13 @@ Handy tools for managing the cluster and fiddling with our resources are:
 - helm
 - k9s
 
+### Migrate
+
+```bash
+cd ResourceMaster.DAL
+dotnet ef migrations add <NameOfTheMigration>
+```
+
 ### Resources
 
 The `deploy` directory is the chart for `stage` and `prod` environment with
