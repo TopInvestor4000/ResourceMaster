@@ -33,7 +33,7 @@
             <MudTextField @bind-Value="_resource.location" Label="Location" id="location" Variant="Variant.Outlined"/>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-            <MudAutocomplete T="Countries" @bind-Value="_resource.country" Label="Country" Variant="Variant.Outlined" SearchFunc="FilterCountries"/>
+            <MudAutocomplete T="Countries" @bind-Value="@_resource.country" Label="Country" Variant="Variant.Outlined" ToStringFunc="@((Countries option) => option.GetDisplayName())" SearchFunc="FilterCountries"></MudAutocomplete>
         </MudItem>
     </MudGrid>
     <br>
@@ -65,6 +65,7 @@
 
 @code {
     private List<Countries> _countries = Enum.GetValues<Countries>().ToList();
+
     private async Task<IEnumerable<Countries>> FilterCountries(string value)
     {
         if (string.IsNullOrEmpty(value))
