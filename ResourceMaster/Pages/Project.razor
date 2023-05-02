@@ -3,6 +3,7 @@
 @using MudBlazor;
 @using ResourceMaster.Services.CustomerService
 @inject ISnackbar Snackbar;
+@inject ProjectService _ProjectService;
 
 <h1>Create new project</h1>
 <br>
@@ -41,7 +42,7 @@
     private async Task HandleSubmit()
     {
         Snackbar.Add("Successfully added " + _project.projectName);
-        await ProjectService.AddAsync(_project);
+        await _ProjectService.AddAsync(_project);
     }
 
 }
