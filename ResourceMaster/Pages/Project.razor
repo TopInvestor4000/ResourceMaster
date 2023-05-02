@@ -1,0 +1,48 @@
+@page "/project"
+@using ResourceMaster.ViewModels;
+@using MudBlazor;
+@using ResourceMaster.Services.CustomerService
+@inject ISnackbar Snackbar;
+@inject ProjectService _ProjectService;
+
+<h1>Create new project</h1>
+<br>
+<h3>Project</h3>
+<MudForm onsubmit="@HandleSubmit" Model="_project">
+    <MudGrid>
+        <MudItem xs="12" sm="6" md="4">
+            <MudTextField @bind-Value="_project.projectName" Label="Project name" id="projectName" Variant="Variant.Outlined"/>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="4">
+            <MudTextField @bind-Value="_project.workForce" Label="Workforce" id="workforce" Variant="Variant.Outlined" Min="0" Max="999"/>
+        </MudItem>
+        <br/>
+        <MudItem xs="12" sm="6" md="4">
+            <MudDatePicker Label="Project start" @bind-Date="_project.projectStart"/>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="4">
+            <MudDatePicker Label="Project end" @bind-Date="_project.projectEnd"/>
+        </MudItem>
+    </MudGrid>
+    <MudGrid>
+        <MudItem xs="12" Class="my-4 text-center">
+            <MudButton Variant="Variant.Filled"
+                       Size="Size.Large"
+                       Color="Color.Primary"
+                       ButtonType="ButtonType.Submit">
+                Add project
+            </MudButton>
+        </MudItem>
+    </MudGrid>
+</MudForm>
+
+@code{
+    private ProjectViewModel _project = new();
+
+    private async Task HandleSubmit()
+    {
+        Snackbar.Add("Successfully added " + _project.projectName);
+        await _ProjectService.AddAsync(_project);
+    }
+
+}

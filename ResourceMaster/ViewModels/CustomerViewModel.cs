@@ -9,5 +9,5 @@ public class CustomerViewModel
     public string street { get; set; }
     public string zipCode { get; set; }
     public string location { get; set; }
-    public string country { get; set; }
+    public Countries country { get; set; }
 }

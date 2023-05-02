@@ -1,101 +1,51 @@
 @page "/applicant"
-@using ResourceMaster.ViewModels;
-@using MudBlazor;
-@using System.Linq;
+@using ResourceMaster.ViewModels
+@using MudBlazor
+@using ResourceMaster.Services.CustomerService
 @inject ISnackbar Snackbar;
-@using ResourceMaster.DAL.Models
+@inject ResourceService ResourceService;
 
 <h1>Create new applicant</h1>
 <br>
 <h3>Person</h3>
-<MudForm OnSubmit="HandleSubmit" Model="_resource">
+<MudForm onsubmit="@HandleSubmit" Model="_resource">
     <MudGrid>
         <MudItem xs="12" sm="6" md="4">
-            <MudTextField @bind-Value="_resource.firstName" Label="First name" id="firstname" Variant="Variant.Outlined" />
+            <MudTextField @bind-Value="_resource.firstName" Label="First name" id="firstname" Variant="Variant.Outlined"/>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-            <MudTextField @bind-Value="_resource.lastName" Label="Last name" id="lastname" Variant="Variant.Outlined" />
+            <MudTextField @bind-Value="_resource.lastName" Label="Last name" id="lastname" Variant="Variant.Outlined"/>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-             <MudTextField @bind-Value="_resource.age" Label="Age" id="age" Variant="Variant.Outlined" Min="0" Max="99"/>
+            <MudTextField @bind-Value="_resource.age" Label="Age" id="age" Variant="Variant.Outlined" Min="0" Max="99"/>
         </MudItem>
     </MudGrid>
-</MudForm>
-<br>
-<h3>Address</h3>
-<MudForm OnSubmit="HandleSubmit" Model="_resource">
+    <br>
+    <h3>Address</h3>
     <MudGrid>
         <MudItem xs="12" sm="6" md="4">
             <MudTextField @bind-Value="_resource.street" Label="Street" id="street" Variant="Variant.Outlined"/>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
             <MudTextField @bind-Value="_resource.zipCode" Label="Zip Code" id="zipCode" Variant="Variant.Outlined"/>
-        </MudItem>        
+        </MudItem>
         <MudItem xs="12" sm="6" md="4">
             <MudTextField @bind-Value="_resource.location" Label="Location" id="location" Variant="Variant.Outlined"/>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-            <MudAutocomplete T="string" @bind-Value="_resource.country" Label="Country" Variant="Variant.Outlined" SearchFunc="FilterCountries" />
+            <MudAutocomplete T="Countries" @bind-Value="@_resource.country" Label="Country" Variant="Variant.Outlined" ToStringFunc="@((Countries option) => option.GetDisplayName())" SearchFunc="FilterCountries"></MudAutocomplete>
         </MudItem>
     </MudGrid>
-</MudForm>
-<br>
-<h3>Skills</h3>
-<br>
-<MudForm OnSubmit="HandleSubmit" Model="_resource">
-    <MudGrid>
-        <MudItem xs="12" sm="4">
-            <MudPaper Elevation="1">
-                <MudTextField Value="_noSelectedFilter" Label="Search NO CAN" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" ValueChanged="@((string value) => OnFilterChanged(value, true))" Immediate="true" />
-                <MudList Clickable="true" Class="list-container">
-                    @foreach (var item in _filteredNoSelected)
-                    {
-                        <MudListItem Clickable="true" OnClick="@((e) => Select(item, e))">@item</MudListItem>
-                    }
-                </MudList>
-            </MudPaper>
-        </MudItem>
-        <MudItem xs="12" sm="4" Direction="Direction.Column">
-            <MudPaper>
-                <MudButton Variant="Variant.Filled"
-                           Size="Size.Large"
-                           Color="Color.Tertiary"
-                           OnClick="SelectAll"
-                           FullWidth="true"
-                           Padding="py-1">
-                    Select all
-                </MudButton>
-                <MudButton Variant="Variant.Filled"
-                           Size="Size.Large"
-                           Color="Color.Secondary"
-                           OnClick="DeselectAll"
-                           FullWidth="true"
-                           Padding="py-1">
-                    Deselect all
-                </MudButton>
-            </MudPaper>
-        </MudItem>
-        <MudItem xs="12" sm="4">
-            <MudPaper Elevation="1">
-                <MudTextField Value="_selectedFilter" Label="Search CAN" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" ValueChanged="@((string value) => OnFilterChanged(value, false))" Immediate="true" />
-                <MudList Clickable="true" Class="list-container">
-                    @foreach (var item in _filteredSelected)
-                    {
-                        <MudListItem Clickable="true" OnClick="@((e) => Deselect(item, e))">@item</MudListItem>
-                    }
-                </MudList>
-            </MudPaper>
-        </MudItem>
-    </MudGrid>
-</MudForm>
-<MudForm OnSubmit="HandleSubmit" Model="_resource">
+    <br>
+    <h3>Skills</h3>
+    <br>
+    <Skills OnItemSelected="(skills) => _resource.skills = skills"/>
     <MudGrid>
         <MudItem xs="12" Class="my-4 text-center">
             <MudButton Variant="Variant.Filled"
                        Size="Size.Large"
                        Color="Color.Primary"
-                       @onclick="@(() => Snackbar.Add("Successfully added xxx..."))"
-                       type="submit">
+                       ButtonType="ButtonType.Submit">
                 Add applicant
             </MudButton>
         </MudItem>
@@ -107,312 +57,23 @@
 
     private async Task HandleSubmit()
     {
-        _resource = new ResourceViewModel();
-    // TODO: implement code to send to db
+        await ResourceService.AddAsync(_resource);
+        Snackbar.Add("Successfully added " + _resource.firstName + " " + _resource.lastName);
     }
 
 }
 
 @code {
+    private List<Countries> _countries = Enum.GetValues<Countries>().ToList();
 
-    private List<string> skillsTest = new List<string>
+    private async Task<IEnumerable<Countries>> FilterCountries(string value)
     {
-        "Java",
-        "JavaScript",
-        "CSS",
-        "Kubernetes"
-    };
-
-    private List<string> _noSelected = new List<string>();
-    private List<string> _selected = new List<string>();
-    private string _noSelectedFilter = "";
-    private string _selectedFilter = "";
-    private List<string> _filteredNoSelected = new List<string>();
-    private List<string> _filteredSelected = new List<string>();
-
-    protected override void OnInitialized()
-    {
-        _noSelected.AddRange(skillsTest);
-        SortLists();
-        UpdateFilteredList();
-    }
-
-    private void Select(string s, MouseEventArgs e)
-    {
-        _noSelected.Remove(s);
-        _selected.Add(s);
-        SortLists();
-        UpdateFilteredList();
-    }
-
-    private void Deselect(string s, MouseEventArgs e)
-    {
-        _selected.Remove(s);
-        _noSelected.Add(s);
-        SortLists();
-        UpdateFilteredList();
-    }
-
-    private void SelectAll()
-    {
-        _selected.AddRange(_noSelected);
-        _noSelected.Clear();
-        SortLists();
-        UpdateFilteredList();
-    }
-
-    private void DeselectAll()
-    {
-        _noSelected.AddRange(_selected);
-        _selected.Clear();
-        SortLists();
-        UpdateFilteredList();
-    }
-
-    private void SortLists()
-    {
-        _noSelected.Sort();
-        _selected.Sort();
-    }
-
-    private void UpdateFilteredList()
-    {
-        _filteredNoSelected = _noSelected.Where(x => x.IndexOf(_noSelectedFilter, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
-        _filteredSelected = _selected.Where(x => x.IndexOf(_selectedFilter, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
-    }
-
-    private void OnFilterChanged(string value, bool isNoSelected)
-    {
-        if (isNoSelected)
+        if (string.IsNullOrEmpty(value))
         {
-            _noSelectedFilter = value;
-        }
-        else
-        {
-            _selectedFilter = value;
+            return _countries;
         }
 
-        UpdateFilteredList();
-        StateHasChanged();
+        return await Task.FromResult(_countries.FilterByDisplayName(value));
     }
-}
-    
- @code {
-        
-     private async Task<IEnumerable<string>> FilterCountries(string value)
-     {
-         if (string.IsNullOrEmpty(value))
-         {
-             return countries;
-         }
-    
-         return await Task.FromResult(countries.Where(x => x.StartsWith(value, StringComparison.OrdinalIgnoreCase)));
-     }
 
-        private List<string> countries = new List<string>
-    {
-        "Afghanistan",
-        "Albania",
-        "Algeria",
-        "Andorra",
-        "Angola",
-        "Antigua and Barbuda",
-        "Argentina",
-        "Armenia",
-        "Australia",
-        "Austria",
-        "Azerbaijan",
-        "Bahamas",
-        "Bahrain",
-        "Bangladesh",
-        "Barbados",
-        "Belarus",
-        "Belgium",
-        "Belize",
-        "Benin",
-        "Bhutan",
-        "Bolivia",
-        "Bosnia and Herzegovina",
-        "Botswana",
-        "Brazil",
-        "Brunei",
-        "Bulgaria",
-        "Burkina Faso",
-        "Burundi",
-        "Côte d'Ivoire",
-        "Cabo Verde",
-        "Cambodia",
-        "Cameroon",
-        "Canada",
-        "Central African Republic",
-        "Chad",
-        "Chile",
-        "China",
-        "Colombia",
-        "Comoros",
-        "Congo (Congo-Brazzaville)",
-        "Costa Rica",
-        "Croatia",
-        "Cuba",
-        "Cyprus",
-        "Czechia (Czech Republic)",
-        "Democratic Republic of the Congo",
-        "Denmark",
-        "Djibouti",
-        "Dominica",
-        "Dominican Republic",
-        "Ecuador",
-        "Egypt",
-        "El Salvador",
-        "Equatorial Guinea",
-        "Eritrea",
-        "Estonia",
-        "Ethiopia",
-        "Fiji",
-        "Finland",
-        "France",
-        "Gabon",
-        "Gambia",
-        "Georgia",
-        "Germany",
-        "Ghana",
-        "Greece",
-        "Grenada",
-        "Guatemala",
-        "Guinea",
-        "Guinea-Bissau",
-        "Guyana",
-        "Haiti",
-        "Holy See",
-        "Honduras",
-        "Hungary",
-        "Iceland",
-        "India",
-        "Indonesia",
-        "Iran",
-        "Iraq",
-        "Ireland",
-        "Israel",
-        "Italy",
-        "Jamaica",
-        "Japan",
-        "Jordan",
-        "Kazakhstan",
-        "Kenya",
-        "Kiribati",
-        "Kuwait",
-        "Kyrgyzstan",
-        "Laos",
-        "Latvia",
-        "Lebanon",
-        "Lesotho",
-        "Liberia",
-        "Libya",
-        "Liechtenstein",
-        "Lithuania",
-        "Luxembourg",
-        "Madagascar",
-        "Malawi",
-        "Malaysia",
-        "Maldives",
-        "Mali",
-        "Malta",
-        "Marshall Islands",
-        "Mauritania",
-        "Mauritius",
-        "Mexico",
-        "Micronesia",
-        "Moldova",
-        "Monaco",
-        "Mongolia",
-        "Montenegro",
-        "Morocco",
-        "Mozambique",
-        "Myanmar (formerly Burma)",
-        "Namibia",
-        "Nauru",
-        "Nepal",
-        "Netherlands",
-        "New Zealand",
-        "Nicaragua",
-        "Niger",
-        "Nigeria",
-        "North Korea",
-        "North Macedonia",
-        "Norway",
-        "Oman",
-        "Pakistan",
-        "Palau",
-        "Palestine State",
-        "Panama",
-        "Papua New Guinea",
-        "Paraguay",
-        "Peru",
-        "Philippines",
-        "Poland",
-        "Portugal",
-        "Qatar",
-        "Romania",
-        "Russia",
-        "Rwanda",
-        "Saint Kitts and Nevis",
-        "Saint Lucia",
-        "Saint Vincent and the Grenadines",
-        "Samoa",
-        "San Marino",
-        "Sao Tome and Principe",
-        "Saudi Arabia",
-        "Senegal",
-        "Serbia",
-        "Seychelles",
-        "Sierra Leone",
-        "Singapore",
-        "Slovakia",
-        "Slovenia",
-        "Solomon Islands",
-        "Somalia",
-        "South Africa",
-        "South Korea",
-        "South Sudan",
-        "Spain",
-        "Sri Lanka",
-        "Sudan",
-        "Suriname",
-        "Swaziland",
-        "Sweden",
-        "Switzerland",
-        "Syria",
-        "Tajikistan",
-        "Tanzania",
-        "Thailand",
-        "Timor-Leste",
-        "Togo",
-        "Tonga",
-        "Trinidad and Tobago",
-        "Tunisia",
-        "Turkey",
-        "Turkmenistan",
-        "Tuvalu",
-        "Uganda",
-        "Ukraine",
-        "United Arab Emirates",
-        "United Kingdom",
-        "United States of America",
-        "Uruguay",
-        "Uzbekistan",
-        "Vanuatu",
-        "Venezuela",
-        "Vietnam",
-        "Yemen",
-        "Zambia",
-        "Zimbabwe"
-    };
- }
-
-<style>
-.list-container {
-    min-height: 50px;
-    height:  auto;
-    overflow-y: auto;
 }
-</style>
