@@ -1,12 +1,13 @@
 @page "/project"
 @using ResourceMaster.ViewModels;
 @using MudBlazor;
+@using ResourceMaster.Services.CustomerService
 @inject ISnackbar Snackbar;
 
 <h1>Create new project</h1>
 <br>
 <h3>Project</h3>
-<MudForm OnSubmit="HandleSubmit" Model="_project">
+<MudForm onsubmit="@HandleSubmit" Model="_project">
     <MudGrid>
         <MudItem xs="12" sm="6" md="4">
             <MudTextField @bind-Value="_project.projectName" Label="Project name" id="projectName" Variant="Variant.Outlined"/>
@@ -27,8 +28,7 @@
             <MudButton Variant="Variant.Filled"
                        Size="Size.Large"
                        Color="Color.Primary"
-                       @onclick="@(() => Snackbar.Add("Successfully added " + _project.projectName))"
-                       type="submit">
+                       ButtonType="ButtonType.Submit">
                 Add project
             </MudButton>
         </MudItem>
@@ -40,8 +40,8 @@
 
     private async Task HandleSubmit()
     {
-    // _resource = new ResourceViewModel();
-    // TODO: implement code to send to db
+        Snackbar.Add("Successfully added " + _project.projectName);
+        await ProjectService.AddAsync(_project);
     }
 
 }
