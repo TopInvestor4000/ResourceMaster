@@ -1,43 +1,68 @@
 @page "/supplier"
 @using ResourceMaster.ViewModels;
 @using MudBlazor;
+@using ResourceMaster.Services.CustomerService
+@inject CustomerService CustomerService;
+@inject ISnackbar Snackbar;
 
 <h1>Create new applicant</h1>
 
 
-<MudForm OnSubmit="HandleSubmit" Model="supplier">
+<MudForm onsubmit="@HandleSubmit" Model="_customer">
     <MudGrid>
         <MudItem xs="12" sm="6" md="4">
-            <MudField @bind-value="supplier.companyName" Label="name of corporation" id="corporation" Variant="Variant.Text"></MudField>
+            <MudField @bind-value="_customer.companyName" Label="name of corporation" id="corporation" Variant="Variant.Text"></MudField>
         </MudItem>
-        @*
-        <MudItem xs="12">
-            <MudNumericField @bind-Value="supplier.neededWorkforce" Label="number of workforce needed" id="age" Variant="Variant.Text" Min="0" Max="99"/>
+        <MudItem xs="12" sm="6" md="4">
+            <MudField @bind-value="_customer.firstName" Label="firstname" id="firstname" Variant="Variant.Text"></MudField>
         </MudItem>
-        *@
-        <MudItem xs="12">
-            @*
-            <MudSelect T="Professions" MultiSelection="true" Label="professions which are needed" AnchorOrigin="Origin.BottomCenter">
-                @foreach (Professions profession in Enum.GetValues(typeof(Professions)))
-                {
-                    <MudSelectItem Value="@profession">@profession</MudSelectItem>
-                }
-            </MudSelect>
-            *@
+        <MudItem xs="12" sm="6" md="4">
+            <MudField @bind-value="_customer.lastName" Label="lastname" id="lastname" Variant="Variant.Text"></MudField>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="4">
+            <MudField @bind-value="_customer.street" Label="street" id="street" Variant="Variant.Text"></MudField>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="4">
+            <MudField @bind-Value="_customer.zipCode" Label="zip code" id="zipCode" Variant="Variant.Text"></MudField>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="4">
+            <MudField @bind-value="_customer.location" Label="location" id="location" Variant="Variant.Text"></MudField>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="4">
+            <MudAutocomplete T="Countries" @bind-Value="_customer.country" Label="Country" Variant="Variant.Outlined" SearchFunc="FilterCountries"/>
         </MudItem>
     </MudGrid>
-    <MudButton type="submit">Add supplier</MudButton>
+    <MudGrid>
+        <MudItem xs="12" Class="my-4 text-center">
+            <MudButton Variant="Variant.Filled"
+                       Size="Size.Large"
+                       Color="Color.Primary"
+                       ButtonType="ButtonType.Submit">
+                Add customer
+            </MudButton>
+        </MudItem>
+    </MudGrid>
 </MudForm>
 
 
-
 @code{
-    private CustomerViewModel supplier = new();
+    private CustomerViewModel _customer = new();
+    private List<Countries> _countries = Enum.GetValues<Countries>().ToList();
 
     private async Task HandleSubmit()
     {
-        supplier = new CustomerViewModel();
-    // TODO: implement code to send to db
+        await CustomerService.AddAsync(_customer);
+        Snackbar.Add("Successfully added " + _customer.companyName);
     }
 
+
+    private async Task<IEnumerable<Countries>> FilterCountries(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return _countries;
+        }
+
+        return await Task.FromResult(_countries.FilterByDisplayName(value));
+    }
 }

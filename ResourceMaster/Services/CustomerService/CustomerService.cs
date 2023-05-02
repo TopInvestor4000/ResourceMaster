@@ -31,7 +31,7 @@ namespace ResourceMaster.Services.CustomerService
                     lastName = table.lastName,
                     street = table.street,
                     location = table.location,
-                    country = table.country,
+                    country = (Countries)Enum.Parse(typeof(Countries), table.country),
                     zipCode = table.zipCode
                 };
                 resultList.Add(viewModel);
@@ -49,7 +49,7 @@ namespace ResourceMaster.Services.CustomerService
                 lastName = customer.lastName,
                 street = customer.street,
                 location = customer.location,
-                country = customer.country,
+                country = customer.country.ToString(),
                 zipCode = customer.zipCode
             };
 

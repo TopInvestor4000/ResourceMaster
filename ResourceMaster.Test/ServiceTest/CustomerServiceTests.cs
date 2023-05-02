@@ -53,7 +53,7 @@ namespace ResourceMaster.Test.ServiceTest
                 street = table.street,
                 zipCode = table.zipCode,
                 location = table.location,
-                country = table.country,
+                country = (Countries)Enum.Parse(typeof(Countries), table.country),
                 companyName = table.companyName,
             });
 
@@ -76,7 +76,7 @@ namespace ResourceMaster.Test.ServiceTest
                 street = "Löwengasse 5",
                 zipCode = "3000",
                 location = "Zürich",
-                country = "Schweiz",
+                country = Countries.Switzerland,
                 companyName = "Bond Agency",
             };
 
