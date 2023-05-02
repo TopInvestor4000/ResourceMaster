@@ -1,13 +1,14 @@
 @page "/applicant"
-@using ResourceMaster.ViewModels;
-@using MudBlazor;
-@using System.Linq;
+@using MudBlazor
+@using ResourceMaster.Services.CustomerService
+@using ResourceMaster.ViewModels
 @inject ISnackbar Snackbar;
+@inject ResourceService ResourceService;
 
 <h1>Create new applicant</h1>
 <br>
 <h3>Person</h3>
-<MudForm OnSubmit="HandleSubmit" Model="_resource">
+<MudForm onsubmit="@HandleSubmit" Model="_resource">
     <MudGrid>
         <MudItem xs="12" sm="6" md="4">
             <MudTextField @bind-Value="_resource.firstName" Label="First name" id="firstname" Variant="Variant.Outlined"/>
@@ -19,10 +20,8 @@
             <MudTextField @bind-Value="_resource.age" Label="Age" id="age" Variant="Variant.Outlined" Min="0" Max="99"/>
         </MudItem>
     </MudGrid>
-</MudForm>
-<br>
-<h3>Address</h3>
-<MudForm OnSubmit="HandleSubmit" Model="_resource">
+    <br>
+    <h3>Address</h3>
     <MudGrid>
         <MudItem xs="12" sm="6" md="4">
             <MudTextField @bind-Value="_resource.street" Label="Street" id="street" Variant="Variant.Outlined"/>
@@ -37,21 +36,16 @@
             <MudAutocomplete T="string" @bind-Value="_resource.country" Label="Country" Variant="Variant.Outlined" SearchFunc="FilterCountries"/>
         </MudItem>
     </MudGrid>
-</MudForm>
-<br>
-<h3>Skills</h3>
-<br>
-<MudForm OnSubmit="HandleSubmit" Model="_resource">
+    <br>
+    <h3>Skills</h3>
+    <br>
     <Skills OnItemSelected="(skills) => _resource.skills = skills"/>
-</MudForm>
-<MudForm OnSubmit="HandleSubmit" Model="_resource">
     <MudGrid>
         <MudItem xs="12" Class="my-4 text-center">
             <MudButton Variant="Variant.Filled"
                        Size="Size.Large"
                        Color="Color.Primary"
-                       @onclick="@(() => Snackbar.Add("Successfully added xxx..."))"
-                       type="submit">
+                       ButtonType="ButtonType.Submit">
                 Add applicant
             </MudButton>
         </MudItem>
@@ -63,8 +57,8 @@
 
     private async Task HandleSubmit()
     {
-        _resource = new ResourceViewModel();
-    // TODO: implement code to send to db
+        Snackbar.Add("Successfully added " + _resource.firstName + " " + _resource.lastName);
+        await ResourceService.AddAsync(_resource);
     }
 
 }
