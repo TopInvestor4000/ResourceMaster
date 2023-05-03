@@ -15,7 +15,7 @@ namespace ResourceMaster.Services.CustomerService
             _logger = logger;
         }
 
-        public async Task<IEnumerable<CustomerViewModel>> GetAllAsync( )
+        public async Task<IEnumerable<CustomerViewModel>> GetAllAsync()
         {
 
             _logger.LogInformation("GetAllAsync Method called");
@@ -54,6 +54,40 @@ namespace ResourceMaster.Services.CustomerService
             };
 
             await _repository.AddAsync(newEntry);
+        }
+
+        public CustomerViewModel ToViewModel(Customer customer)
+        {
+            var viewModel = new CustomerViewModel()
+            {
+                id = customer.id,
+                companyName = customer.companyName,
+                firstName = customer.firstName,
+                lastName = customer.lastName,
+                street = customer.street,
+                location = customer.location,
+                country = (Countries)Enum.Parse(typeof(Countries), customer.country),
+                zipCode = customer.zipCode
+            };
+
+            return viewModel;
+        }
+
+        public Customer ToDb(CustomerViewModel customer)
+        {
+            var model = new Customer()
+            {
+                id = customer.id,
+                companyName = customer.companyName,
+                firstName = customer.firstName,
+                lastName = customer.lastName,
+                street = customer.street,
+                location = customer.location,
+                country = customer.country.ToString(),
+                zipCode = customer.zipCode
+            };
+
+            return model;
         }
     }
 }

@@ -20,7 +20,10 @@
         <MudTd DataLabel="First name">@context.firstName</MudTd>
         <MudTd DataLabel="Last name">@context.lastName</MudTd>
         <MudTd DataLabel="age">@context.age</MudTd>
-        <MudTd DataLabel="skills">@context.skills[0].description</MudTd>
+        <MudTd DataLabel="skills">
+            @(context.skills != null && context.skills.Count > 0
+                ? context.skills[0].description : "Kein skill vorhanden")
+        </MudTd>
     </RowTemplate>
     <PagerContent>
         <MudTablePager />
