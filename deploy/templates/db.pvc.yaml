@@ -6,7 +6,7 @@ metadata:
 spec:
   storageClassName: "cinder-csi-ssd"
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 10Gi
@@ -19,7 +19,7 @@ metadata:
 spec:
   storageClassName: "cinder-csi-ssd"
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 20Gi
