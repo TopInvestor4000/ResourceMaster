@@ -1,0 +1,54 @@
+@page "/customerOverview"
+@using ResourceMaster.Services.CustomerService
+@using ResourceMaster.ViewModels
+@using MudBlazor
+@inject CustomerService CustomerService;
+
+<MudTable Items="@customers" Bordered="@true" Striped="true" Filter="new Func<CustomerViewModel,bool>(FilterFunc1)" @bind-SelectedItem="selectedCustomer">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Customer Overview</MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="filter" Placeholder="Filter" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>Company name</MudTh>
+        <MudTh>First name</MudTh>
+        <MudTh>Last name</MudTh>
+        <MudTh>country</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="companyName">@context.companyName</MudTd>
+        <MudTd DataLabel="firstName">@context.firstName</MudTd>
+        <MudTd DataLabel="lastName">@context.lastName</MudTd>
+        <MudTd DataLabel="country">@context.country</MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+@code {
+    private string filter = "";
+    private CustomerViewModel selectedCustomer;
+    private IEnumerable<CustomerViewModel> customers = new List<CustomerViewModel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        customers = await CustomerService.GetAllAsync();
+    }
+
+    private bool FilterFunc1(CustomerViewModel element) => FilterFunc(element, filter);
+
+    private bool FilterFunc(CustomerViewModel element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.companyName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.firstName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.lastName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+}

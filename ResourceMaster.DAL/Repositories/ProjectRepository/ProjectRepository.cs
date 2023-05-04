@@ -21,8 +21,16 @@ namespace ResourceMaster.DAL.Repositories.ProjectRepository
 
         public async Task AddAsync(Project customer)
         {
-            await _context.Projects.AddAsync(customer);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.Projects.AddAsync(customer);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                var a = ex.Message;
+            }
+           
         }
     }
 }

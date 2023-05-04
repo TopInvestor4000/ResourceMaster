@@ -8,11 +8,13 @@ namespace ResourceMaster.Services.CustomerService
     {
         private readonly IProjectRepository _repository;
         private readonly ILogger<ProjectService> _logger;
+        private readonly CustomerService _customerService;
 
-        public ProjectService(IProjectRepository repository, ILogger<ProjectService> logger)
+        public ProjectService(IProjectRepository repository, ILogger<ProjectService> logger, CustomerService customerService)
         {
             _repository = repository;
             _logger = logger;
+            _customerService = customerService;
         }
 
         public async Task<IEnumerable<ProjectViewModel>> GetAllAsync( )
@@ -44,11 +46,11 @@ namespace ResourceMaster.Services.CustomerService
             {
                     id = project.id,
                     projectName = project.projectName,
-                    customer = project.customer,
+                   customer = project.customer,
                     workForce = project.workForce,
-                    projectStart = project.projectStart,
-                    projectEnd = project.projectEnd,
-                    skills = project.skills,
+                    projectStart = DateTime.SpecifyKind(project.projectStart.Value, DateTimeKind.Utc),
+                    projectEnd = DateTime.SpecifyKind(project.projectEnd.Value, DateTimeKind.Utc),
+                skills = project.skills,
             };
 
             await _repository.AddAsync(newEntry);
