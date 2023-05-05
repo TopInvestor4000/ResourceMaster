@@ -25,19 +25,31 @@ namespace ResourceMaster.Services.CustomerService
             List<ProjectViewModel> resultList = new List<ProjectViewModel>();
             foreach (var table in customerList)
             {
-                var viewModel = new ProjectViewModel()
-                {
-                    id = table.id,
-                    projectName = table.projectName,
-                    customer = table.customer,
-                    workForce = table.workForce,
-                    projectStart = table.projectStart,
-                    projectEnd = table.projectEnd,
-                    skills = table.skills,
-                };
+                ProjectViewModel viewModel = ToViewModel(table);
                 resultList.Add(viewModel);
             }
             return resultList;
+        }
+
+        private static ProjectViewModel ToViewModel(Project table)
+        {
+            return new ProjectViewModel()
+            {
+                id = table.id,
+                projectName = table.projectName,
+                customer = table.customer,
+                workForce = table.workForce,
+                projectStart = table.projectStart,
+                projectEnd = table.projectEnd,
+                skills = table.skills,
+            };
+        }
+
+        public async Task<ProjectViewModel> GetSingle(int id)
+        {
+            var project = await _repository.GetSingle(id);
+            return ToViewModel(project);
+
         }
 
         public async Task AddAsync(ProjectViewModel project)
