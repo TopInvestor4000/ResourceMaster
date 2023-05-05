@@ -41,8 +41,8 @@ public class TestData
                 
                 for (int i = 0; i < numToSelect; i++)
                 {
-                    int randomIndex = random.Next(0, numToSelect);
-                    string selectedElement = skillList[randomIndex];
+                    var randomIndex = random.Next(0, numToSelect);
+                    var selectedElement = skillList[randomIndex];
                     selectedElements.Add(selectedElement);
                 }
                 return selectedElements;
