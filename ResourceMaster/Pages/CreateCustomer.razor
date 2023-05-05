@@ -1,4 +1,4 @@
-@page "/supplier"
+@page "/createCustomer"
 @using ResourceMaster.ViewModels;
 @using MudBlazor;
 @using ResourceMaster.Services.CustomerService
@@ -7,26 +7,25 @@
 
 <h1>Create new applicant</h1>
 
-
 <MudForm onsubmit="@HandleSubmit" Model="_customer">
     <MudGrid>
         <MudItem xs="12" sm="6" md="4">
-            <MudField @bind-value="_customer.companyName" Label="name of corporation" id="corporation" Variant="Variant.Text"></MudField>
+            <MudTextField T="string" @bind-value="_customer.companyName" Label="name of corporation" id="corporation" Variant="Variant.Outlined"/>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-            <MudField @bind-value="_customer.firstName" Label="firstname" id="firstname" Variant="Variant.Text"></MudField>
+            <MudTextField T="string" @bind-value="_customer.firstName" Label="firstname" id="firstname" Variant="Variant.Outlined"></MudTextField>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-            <MudField @bind-value="_customer.lastName" Label="lastname" id="lastname" Variant="Variant.Text"></MudField>
+            <MudTextField T="string" @bind-value="_customer.lastName" Label="lastname" id="lastname" Variant="Variant.Outlined"></MudTextField>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-            <MudField @bind-value="_customer.street" Label="street" id="street" Variant="Variant.Text"></MudField>
+            <MudTextField T="string" @bind-value="_customer.street" Label="street" id="street" Variant="Variant.Outlined"></MudTextField>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-            <MudField @bind-Value="_customer.zipCode" Label="zip code" id="zipCode" Variant="Variant.Text"></MudField>
+            <MudTextField T="string" @bind-Value="_customer.zipCode" Label="zip code" id="zipCode" Variant="Variant.Outlined"></MudTextField>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-            <MudField @bind-value="_customer.location" Label="location" id="location" Variant="Variant.Text"></MudField>
+            <MudTextField T="string" @bind-value="_customer.location" Label="location" id="location" Variant="Variant.Outlined"></MudTextField>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
             <MudAutocomplete T="Countries" @bind-Value="_customer.country" Label="Country" Variant="Variant.Outlined" SearchFunc="FilterCountries"/>
@@ -65,4 +64,5 @@
 
         return await Task.FromResult(_countries.FilterByDisplayName(value));
     }
+
 }
