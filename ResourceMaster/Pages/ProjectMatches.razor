@@ -1,0 +1,86 @@
+﻿@page "/projectMatches/{projectId:int}"
+@using ResourceMaster.DAL.Models;
+@using ResourceMaster.Services.CustomerService
+@using ResourceMaster.Services.MatchingService;
+@using ResourceMaster.ViewModels
+@using MudBlazor
+@inject ResourceService ResourceService;
+@inject MatchingService MatchingService;
+@inject ProjectService ProjectService;
+
+<MudTable Items="@resources" Bordered="@true" Striped="true">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Resource </MudText>
+     </ToolBarContent>
+    <HeaderContent>
+        <MudTh>First name</MudTh>
+        <MudTh>Last name</MudTh>
+        <MudTh>Age</MudTh>
+        <MudTh>Skills</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="First name">@context.firstName</MudTd>
+        <MudTd DataLabel="Last name">@context.lastName</MudTd>
+        <MudTd DataLabel="age">@context.age</MudTd>
+        <MudTd DataLabel="skills">
+            @(context.skills != null && context.skills.Count > 0
+                ? string.Join(", ", context.skills.Select(s => s.description))
+                : "Kein Skill vorhanden")
+        </MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+@code {
+
+    [Parameter]
+    public int projectId { get; set; }
+
+    private List<ResourceViewModel> resources = new List<ResourceViewModel>();
+
+    private List<Skill> skillList1 = new()
+    {
+        new Skill("Java", false, "senior", "yes"),
+        new Skill("JavaScript", false, "senior", "yes"),
+    };
+
+    private List<Skill> skillListProject = new()
+    {
+        new Skill("Java", false, "senior", "yes"),
+        new Skill("JavaScript", false, "senior", "yes"),
+        new Skill("CSS", false, "senior", "yes"),
+    };
+
+    private List<Skill> skillList2 = new()
+    {
+        new Skill("Kubernetes", false, "senior", "yes"),
+    };
+    //private ProjectViewModel currentProject;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // projectId = int.Parse(RouteData.Values["projectId"].ToString());
+        var currentProject = await ProjectService.GetSingle(projectId);
+        currentProject.skills = skillListProject;
+
+        var allResource = (await ResourceService.GetAllAsync()).ToList();
+
+        for (int i = 0; i < allResource.Count; i++)
+        {
+            if (i % 2 == 0)
+            {
+                allResource[i].skills = skillList2;
+            }
+            else
+            {
+                allResource[i].skills = skillList1;
+            }
+        }
+
+        resources = (MatchingService.MatchResourcesToProject(currentProject, allResource));
+    }
+
+
+}

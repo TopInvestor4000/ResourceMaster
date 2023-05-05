@@ -19,6 +19,11 @@ namespace ResourceMaster.DAL.Repositories.ProjectRepository
             return await _context.Projects.ToListAsync();
         }
 
+        public async Task<Project> GetSingle(int id)
+        {
+            return await _context.Projects.SingleOrDefaultAsync(x => x.id == id);
+        }
+
         public async Task AddAsync(Project customer)
         {
             try
