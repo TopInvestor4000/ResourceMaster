@@ -29,10 +29,6 @@ namespace ResourceMaster.Services.CustomerService
                     age = table.age,
                     firstName = table.firstName,
                     lastName = table.lastName,
-                    street = table.street,
-                    zipCode = table.zipCode,
-                    location = table.location,
-                    country = (Countries)Enum.Parse(typeof(Countries), table.country),
                     skills = table.skills,
                 };
                 resultList.Add(viewModel);
@@ -48,10 +44,6 @@ namespace ResourceMaster.Services.CustomerService
                     age = resource.age,
                     firstName = resource.firstName,
                     lastName = resource.lastName,
-                    street = resource.street,
-                    zipCode = resource.zipCode,
-                    location = resource.location,
-                    country = resource.country.ToString(),
                     skills = resource.skills,
             };
 
