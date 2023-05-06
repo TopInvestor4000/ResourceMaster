@@ -7,7 +7,7 @@
                 <MudList Clickable="true" Class="list-container">
                     @foreach (var item in _filteredNoSelected)
                     {
-                        <MudListItem Clickable="true" OnClick="@((e) => Select(item, e))">@item.description</MudListItem>
+                        <MudListItem Clickable="true" OnClick="@((e) => Select(item, e))">@item.SkillName</MudListItem>
                     }
                 </MudList>
             </MudPaper>
@@ -38,7 +38,7 @@
                 <MudList Clickable="true" Class="list-container">
                     @foreach (var item in _filteredSelected)
                     {
-                        <MudListItem Clickable="true" OnClick="@((e) => Deselect(item, e))">@item.description</MudListItem>
+                        <MudListItem Clickable="true" OnClick="@((e) => Deselect(item, e))">@item.SkillName</MudListItem>
                     }
                 </MudList>
             </MudPaper>
@@ -52,10 +52,7 @@
     
     private List<Skill> skillsTest = new()
     {
-        new Skill("Java", false, "senior", "yes"),
-        new Skill("JavaScript", false, "senior", "yes"),
-        new Skill("CSS", false, "senior", "yes"),
-        new Skill("Kubernetes", false, "senior", "yes"),
+        new Skill()
     };
 
     private List<Skill> _noSelected = new();
@@ -81,8 +78,8 @@
 
     private void UpdateFilteredList()
     {
-        _filteredNoSelected = _noSelected.Where(x => x.description.IndexOf(_noSelectedFilter, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
-        _filteredSelected = _selected.Where(x => x.description.IndexOf(_selectedFilter, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
+        _filteredNoSelected = _noSelected.Where(x => x.SkillName.IndexOf(_noSelectedFilter, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
+        _filteredSelected = _selected.Where(x => x.SkillName.IndexOf(_selectedFilter, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
     }
 
     private void OnFilterChanged(string value, bool isNoSelected)

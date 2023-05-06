@@ -7,13 +7,13 @@ public class TestData
     public List<Customer> customers(int numCustomers)
     {
         var faker = new Faker<Customer>()
-            .RuleFor(t => t.id, f => f.UniqueIndex)
-            .RuleFor(t => t.companyName, f => f.Company.CompanyName())
-            .RuleFor(t => t.firstName, f => f.Name.FirstName())
-            .RuleFor(t => t.lastName, f => f.Name.LastName())
-            .RuleFor(t => t.street, f => f.Address.StreetName() + " " + f.Address.StreetAddress())
-            .RuleFor(t => t.location, f => f.Address.City())
-            .RuleFor(t => t.country, f => f.Address.Country());
+            .RuleFor(t => t.Id, f => f.UniqueIndex)
+            .RuleFor(t => t.CompanyName, f => f.Company.CompanyName())
+            .RuleFor(t => t.FirstName, f => f.Name.FirstName())
+            .RuleFor(t => t.LastName, f => f.Name.LastName())
+            .RuleFor(t => t.Street, f => f.Address.StreetName() + " " + f.Address.StreetAddress())
+            .RuleFor(t => t.Location, f => f.Address.City())
+            .RuleFor(t => t.Country, f => f.Address.Country());
 
         return faker.Generate(numCustomers);
     }
@@ -21,7 +21,7 @@ public class TestData
     public List<Project> projects(int numTests)
     {
         var faker = new Faker<Project>()
-            .RuleFor(t => t.id, f => f.UniqueIndex);
+            .RuleFor(t => t.Id, f => f.UniqueIndex);
 
         return faker.Generate(numTests);
     }

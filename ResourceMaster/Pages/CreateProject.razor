@@ -30,7 +30,7 @@
         <MudSelect @bind-Value="_project.customer" Label="Select customer">
                 @foreach (Customer item in _customerList)
             {
-                <MudSelectItem Value="@item">@item.companyName</MudSelectItem>
+                <MudSelectItem Value="@item">@item.CompanyName</MudSelectItem>
             }
         </MudSelect>
         </MudItem>

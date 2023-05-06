@@ -31,14 +31,14 @@ namespace ResourceMaster.Test.ServiceTest
         {
             new Customer()
             {
-                id = 1,
-                firstName = "Peter",
-                lastName = "Meier",
-                street = "Löwengasse 5",
-                zipCode = "3000",
-                location = "Zürich",
-                country = "Schweiz",
-                companyName = "Bond Agency"
+                Id = 1,
+                FirstName = "Peter",
+                LastName = "Meier",
+                Street = "Löwengasse 5",
+                ZipCode = "3000",
+                Location = "Zürich",
+                Country = "Schweiz",
+                CompanyName = "Bond Agency"
             },
         };
 
@@ -47,14 +47,14 @@ namespace ResourceMaster.Test.ServiceTest
 
             var expectedViewModels = customerList.Select(table => new CustomerViewModel()
             {
-                id = table.id,
-                firstName = table.firstName,
-                lastName = table.lastName,
-                street = table.street,
-                zipCode = table.zipCode,
-                location = table.location,
-                country = (Countries)Enum.Parse(typeof(Countries), table.country),
-                companyName = table.companyName,
+                id = table.Id,
+                firstName = table.FirstName,
+                lastName = table.LastName,
+                street = table.Street,
+                zipCode = table.ZipCode,
+                location = table.Location,
+                country = (Countries)Enum.Parse(typeof(Countries), table.Country),
+                companyName = table.CompanyName,
             });
 
             // Act

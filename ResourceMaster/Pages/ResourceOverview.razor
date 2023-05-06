@@ -22,7 +22,7 @@
         <MudTd DataLabel="age">@context.age</MudTd>
         <MudTd DataLabel="skills">
             @(context.skills != null && context.skills.Count > 0
-                ? context.skills[0].description : "Kein skill vorhanden")
+                ? context.skills[0].SkillName : "Kein skill vorhanden")
         </MudTd>
     </RowTemplate>
     <PagerContent>
@@ -46,7 +46,7 @@
     {
         if (string.IsNullOrWhiteSpace(searchString))
             return true;
-        if (element.skills[0].description.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (element.skills[0].SkillName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (element.firstName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;

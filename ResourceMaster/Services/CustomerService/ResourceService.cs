@@ -25,11 +25,8 @@ namespace ResourceMaster.Services.CustomerService
             {
                 var viewModel = new ResourceViewModel()
                 {
-                    id = table.id,
-                    age = table.age,
-                    firstName = table.firstName,
-                    lastName = table.lastName,
-                    skills = table.skills,
+                    id = table.Id,
+
                 };
                 resultList.Add(viewModel);
             }
@@ -40,11 +37,8 @@ namespace ResourceMaster.Services.CustomerService
         {
             var newEntry = new Resource()
             {
-                    id = resource.id,
-                    age = resource.age,
-                    firstName = resource.firstName,
-                    lastName = resource.lastName,
-                    skills = resource.skills,
+                    Id = resource.id,
+                   
             };
 
             await _repository.AddAsync(newEntry);

@@ -35,13 +35,11 @@ namespace ResourceMaster.Services.CustomerService
         {
             return new ProjectViewModel()
             {
-                id = table.id,
-                projectName = table.projectName,
-                customer = table.customer,
-                workForce = table.workForce,
-                projectStart = table.projectStart,
-                projectEnd = table.projectEnd,
-                skills = table.skills,
+                id = table.Id,
+                projectName = table.ProjectName,
+                customer = table.Customer,
+                projectStart = table.ProjectStart,
+                projectEnd = table.ProjectEnd,
             };
         }
 
@@ -56,13 +54,12 @@ namespace ResourceMaster.Services.CustomerService
         {
             var newEntry = new Project()
             {
-                    id = project.id,
-                    projectName = project.projectName,
-                   customer = project.customer,
-                    workForce = project.workForce,
-                    projectStart = DateTime.SpecifyKind(project.projectStart.Value, DateTimeKind.Utc),
-                    projectEnd = DateTime.SpecifyKind(project.projectEnd.Value, DateTimeKind.Utc),
-                skills = project.skills,
+                    Id = project.id,
+                    ProjectName = project.projectName,
+                   Customer = project.customer,
+                  
+                    ProjectStart = DateTime.SpecifyKind(project.projectStart.Value, DateTimeKind.Utc),
+                    ProjectEnd = DateTime.SpecifyKind(project.projectEnd.Value, DateTimeKind.Utc),
             };
 
             await _repository.AddAsync(newEntry);

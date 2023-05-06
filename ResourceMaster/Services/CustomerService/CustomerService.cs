@@ -25,14 +25,14 @@ namespace ResourceMaster.Services.CustomerService
             {
                 var viewModel = new CustomerViewModel()
                 {
-                    id = table.id,
-                    companyName = table.companyName,
-                    firstName = table.firstName,
-                    lastName = table.lastName,
-                    street = table.street,
-                    location = table.location,
-                    country = (Countries)Enum.Parse(typeof(Countries), table.country),
-                    zipCode = table.zipCode
+                    id = table.Id,
+                    companyName = table.CompanyName,
+                    firstName = table.FirstName,
+                    lastName = table.LastName,
+                    street = table.Street,
+                    location = table.Location,
+                    country = (Countries)Enum.Parse(typeof(Countries), table.Country),
+                    zipCode = table.ZipCode
                 };
                 resultList.Add(viewModel);
             }
@@ -43,14 +43,14 @@ namespace ResourceMaster.Services.CustomerService
         {
             var newEntry = new Customer()
             {
-                id = customer.id,
-                companyName = customer.companyName,
-                firstName = customer.firstName,
-                lastName = customer.lastName,
-                street = customer.street,
-                location = customer.location,
-                country = customer.country.ToString(),
-                zipCode = customer.zipCode
+                Id = customer.id,
+                CompanyName = customer.companyName,
+                FirstName = customer.firstName,
+                LastName = customer.lastName,
+                Street = customer.street,
+                Location = customer.location,
+                Country = customer.country.ToString(),
+                ZipCode = customer.zipCode
             };
 
             await _repository.AddAsync(newEntry);
@@ -60,14 +60,14 @@ namespace ResourceMaster.Services.CustomerService
         {
             var viewModel = new CustomerViewModel()
             {
-                id = customer.id,
-                companyName = customer.companyName,
-                firstName = customer.firstName,
-                lastName = customer.lastName,
-                street = customer.street,
-                location = customer.location,
-                country = (Countries)Enum.Parse(typeof(Countries), customer.country),
-                zipCode = customer.zipCode
+                id = customer.Id,
+                companyName = customer.CompanyName,
+                firstName = customer.FirstName,
+                lastName = customer.LastName,
+                street = customer.Street,
+                location = customer.Location,
+                country = (Countries)Enum.Parse(typeof(Countries), customer.Country),
+                zipCode = customer.ZipCode
             };
 
             return viewModel;
@@ -77,14 +77,14 @@ namespace ResourceMaster.Services.CustomerService
         {
             var model = new Customer()
             {
-                id = customer.id,
-                companyName = customer.companyName,
-                firstName = customer.firstName,
-                lastName = customer.lastName,
-                street = customer.street,
-                location = customer.location,
-                country = customer.country.ToString(),
-                zipCode = customer.zipCode
+                Id = customer.id,
+                CompanyName = customer.companyName,
+                FirstName = customer.firstName,
+                LastName = customer.lastName,
+                Street = customer.street,
+                Location = customer.location,
+                Country = customer.country.ToString(),
+                ZipCode = customer.zipCode
             };
 
             return model;
