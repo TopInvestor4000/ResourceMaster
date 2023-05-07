@@ -8,32 +8,32 @@
 <h1>Create new applicant</h1>
 <br>
 <MudForm onsubmit="@HandleSubmit" Model="_resource">
-<MudStack Row="true" Spacing="4" AlignItems="AlignItems.Stretch">
-    <!-- Person -->
-    <MudStack Style="margin-right: 32px; min-width: 300px; height: 100%">
-        <MudPaper Class="pa-4">
-            <MudStack Row="true">
-                <MudAvatar Image="/person.jpg" Size="Size.Large" />
-                <MudStack Justify="Justify.Center" Spacing="0">
-                    <MudText Class="resource-header">Applicant</MudText>
-                </MudStack>
-            </MudStack>
-        </MudPaper>
-
-        <MudPaper Class="pa-4">
-            <MudStack Row="true" Spacing="4" Grow="1">
-                <MudStack Spacing="4" Class="flex-grow">
-                    <MudStack Row="true">
-                        <MudTextField @bind-Value="_resource.firstName" Label="First name" id="firstname" Variant="Variant.Outlined"/>
-                        <MudTextField @bind-Value="_resource.lastName" Label="Last name" id="lastname" Variant="Variant.Outlined"/>
+    <MudStack Row="true" Spacing="4" AlignItems="AlignItems.Stretch">
+        <!-- Person -->
+        <MudStack Style="margin-right: 32px; min-width: 300px; height: 100%">
+            <MudPaper Class="pa-4">
+                <MudStack Row="true">
+                    <MudAvatar Image="/person.jpg" Size="Size.Large" />
+                    <MudStack Justify="Justify.Center" Spacing="0">
+                        <MudText Class="resource-header">Applicant</MudText>
                     </MudStack>
-                    <MudTextField @bind-Value="_resource.age" Label="Age" id="age" Variant="Variant.Outlined" Min="0" Max="99"/>
                 </MudStack>
-            </MudStack>
-        </MudPaper>
-    </MudStack>
+            </MudPaper>
 
-    <!-- Skills -->
+            <MudPaper Class="pa-4">
+                <MudStack Row="true" Spacing="4" Grow="1">
+                    <MudStack Spacing="4" Class="flex-grow">
+                        <MudStack Row="true">
+                            <MudTextField @bind-Value="_resource.firstName" Label="First name" id="firstname" Variant="Variant.Outlined"/>
+                            <MudTextField @bind-Value="_resource.lastName" Label="Last name" id="lastname" Variant="Variant.Outlined"/>
+                        </MudStack>
+                        <MudTextField @bind-Value="_resource.age" Label="Age" id="age" Variant="Variant.Outlined" Min="0" Max="99"/>
+                    </MudStack>
+                </MudStack>
+            </MudPaper>
+        </MudStack>
+
+        <!-- Skills -->
         <MudStack Style="width: 100%; height: 100%">
             <MudPaper Class="pa-4">
                 <MudStack Row="true">
@@ -50,62 +50,38 @@
                         <MudSelect Label="Skill" T="string" @bind-Value="selectedSkill">
                             @foreach (var skillOption in skillOptions)
                             {
-                                <MudSelectItem Value="@skillOption" />
+                                <MudSelectItem Value="@skillOption"/>
                             }
                         </MudSelect>
-                        <MudSelect Label="Skill" T="string" @bind-Value="selectedLevel">
+                        <MudSelect Label="Skill Level" T="string" @bind-Value="selectedLevel">
                             @foreach (var levelOption in levelOptions)
                             {
-                                <MudSelectItem Value="@levelOption" />
+                                <MudSelectItem Value="@levelOption"/>
                             }
                         </MudSelect>
-                        <MudCheckBox @bind-Checked="isCertified" Label="Certified" />
+                        <MudCheckBox @bind-Checked="isCertified" Label="Certified"/>
                     </MudStack>
                     <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AddSkill">Add Skill</MudButton>
                 </MudStack>
             </MudPaper>
-            <MudTable Items="skills">
-                <HeaderContent>
-                    <MudTh>#</MudTh>
-                    <MudTh>Skill</MudTh>
-                    <MudTh>Skill Level</MudTh>
-                    <MudTh>Certified</MudTh>
-                </HeaderContent>
-                <RowTemplate>
-                    <MudTh DataLabel="#">1</MudTh>
-                    <MudTh DataLabel="Skill">@selectedSkill</MudTh>
-                    <MudTh DataLabel="Skill Level">@selectedLevel</MudTh>
-                    <MudTh DataLabel="Certified">@isCertified</MudTh>
-                </RowTemplate>
-            </MudTable>
-                <MudList>
-                    @foreach (var skill in skills)
-                    {
-                        <MudListItem>
-                            <MudText>@skill.SkillName, @skill.Level, Certified: @(skill.Certified ? "Yes" : "No")</MudText>
-                            <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => RemoveSkill(skill))">Delete</MudButton>
-                        </MudListItem>
-                    }
-                </MudList>
         </MudStack>
     </MudStack>
-@*
-    <MudGrid>
-        <MudItem xs="12" sm="6" md="4">
-            <MudTextField @bind-Value="_resource.firstName" Label="First name" id="firstname" Variant="Variant.Outlined"/>
-        </MudItem>
-        <MudItem xs="12" sm="6" md="4">
-            <MudTextField @bind-Value="_resource.lastName" Label="Last name" id="lastname" Variant="Variant.Outlined"/>
-        </MudItem>
-        <MudItem xs="12" sm="6" md="4">
-            <MudTextField @bind-Value="_resource.age" Label="Age" id="age" Variant="Variant.Outlined" Min="0" Max="99"/>
-        </MudItem>
-    </MudGrid>
-*@
-    <br>
-    <h3>Skills</h3>
-    <br>
-    <Skills OnItemSelected="(skills) => _resource.skills = skills"/>
+    <MudList>
+            @foreach (var skill in skills)
+            {
+                <MudListItem>
+                    <MudGrid>
+                        <MudItem xs="12" sm="4" md="3">
+                            <MudText><b>Skill:</b> @skill.SkillName | <b>Level:</b> @skill.Level | <b>Certified:</b> @(skill.Certified ? "Yes" : "No")</MudText>
+                        </MudItem>
+                        <MudItem xs="12" sm="4" md="3">
+                            <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => RemoveSkill(skill))">Delete</MudButton>
+                        </MudItem>
+                    </MudGrid>
+                </MudListItem>
+                <MudDivider />
+            }
+        </MudList>
     <MudGrid>
         <MudItem xs="12" Class="my-4 text-center">
             <MudButton Variant="Variant.Filled"
@@ -145,9 +121,9 @@
 }
 
 @code {
-    private List<string> skillOptions = new List<string> { "Skill 1", "Skill 2", "Skill 3" };
+    private List<string> skillOptions = new List<string> { "Java", "C#", "Databases" };
     private List<string> levelOptions = new List<string> { "Poor", "Mediocre", "God" };
-    private string selectedSkill = "Skill 1";
+    private string selectedSkill = "Java";
     private string selectedLevel = "Poor";
     private bool isCertified;
 
