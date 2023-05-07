@@ -7,8 +7,89 @@
 
 <h1>Create new applicant</h1>
 <br>
-<h3>Person</h3>
 <MudForm onsubmit="@HandleSubmit" Model="_resource">
+<MudStack Row="true" Spacing="4" AlignItems="AlignItems.Stretch">
+    <!-- Person -->
+    <MudStack Style="margin-right: 32px; min-width: 300px; height: 100%">
+        <MudPaper Class="pa-4">
+            <MudStack Row="true">
+                <MudAvatar Image="/person.jpg" Size="Size.Large" />
+                <MudStack Justify="Justify.Center" Spacing="0">
+                    <MudText Class="resource-header">Applicant</MudText>
+                </MudStack>
+            </MudStack>
+        </MudPaper>
+
+        <MudPaper Class="pa-4">
+            <MudStack Row="true" Spacing="4" Grow="1">
+                <MudStack Spacing="4" Class="flex-grow">
+                    <MudStack Row="true">
+                        <MudTextField @bind-Value="_resource.firstName" Label="First name" id="firstname" Variant="Variant.Outlined"/>
+                        <MudTextField @bind-Value="_resource.lastName" Label="Last name" id="lastname" Variant="Variant.Outlined"/>
+                    </MudStack>
+                    <MudTextField @bind-Value="_resource.age" Label="Age" id="age" Variant="Variant.Outlined" Min="0" Max="99"/>
+                </MudStack>
+            </MudStack>
+        </MudPaper>
+    </MudStack>
+
+    <!-- Skills -->
+        <MudStack Style="width: 100%; height: 100%">
+            <MudPaper Class="pa-4">
+                <MudStack Row="true">
+                    <MudAvatar Image="/skill.jpg" Size="Size.Large" />
+                    <MudStack Justify="Justify.Center" Spacing="0">
+                        <MudText Class="resource-header">Skill</MudText>
+                    </MudStack>
+                </MudStack>
+            </MudPaper>
+    
+            <MudPaper Class="pa-4">
+                <MudStack Spacing="4" Class="flex-grow">
+                    <MudStack Row="true" Spacing="4">
+                        <MudSelect Label="Skill" T="string" @bind-Value="selectedSkill">
+                            @foreach (var skillOption in skillOptions)
+                            {
+                                <MudSelectItem Value="@skillOption" />
+                            }
+                        </MudSelect>
+                        <MudSelect Label="Skill" T="string" @bind-Value="selectedLevel">
+                            @foreach (var levelOption in levelOptions)
+                            {
+                                <MudSelectItem Value="@levelOption" />
+                            }
+                        </MudSelect>
+                        <MudCheckBox @bind-Checked="isCertified" Label="Certified" />
+                    </MudStack>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AddSkill">Add Skill</MudButton>
+                </MudStack>
+            </MudPaper>
+            <MudTable Items="skills">
+                <HeaderContent>
+                    <MudTh>#</MudTh>
+                    <MudTh>Skill</MudTh>
+                    <MudTh>Skill Level</MudTh>
+                    <MudTh>Certified</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTh DataLabel="#">1</MudTh>
+                    <MudTh DataLabel="Skill">@selectedSkill</MudTh>
+                    <MudTh DataLabel="Skill Level">@selectedLevel</MudTh>
+                    <MudTh DataLabel="Certified">@isCertified</MudTh>
+                </RowTemplate>
+            </MudTable>
+                <MudList>
+                    @foreach (var skill in skills)
+                    {
+                        <MudListItem>
+                            <MudText>@skill.SkillName, @skill.Level, Certified: @(skill.Certified ? "Yes" : "No")</MudText>
+                            <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => RemoveSkill(skill))">Delete</MudButton>
+                        </MudListItem>
+                    }
+                </MudList>
+        </MudStack>
+    </MudStack>
+@*
     <MudGrid>
         <MudItem xs="12" sm="6" md="4">
             <MudTextField @bind-Value="_resource.firstName" Label="First name" id="firstname" Variant="Variant.Outlined"/>
@@ -20,22 +101,7 @@
             <MudTextField @bind-Value="_resource.age" Label="Age" id="age" Variant="Variant.Outlined" Min="0" Max="99"/>
         </MudItem>
     </MudGrid>
-    <br>
-    <h3>Address</h3>
-    <MudGrid>
-        <MudItem xs="12" sm="6" md="4">
-            <MudTextField @bind-Value="_resource.street" Label="Street" id="street" Variant="Variant.Outlined"/>
-        </MudItem>
-        <MudItem xs="12" sm="6" md="4">
-            <MudTextField @bind-Value="_resource.zipCode" Label="Zip Code" id="zipCode" Variant="Variant.Outlined"/>
-        </MudItem>
-        <MudItem xs="12" sm="6" md="4">
-            <MudTextField @bind-Value="_resource.location" Label="Location" id="location" Variant="Variant.Outlined"/>
-        </MudItem>
-        <MudItem xs="12" sm="6" md="4">
-            <MudAutocomplete T="Countries" @bind-Value="@_resource.country" Label="Country" Variant="Variant.Outlined" ToStringFunc="@((Countries option) => option.GetDisplayName())" SearchFunc="FilterCountries"></MudAutocomplete>
-        </MudItem>
-    </MudGrid>
+*@
     <br>
     <h3>Skills</h3>
     <br>
@@ -76,4 +142,34 @@
         return await Task.FromResult(_countries.FilterByDisplayName(value));
     }
 
+}
+
+@code {
+    private List<string> skillOptions = new List<string> { "Skill 1", "Skill 2", "Skill 3" };
+    private List<string> levelOptions = new List<string> { "Poor", "Mediocre", "God" };
+    private string selectedSkill = "Skill 1";
+    private string selectedLevel = "Poor";
+    private bool isCertified;
+
+    private List<SkillModel> skills = new();
+
+    private void AddSkill()
+    {
+        if (!string.IsNullOrEmpty(selectedSkill) && !string.IsNullOrEmpty(selectedLevel))
+        {
+            skills.Add(new SkillModel { SkillName = selectedSkill, Level = selectedLevel, Certified = isCertified });
+        }
+    }
+
+    private void RemoveSkill(SkillModel skill)
+    {
+        skills.Remove(skill);
+    }
+
+    public class SkillModel
+    {
+        public string SkillName { get; set; }
+        public string Level { get; set; }
+        public bool Certified { get; set; }
+    }
 }
