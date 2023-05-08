@@ -47,12 +47,7 @@
             <MudPaper Class="pa-4">
                 <MudStack Spacing="4" Class="flex-grow">
                     <MudStack Row="true" Spacing="4">
-                        <MudSelect Label="Skill" T="string" @bind-Value="selectedSkill">
-                            @foreach (var skillOption in skillOptions)
-                            {
-                                <MudSelectItem Value="@skillOption"/>
-                            }
-                        </MudSelect>
+                        <MudAutocomplete T="string" Label="Skill" @bind-Value="selectedSkill" SearchFunc="@SkillSearch"/>
                         <MudSelect Label="Skill Level" T="string" @bind-Value="selectedLevel">
                             @foreach (var levelOption in levelOptions)
                             {
@@ -71,7 +66,7 @@
             {
                 <MudListItem>
                     <MudGrid>
-                        <MudItem xs="12" sm="4" md="3">
+                        <MudItem xs="12" sm="5" md="5">
                             <MudText><b>Skill:</b> @skill.SkillName | <b>Level:</b> @skill.Level | <b>Certified:</b> @(skill.Certified ? "Yes" : "No")</MudText>
                         </MudItem>
                         <MudItem xs="12" sm="4" md="3">
@@ -121,25 +116,55 @@
 }
 
 @code {
-    private List<string> skillOptions = new List<string> { "Java", "C#", "Databases" };
+    private List<string> skillOptions = new List<string> { "Java", "C#", "SQL", "JavaScript", "Python", "Ruby", "Swift", "PHP", "Kotlin", "TypeScript" }.OrderBy(skill => skill).ToList();
     private List<string> levelOptions = new List<string> { "Poor", "Mediocre", "God" };
-    private string selectedSkill = "Java";
-    private string selectedLevel = "Poor";
+    private string selectedSkill = "";
+    private string selectedLevel = "";
     private bool isCertified;
+    
+    private List<string> availableSkillOptions;
 
     private List<SkillModel> skills = new();
 
+    protected override void OnInitialized()
+    {
+        availableSkillOptions = new List<string>(skillOptions);
+    }
+    
     private void AddSkill()
     {
         if (!string.IsNullOrEmpty(selectedSkill) && !string.IsNullOrEmpty(selectedLevel))
         {
             skills.Add(new SkillModel { SkillName = selectedSkill, Level = selectedLevel, Certified = isCertified });
         }
+        
+        availableSkillOptions.Remove(selectedSkill);
+        SortSkills();
+        
+        selectedSkill = string.Empty;
+    }
+    
+    private async Task<IEnumerable<string>> SkillSearch(string value)
+    {
+    
+        await Task.Delay(5);
+
+        if (string.IsNullOrEmpty(value))
+            return availableSkillOptions;
+        return availableSkillOptions.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
     }
 
     private void RemoveSkill(SkillModel skill)
     {
         skills.Remove(skill);
+        availableSkillOptions.Add(skill.SkillName);
+        SortSkills();
+    }
+
+    private void SortSkills()
+    {
+        skillOptions.Sort();
+        availableSkillOptions.Sort();
     }
 
     public class SkillModel
