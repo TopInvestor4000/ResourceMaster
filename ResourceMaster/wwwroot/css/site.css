@@ -81,3 +81,8 @@ a, .btn-link {
 .flex-grow > div {
     flex-grow: 1;
 }
+
+.equal-height-second-box{
+     height: 200px;
+     margin-top: 2%;
+}
