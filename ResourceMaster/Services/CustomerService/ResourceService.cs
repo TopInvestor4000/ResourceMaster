@@ -29,7 +29,7 @@ namespace ResourceMaster.Services.CustomerService
                     age = table.age,
                     firstName = table.firstName,
                     lastName = table.lastName,
-                    skills = table.skills,
+                    // TODO skills = table.skills,
                 };
                 resultList.Add(viewModel);
             }
@@ -44,7 +44,7 @@ namespace ResourceMaster.Services.CustomerService
                     age = resource.age,
                     firstName = resource.firstName,
                     lastName = resource.lastName,
-                    skills = resource.skills,
+                    // TODO skills = resource.skills,
             };
 
             await _repository.AddAsync(newEntry);

@@ -4,6 +4,7 @@
 @using ResourceMaster.Services.CustomerService
 @inject ISnackbar Snackbar;
 @inject ResourceService ResourceService;
+@inject SkillService SkillService;
 
 <h1>Create new applicant</h1>
 <br>
@@ -14,7 +15,7 @@
             <MudItem xs="12" sm="6">
                 <MudPaper Class="pa-4">
                     <MudStack Row="true">
-                        <MudAvatar Image="/person.jpg" Size="Size.Large" />
+                        <MudAvatar Image="/person.jpg" Size="Size.Large"/>
                         <MudStack Justify="Justify.Center" Spacing="0">
                             <MudText Class="resource-header">Applicant</MudText>
                         </MudStack>
@@ -33,56 +34,10 @@
                     </MudStack>
                 </MudPaper>
             </MudItem>
-
-            <!-- Skills -->
-            <MudItem xs="12" sm="6">
-                <MudPaper Class="pa-4">
-                    <MudStack Row="true">
-                        <MudAvatar Image="/skill.jpg" Size="Size.Large" />
-                        <MudStack Justify="Justify.Center" Spacing="0">
-                            <MudText Class="resource-header">Skill</MudText>
-                        </MudStack>
-                    </MudStack>
-                </MudPaper>
-
-                <MudPaper Class="pa-4 equal-height-second-box">
-                    <MudStack Spacing="4" Class="flex-grow">
-                        <MudStack Row="true" Spacing="4">
-                            <MudAutocomplete T="string" Label="Skill" @bind-Value="selectedSkill" SearchFunc="@SkillSearch"/>
-                            <MudSelect Label="Skill Level" T="string" @bind-Value="selectedLevel">
-                                @foreach (var levelOption in levelOptions)
-                                {
-                                    <MudSelectItem Value="@levelOption"/>
-                                }
-                            </MudSelect>
-                            <MudCheckBox @bind-Checked="isCertified" Label="Certified"/>
-                        </MudStack>
-                            <MudGrid>
-                                <MudItem xs="12" sm="12" md="12" lg="12" xl="12" Class="text-center add-skill-button">
-                                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AddSkill">Add Skill</MudButton>
-                                </MudItem>
-                            </MudGrid>
-                    </MudStack>
-                </MudPaper>
-            </MudItem>
+            <SkillSelection skillOptions="@skillOptions"/>
         </MudGrid>
     </MudStack>
-    <MudList>
-            @foreach (var skill in skills)
-            {
-                <MudListItem>
-                    <MudGrid>
-                        <MudItem xs="12" sm="5" md="5">
-                            <MudText><b>Skill:</b> @skill.SkillName | <b>Level:</b> @skill.Level | <b>Certified:</b> @(skill.Certified ? "Yes" : "No")</MudText>
-                        </MudItem>
-                        <MudItem xs="12" sm="4" md="3">
-                            <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => RemoveSkill(skill))">Delete</MudButton>
-                        </MudItem>
-                    </MudGrid>
-                </MudListItem>
-                <MudDivider />
-            }
-        </MudList>
+    <SkillOverview/>
     <MudGrid>
         <MudItem xs="12" Class="my-4 text-center">
             <MudButton Variant="Variant.Filled"
@@ -97,17 +52,15 @@
 
 @code{
     private ResourceViewModel _resource = new();
+    private List<Countries> _countries = Enum.GetValues<Countries>().ToList();
+    private List<SkillViewModel> _allSkills = new();
+    private List<string> skillOptions = new();
 
     private async Task HandleSubmit()
     {
         await ResourceService.AddAsync(_resource);
         Snackbar.Add("Successfully added " + _resource.firstName + " " + _resource.lastName);
     }
-
-}
-
-@code {
-    private List<Countries> _countries = Enum.GetValues<Countries>().ToList();
 
     private async Task<IEnumerable<Countries>> FilterCountries(string value)
     {
@@ -118,71 +71,10 @@
 
         return await Task.FromResult(_countries.FilterByDisplayName(value));
     }
-
-}
-
-@code {
-    private List<string> skillOptions = new List<string> { "Java", "C#", "SQL", "JavaScript", "Python", "Ruby", "Swift", "PHP", "Kotlin", "TypeScript" }.OrderBy(skill => skill).ToList();
-    private List<string> levelOptions = new List<string> { "Poor", "Mediocre", "God" };
-    private string selectedSkill = "";
-    private string selectedLevel = "";
-    private bool isCertified;
     
-    private List<string> availableSkillOptions;
-
-    private List<SkillModel> skills = new();
-
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        availableSkillOptions = new List<string>(skillOptions);
-    }
-    
-    private void AddSkill()
-    {
-        if (!string.IsNullOrEmpty(selectedSkill) && !string.IsNullOrEmpty(selectedLevel))
-        {
-            skills.Add(new SkillModel { SkillName = selectedSkill, Level = selectedLevel, Certified = isCertified });
-        }
-        
-        availableSkillOptions.Remove(selectedSkill);
-        SortSkills();
-        
-        selectedSkill = string.Empty;
-    }
-    
-    private async Task<IEnumerable<string>> SkillSearch(string value)
-    {
-    
-        await Task.Delay(5);
-
-        if (string.IsNullOrEmpty(value))
-            return availableSkillOptions;
-        return availableSkillOptions.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
-    }
-
-    private void RemoveSkill(SkillModel skill)
-    {
-        skills.Remove(skill);
-        availableSkillOptions.Add(skill.SkillName);
-        SortSkills();
-    }
-
-    private void SortSkills()
-    {
-        skillOptions.Sort();
-        availableSkillOptions.Sort();
-    }
-
-    public class SkillModel
-    {
-        public string SkillName { get; set; }
-        public string Level { get; set; }
-        public bool Certified { get; set; }
+        _allSkills = (await SkillService.GetAllAsync()).ToList();
+        _allSkills.ForEach(element => skillOptions.Add(element.SkillName));
     }
 }
-
-<style>
-    .add-skill-button{
-        margin-top: 20px;
-    }
-</style>
