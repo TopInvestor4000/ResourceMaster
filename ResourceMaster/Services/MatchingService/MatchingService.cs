@@ -17,8 +17,8 @@ namespace ResourceMaster.Services.MatchingService
                 foreach (ResourceViewModel resource in resources)
                 {
                     // Check if the resource has the required skill
-                    if (resource.skills.Select(x => x.SkillName).Contains(requiredSkill.SkillName))
-                    {
+                    // TODO  if (resource.skills.Select(x => x.description).Contains(requiredSkill.description))
+                    // TODO{
                         // Calculate the skill match score
                         double skillMatchScore = CalculateSkillMatchScore(requiredSkill, resource);
 
@@ -27,7 +27,7 @@ namespace ResourceMaster.Services.MatchingService
                         // Add the resource to the list of matching resources
                         matchingResources.Add(resource);
 
-                    }
+                    // TODO }
                 }
             }
 

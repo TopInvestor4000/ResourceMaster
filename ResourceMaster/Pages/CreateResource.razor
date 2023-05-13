@@ -4,42 +4,40 @@
 @using ResourceMaster.Services.CustomerService
 @inject ISnackbar Snackbar;
 @inject ResourceService ResourceService;
+@inject SkillService SkillService;
 
 <h1>Create new applicant</h1>
 <br>
-<h3>Person</h3>
 <MudForm onsubmit="@HandleSubmit" Model="_resource">
-    <MudGrid>
-        <MudItem xs="12" sm="6" md="4">
-            <MudTextField @bind-Value="_resource.firstName" Label="First name" id="firstname" Variant="Variant.Outlined"/>
-        </MudItem>
-        <MudItem xs="12" sm="6" md="4">
-            <MudTextField @bind-Value="_resource.lastName" Label="Last name" id="lastname" Variant="Variant.Outlined"/>
-        </MudItem>
-        <MudItem xs="12" sm="6" md="4">
-            <MudTextField @bind-Value="_resource.age" Label="Age" id="age" Variant="Variant.Outlined" Min="0" Max="99"/>
-        </MudItem>
-    </MudGrid>
-    <br>
-    <h3>Address</h3>
-    <MudGrid>
-        <MudItem xs="12" sm="6" md="4">
-            <MudTextField @bind-Value="_resource.street" Label="Street" id="street" Variant="Variant.Outlined"/>
-        </MudItem>
-        <MudItem xs="12" sm="6" md="4">
-            <MudTextField @bind-Value="_resource.zipCode" Label="Zip Code" id="zipCode" Variant="Variant.Outlined"/>
-        </MudItem>
-        <MudItem xs="12" sm="6" md="4">
-            <MudTextField @bind-Value="_resource.location" Label="Location" id="location" Variant="Variant.Outlined"/>
-        </MudItem>
-        <MudItem xs="12" sm="6" md="4">
-            <MudAutocomplete T="Countries" @bind-Value="@_resource.country" Label="Country" Variant="Variant.Outlined" ToStringFunc="@((Countries option) => option.GetDisplayName())" SearchFunc="FilterCountries"></MudAutocomplete>
-        </MudItem>
-    </MudGrid>
-    <br>
-    <h3>Skills</h3>
-    <br>
-    <Skills OnItemSelected="(skills) => _resource.skills = skills"/>
+    <MudStack Row="true" Spacing="4" AlignItems="AlignItems.Stretch">
+        <MudGrid>
+            <!-- Person -->
+            <MudItem xs="12" sm="6">
+                <MudPaper Class="pa-4">
+                    <MudStack Row="true">
+                        <MudAvatar Image="/person.jpg" Size="Size.Large"/>
+                        <MudStack Justify="Justify.Center" Spacing="0">
+                            <MudText Class="resource-header">Applicant</MudText>
+                        </MudStack>
+                    </MudStack>
+                </MudPaper>
+
+                <MudPaper Class="pa-4 equal-height-second-box">
+                    <MudStack Row="true" Spacing="4" Grow="1">
+                        <MudStack Spacing="4" Class="flex-grow">
+                            <MudStack Row="true">
+                                <MudTextField @bind-Value="_resource.firstName" Label="First name" id="firstname" Variant="Variant.Outlined"/>
+                                <MudTextField @bind-Value="_resource.lastName" Label="Last name" id="lastname" Variant="Variant.Outlined"/>
+                            </MudStack>
+                            <MudTextField @bind-Value="_resource.age" Label="Age" id="age" Variant="Variant.Outlined" Min="0" Max="99"/>
+                        </MudStack>
+                    </MudStack>
+                </MudPaper>
+            </MudItem>
+            <SkillSelection skillOptions="@skillOptions"/>
+        </MudGrid>
+    </MudStack>
+    <SkillOverview/>
     <MudGrid>
         <MudItem xs="12" Class="my-4 text-center">
             <MudButton Variant="Variant.Filled"
@@ -54,17 +52,15 @@
 
 @code{
     private ResourceViewModel _resource = new();
+    private List<Countries> _countries = Enum.GetValues<Countries>().ToList();
+    private List<SkillViewModel> _allSkills = new();
+    private List<string> skillOptions = new();
 
     private async Task HandleSubmit()
     {
         await ResourceService.AddAsync(_resource);
         Snackbar.Add("Successfully added " + _resource.firstName + " " + _resource.lastName);
     }
-
-}
-
-@code {
-    private List<Countries> _countries = Enum.GetValues<Countries>().ToList();
 
     private async Task<IEnumerable<Countries>> FilterCountries(string value)
     {
@@ -75,5 +71,11 @@
 
         return await Task.FromResult(_countries.FilterByDisplayName(value));
     }
-
+    
+    protected override async Task OnInitializedAsync()
+    {
+        // _allSkills = (await SkillService.GetAllAsync()).ToList();
+        // _allSkills.ForEach(element => skillOptions.Add(element.SkillName));
+        skillOptions = new List<string> { "Java", "C#", "SQL", "JavaScript", "Python", "Ruby", "Swift", "PHP", "Kotlin", "TypeScript" }.OrderBy(skill => skill).ToList();
+    }
 }

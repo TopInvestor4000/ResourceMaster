@@ -23,9 +23,9 @@
         <MudTd DataLabel="Last name">@context.lastName</MudTd>
         <MudTd DataLabel="age">@context.age</MudTd>
         <MudTd DataLabel="skills">
-            @(context.skills != null && context.skills.Count > 0
-                ? string.Join(", ", context.skills.Select(s => s.SkillName))
-                : "Kein Skill vorhanden")
+            @* @(context.skills != null && context.skills.Count > 0 *@
+            @*     ? string.Join(", ", context.skills.Select(s => s.description)) *@
+            @*     : "Kein Skill vorhanden") *@
         </MudTd>
     </RowTemplate>
     <PagerContent>
@@ -64,17 +64,17 @@
 
         var allResource = (await ResourceService.GetAllAsync()).ToList();
 
-        for (int i = 0; i < allResource.Count; i++)
-        {
-            if (i % 2 == 0)
-            {
-                allResource[i].skills = skillList2;
-            }
-            else
-            {
-                allResource[i].skills = skillList1;
-            }
-        }
+        // for (int i = 0; i < allResource.Count; i++)
+        // {
+        //     if (i % 2 == 0)
+        //     {
+        //         allResource[i].skills = skillList2;
+        //     }
+        //     else
+        //     {
+        //         allResource[i].skills = skillList1;
+        //     }
+        // }
 
         resources = (MatchingService.MatchResourcesToProject(currentProject, allResource));
     }

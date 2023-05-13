@@ -25,9 +25,11 @@ namespace ResourceMaster.Services.CustomerService
             {
                 var viewModel = new SkillViewModel()
                 {
-                    id = table.SkillId,
-                    description = table.SkillName,
-                    
+                    id = table.id,
+                    SkillName = table.description,
+                    Certified = table.isCertification,
+                    Level = table.skillLevel,
+                    necessity = table.necessity
                 };
                 resultList.Add(viewModel);
             }
@@ -37,10 +39,11 @@ namespace ResourceMaster.Services.CustomerService
         public async Task AddAsync(SkillViewModel skill)
         {
             var newEntry = new Skill()
-            {
-                    SkillId = skill.id,
-                    SkillName = skill.description,
-                    
+                    id = skill.id,
+                    description = skill.SkillName,
+                    isCertification = skill.Certified,
+                    skillLevel = skill.Level,
+                    necessity = skill.necessity
             };
 
             await _repository.AddAsync(newEntry);
