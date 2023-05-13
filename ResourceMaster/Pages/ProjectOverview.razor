@@ -19,10 +19,10 @@
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="projectName">@context.projectName</MudTd>
-        <MudTd DataLabel="projectStart">@context.projectStart</MudTd>
+        <MudTd DataLabel="projectStart">@context.ProjectStart</MudTd>
         <MudTd DataLabel="projectEnd">@context.projectEnd</MudTd>
         <MudTd>
-            <MudButton Color="Color.Primary" OnClick="@(() => OpenProjectDetail(@context.id))">Detail</MudButton>
+            <MudButton Color="Color.Primary" OnClick="@(() => OpenProjectDetail(@context.Id))">Detail</MudButton>
         </MudTd>
     </RowTemplate>
     <PagerContent>
@@ -51,7 +51,7 @@
             return true;
         if (element.projectName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (element.projectStart != null && element.projectStart.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (element.ProjectStart != null && element.ProjectStart.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (element.projectEnd != null && element.projectEnd.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;

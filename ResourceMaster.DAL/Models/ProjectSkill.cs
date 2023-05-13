@@ -8,6 +8,7 @@ namespace ResourceMaster.DAL.Models
 {
     public class ProjectSkill
     {
+        public int ProjectSkillId { get; set; }
         public int SkillId { get; set; }
         public Skill Skill { get; set; }
 

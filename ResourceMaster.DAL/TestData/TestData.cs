@@ -29,10 +29,10 @@ public class TestData
     public List<Resource> GenerateResources(int numTests)
     {
         var faker = new Faker<Resource>()
-            .RuleFor(t => t.id, f => f.UniqueIndex)
-            .RuleFor(t => t.firstName, f => f.Name.FirstName())
-            .RuleFor(t => t.lastName, f => f.Name.LastName())
-            .RuleFor(t => t.skills, new Func<object, object>(f =>
+            .RuleFor(t => t.Id, f => f.UniqueIndex)
+            .RuleFor(t => t.FirstName, f => f.Name.FirstName())
+            .RuleFor(t => t.LastName, f => f.Name.LastName())
+            .RuleFor(t => t.Skills, new Func<object, object>(f =>
             {
                 Random random = new Random();
                 double minNumOfSkillsRatio = 0.4;

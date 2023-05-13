@@ -47,14 +47,14 @@ namespace ResourceMaster.Test.ServiceTest
 
             var expectedViewModels = customerList.Select(table => new CustomerViewModel()
             {
-                id = table.Id,
-                firstName = table.FirstName,
-                lastName = table.LastName,
-                street = table.Street,
-                zipCode = table.ZipCode,
-                location = table.Location,
-                country = (Countries)Enum.Parse(typeof(Countries), table.Country),
-                companyName = table.CompanyName,
+                Id = table.Id,
+                FirstName = table.FirstName,
+                LastName = table.LastName,
+                Street = table.Street,
+                ZipCode = table.ZipCode,
+                Location = table.Location,
+                Country = (Countries)Enum.Parse(typeof(Countries), table.Country),
+                CompanyName = table.CompanyName,
             });
 
             // Act
@@ -70,14 +70,14 @@ namespace ResourceMaster.Test.ServiceTest
             // Arrange
             var customerViewModel = new CustomerViewModel()
             {
-                id = 1,
-                firstName = "James",
-                lastName = "Bond",
-                street = "Löwengasse 5",
-                zipCode = "3000",
-                location = "Zürich",
-                country = Countries.Switzerland,
-                companyName = "Bond Agency",
+                Id = 1,
+                FirstName = "James",
+                LastName = "Bond",
+                Street = "Löwengasse 5",
+                ZipCode = "3000",
+                Location = "Zürich",
+                Country = Countries.Switzerland,
+                CompanyName = "Bond Agency",
             };
 
             _mockRepository.Setup(repo => repo.AddAsync(It.IsAny<Customer>()))

@@ -4,11 +4,11 @@ namespace ResourceMaster.ViewModels;
 
 public class ProjectViewModel
 {
-    public int id { get; set; }
+    public int Id { get; set; }
     public string projectName { get; set; }
-    public Customer customer { get; set; }
+    public Customer Customer { get; set; }
     public int workForce { get; set; }
-    public DateTime? projectStart { get; set; }
+    public DateTime? ProjectStart { get; set; }
     public DateTime? projectEnd { get; set; }
-    public List<Skill> skills { get; set; }
+    public List<Skill> Skills { get; set; }
 }

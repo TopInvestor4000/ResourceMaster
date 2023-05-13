@@ -20,8 +20,8 @@
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="First name">@context.firstName</MudTd>
-        <MudTd DataLabel="Last name">@context.lastName</MudTd>
-        <MudTd DataLabel="age">@context.age</MudTd>
+        <MudTd DataLabel="Last name">@context.LastName</MudTd>
+        <MudTd DataLabel="age">@context.Age</MudTd>
         <MudTd DataLabel="skills">
             @* @(context.skills != null && context.skills.Count > 0 *@
             @*     ? string.Join(", ", context.skills.Select(s => s.description)) *@
@@ -60,7 +60,7 @@
     {
         // projectId = int.Parse(RouteData.Values["projectId"].ToString());
         var currentProject = await ProjectService.GetSingle(projectId);
-        currentProject.skills = skillListProject;
+        currentProject.Skills = skillListProject;
 
         var allResource = (await ResourceService.GetAllAsync()).ToList();
 
