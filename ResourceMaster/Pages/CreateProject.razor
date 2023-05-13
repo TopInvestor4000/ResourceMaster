@@ -21,16 +21,16 @@
         </MudItem>
         <br/>
         <MudItem xs="12" sm="6" md="4">
-            <MudDatePicker Label="Project start" @bind-Date="_project.projectStart"/>
+            <MudDatePicker Label="Project start" @bind-Date="_project.ProjectStart"/>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
             <MudDatePicker Label="Project end" @bind-Date="_project.projectEnd"/>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-        <MudSelect @bind-Value="_project.customer" Label="Select customer">
+        <MudSelect @bind-Value="_project.Customer" Label="Select customer">
                 @foreach (Customer item in _customerList)
             {
-                <MudSelectItem Value="@item">@item.companyName</MudSelectItem>
+                <MudSelectItem Value="@item">@item.CompanyName</MudSelectItem>
             }
         </MudSelect>
         </MudItem>

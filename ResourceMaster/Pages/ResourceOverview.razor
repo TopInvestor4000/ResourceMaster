@@ -18,11 +18,11 @@
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="First name">@context.firstName</MudTd>
-        <MudTd DataLabel="Last name">@context.lastName</MudTd>
-        <MudTd DataLabel="age">@context.age</MudTd>
+        <MudTd DataLabel="Last name">@context.LastName</MudTd>
+        <MudTd DataLabel="age">@context.Age</MudTd>
         <MudTd DataLabel="skills">
-            @(context.skills != null && context.skills.Count > 0
-                ? context.skills[0].SkillName : "Kein skill vorhanden")
+            @(context.Skills != null && context.Skills.Count > 0
+                ? context.Skills[0].SkillName : "Kein skill vorhanden")
         </MudTd>
     </RowTemplate>
     <PagerContent>
@@ -46,11 +46,11 @@
     {
         if (string.IsNullOrWhiteSpace(searchString))
             return true;
-        if (element.skills[0].SkillName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (element.Skills[0].SkillName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (element.firstName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (element.lastName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (element.LastName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         return false;
     }

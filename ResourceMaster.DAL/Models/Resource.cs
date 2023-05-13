@@ -2,8 +2,10 @@
 
 public class Resource
 {
-    public int id { get; set; }
-    public int age { get; set; }
-    public string firstName { get; set; }
-    public string lastName { get; set; }
-    public List<Skill> skills { get; set; }}
+    public int Id { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public List<Skill> Skills { get; set; }
+    public List<Project> Projects { get; set; }
+
+}

@@ -21,7 +21,7 @@ namespace ResourceMaster.DAL.Repositories.ProjectRepository
 
         public async Task<Project> GetSingle(int id)
         {
-            return await _context.Projects.SingleOrDefaultAsync(x => x.id == id);
+            return await _context.Projects.SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task AddAsync(Project customer)

@@ -11,7 +11,7 @@ namespace ResourceMaster.Services.MatchingService
             List<ResourceViewModel> matchingResources = new List<ResourceViewModel>();
 
             // Iterate over each required skill for the project
-            foreach (Skill requiredSkill in project.skills)
+            foreach (Skill requiredSkill in project.Skills)
             {
                 // Iterate over each resource
                 foreach (ResourceViewModel resource in resources)
@@ -32,7 +32,7 @@ namespace ResourceMaster.Services.MatchingService
             }
 
             // Return the top N resources as potential matches for the project
-            return matchingResources.Take(5).DistinctBy(x => x.id).ToList();
+            return matchingResources.Take(5).DistinctBy(x => x.Id).ToList();
         }
 
 
