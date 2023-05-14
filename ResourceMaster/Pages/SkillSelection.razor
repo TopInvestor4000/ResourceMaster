@@ -74,6 +74,7 @@
         
         availableSkillOptions.Remove(selectedSkill);
         SortSkills();
+        ItemSelected();
         
         selectedSkill = string.Empty;
         selectedLevel = string.Empty;
@@ -94,6 +95,7 @@
         skills.Remove(skill);
         availableSkillOptions.Add(skill.SkillName);
         SortSkills();
+        ItemSelected();
     }
 
     private void SortSkills()

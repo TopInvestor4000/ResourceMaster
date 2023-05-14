@@ -26,7 +26,7 @@
                     <MudStack Row="true" Spacing="4" Grow="1">
                         <MudStack Spacing="4" Class="flex-grow">
                             <MudStack Row="true">
-                                <MudTextField @bind-Value="_resource.firstName" Label="First name" id="firstname" Variant="Variant.Outlined"/>
+                                <MudTextField @bind-Value="_resource.FirstName" Label="First name" id="firstname" Variant="Variant.Outlined"/>
                                 <MudTextField @bind-Value="_resource.LastName" Label="Last name" id="lastname" Variant="Variant.Outlined"/>
                             </MudStack>
                             <MudTextField @bind-Value="_resource.Age" Label="Age" id="age" Variant="Variant.Outlined" Min="0" Max="99"/>
@@ -34,7 +34,7 @@
                     </MudStack>
                 </MudPaper>
             </MudItem>
-            <SkillSelection skillOptions="@skillOptions"/>
+            <SkillSelection skillOptions="@skillOptions" OnItemSelected="skills => _resource.Skills = skills"/>
         </MudGrid>
     </MudStack>
     <SkillOverview/>
@@ -59,7 +59,7 @@
     private async Task HandleSubmit()
     {
         await ResourceService.AddAsync(_resource);
-        Snackbar.Add("Successfully added " + _resource.firstName + " " + _resource.LastName);
+        Snackbar.Add("Successfully added " + _resource.FirstName + " " + _resource.LastName);
     }
 
     private async Task<IEnumerable<Countries>> FilterCountries(string value)
