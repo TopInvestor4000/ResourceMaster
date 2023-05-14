@@ -1,12 +1,10 @@
 @page "/createProject"
-@using ResourceMaster.DAL.Models;
-@using ResourceMaster.DAL.Repositories.CustomerRepository;
 @using ResourceMaster.ViewModels;
 @using MudBlazor;
 @using ResourceMaster.Services.CustomerService
 @inject ISnackbar Snackbar;
 @inject ProjectService _ProjectService;
-@inject ICustomerRepository _customerRepository;
+@inject CustomerService _CustomerService;
 
 <h1>Create new project</h1>
 <br>
@@ -28,7 +26,7 @@
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
         <MudSelect @bind-Value="_project.Customer" Label="Select customer">
-                @foreach (Customer item in _customerList)
+                @foreach (CustomerViewModel item in _customerList)
             {
                 <MudSelectItem Value="@item">@item.CompanyName</MudSelectItem>
             }
@@ -49,11 +47,11 @@
 
 @code{
     private ProjectViewModel _project = new();
-    private List<Customer> _customerList = new();
+    private List<CustomerViewModel> _customerList = new();
 
     protected override async Task OnInitializedAsync()
     {
-        _customerList = (await _customerRepository.GetAllAsync()).ToList();
+        _customerList = (await _CustomerService.GetAllAsync()).ToList();
     }
 
 

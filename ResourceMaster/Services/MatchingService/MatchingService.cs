@@ -5,20 +5,21 @@ namespace ResourceMaster.Services.MatchingService
 {
     public class MatchingService
     {
-        public List<ResourceViewModel> MatchResourcesToProject(ProjectViewModel project, List<ResourceViewModel> resources)
+        public List<ResourceViewModel> MatchResourcesToProject(ProjectViewModel project,
+            List<ResourceViewModel> resources)
         {
             // Create a list to store the matching resources
             List<ResourceViewModel> matchingResources = new List<ResourceViewModel>();
 
             // Iterate over each required skill for the project
-            foreach (Skill requiredSkill in project.Skills)
+            foreach (SkillViewModel requiredSkill in project.Skills)
             {
                 // Iterate over each resource
                 foreach (ResourceViewModel resource in resources)
                 {
                     // Check if the resource has the required skill
-                    // TODO  if (resource.skills.Select(x => x.description).Contains(requiredSkill.description))
-                    // TODO{
+                    if (resource.Skills.Select(x => x.SkillName).Contains(requiredSkill.SkillName))
+                    {
                         // Calculate the skill match score
                         double skillMatchScore = CalculateSkillMatchScore(requiredSkill, resource);
 
@@ -26,8 +27,7 @@ namespace ResourceMaster.Services.MatchingService
 
                         // Add the resource to the list of matching resources
                         matchingResources.Add(resource);
-
-                    // TODO }
+                    }
                 }
             }
 
@@ -37,7 +37,7 @@ namespace ResourceMaster.Services.MatchingService
 
 
         // sql structure need refactroing before we can properly use these methods
-        private double CalculateSkillMatchScore(Skill requiredSkill, ResourceViewModel resource)
+        private double CalculateSkillMatchScore(SkillViewModel requiredSkill, ResourceViewModel resource)
         {
             // Combine the scores into an overall match score
             double overallMatchScore = 2 + CalcFactorScore(requiredSkill, resource);
@@ -48,7 +48,7 @@ namespace ResourceMaster.Services.MatchingService
 
         // Right now empty
         // TODO: check if resource are free and calc with the workload
-        private double CalcFactorScore(Skill requiredSkill, ResourceViewModel resource)
+        private double CalcFactorScore(SkillViewModel requiredSkill, ResourceViewModel resource)
         {
             return 0;
         }

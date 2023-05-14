@@ -1,7 +1,6 @@
 ﻿@page "/projectMatches/{projectId:int}"
-@using ResourceMaster.DAL.Models;
 @using ResourceMaster.Services.CustomerService
-@using ResourceMaster.Services.MatchingService;
+@using ResourceMaster.Services.MatchingService
 @using ResourceMaster.ViewModels
 @using MudBlazor
 @inject ResourceService ResourceService;
@@ -23,9 +22,9 @@
         <MudTd DataLabel="Last name">@context.LastName</MudTd>
         <MudTd DataLabel="age">@context.Age</MudTd>
         <MudTd DataLabel="skills">
-            @* @(context.skills != null && context.skills.Count > 0 *@
-            @*     ? string.Join(", ", context.skills.Select(s => s.description)) *@
-            @*     : "Kein Skill vorhanden") *@
+            @(context.Skills != null && context.Skills.Count > 0
+                ? string.Join(", ", context.Skills.Select(s => s.SkillName))
+                : "Kein Skill vorhanden")
         </MudTd>
     </RowTemplate>
     <PagerContent>
@@ -40,19 +39,19 @@
 
     private List<ResourceViewModel> resources = new List<ResourceViewModel>();
 
-    private List<Skill> skillList1 = new()
+    private List<SkillViewModel> skillList1 = new()
     {
-        new Skill()
+        new SkillViewModel()
     };
 
-    private List<Skill> skillListProject = new()
+    private List<SkillViewModel> skillListProject = new()
     {
-      new Skill()
+      new SkillViewModel()
     };
 
-    private List<Skill> skillList2 = new()
+    private List<SkillViewModel> skillList2 = new()
     {
-        new Skill(),
+        new SkillViewModel(),
     };
     //private ProjectViewModel currentProject;
 
@@ -64,17 +63,17 @@
 
         var allResource = (await ResourceService.GetAllAsync()).ToList();
 
-        // for (int i = 0; i < allResource.Count; i++)
-        // {
-        //     if (i % 2 == 0)
-        //     {
-        //         allResource[i].skills = skillList2;
-        //     }
-        //     else
-        //     {
-        //         allResource[i].skills = skillList1;
-        //     }
-        // }
+        for (int i = 0; i < allResource.Count; i++)
+        {
+            if (i % 2 == 0)
+            {
+                allResource[i].Skills = skillList2;
+            }
+            else
+            {
+                allResource[i].Skills = skillList1;
+            }
+        }
 
         resources = (MatchingService.MatchResourcesToProject(currentProject, allResource));
     }
