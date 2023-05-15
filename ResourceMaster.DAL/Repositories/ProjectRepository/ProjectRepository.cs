@@ -6,7 +6,6 @@ namespace ResourceMaster.DAL.Repositories.ProjectRepository
 {
     public class ProjectRepository : IProjectRepository
     {
-
         private readonly DatabaseContext _context;
 
         public ProjectRepository(DatabaseContext context)
@@ -24,18 +23,11 @@ namespace ResourceMaster.DAL.Repositories.ProjectRepository
             return await _context.Projects.SingleOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task AddAsync(Project customer)
+        public async Task AddAsync(Project project)
         {
-            try
-            {
-                await _context.Projects.AddAsync(customer);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                var a = ex.Message;
-            }
-           
+            project.Customer = _context.Customers.Find(project.Customer.Id);
+            await _context.Projects.AddAsync(project);
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -9,20 +9,18 @@ namespace ResourceMaster.Services.CustomerService
     {
         private readonly IProjectRepository _repository;
         private readonly ILogger<ProjectService> _logger;
-        private readonly CustomerService _customerService;
 
-        public ProjectService(IProjectRepository repository, ILogger<ProjectService> logger, CustomerService customerService)
+        public ProjectService(IProjectRepository repository, ILogger<ProjectService> logger)
         {
             _repository = repository;
             _logger = logger;
-            _customerService = customerService;
         }
 
         public async Task<IEnumerable<ProjectViewModel>> GetAllAsync( )
         {
             _logger.LogInformation("GetAllAsync Method called");
-            var customerList =  await _repository.GetAllAsync();
-            return customerList.Adapt<List<ProjectViewModel>>();
+            var projectList =  await _repository.GetAllAsync();
+            return projectList.Adapt<List<ProjectViewModel>>();
         }
 
         public async Task<ProjectViewModel> GetSingle(int id)
