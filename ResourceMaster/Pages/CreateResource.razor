@@ -4,7 +4,6 @@
 @using ResourceMaster.Services.CustomerService
 @inject ISnackbar Snackbar;
 @inject ResourceService ResourceService;
-@inject SkillService SkillService;
 
 <h1>Create new applicant</h1>
 <br>
@@ -37,7 +36,6 @@
             <SkillSelection skillOptions="@skillOptions" OnItemSelected="skills => _resource.Skills = skills"/>
         </MudGrid>
     </MudStack>
-    <SkillOverview/>
     <MudGrid>
         <MudItem xs="12" Class="my-4 text-center">
             <MudButton Variant="Variant.Filled"

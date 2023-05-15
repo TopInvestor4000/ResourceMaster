@@ -48,18 +48,19 @@
 
     [Parameter]
     public List<string> skillOptions { get; set; }
-    private List<string> levelOptions = new List<string> { "Poor", "Mediocre", "God" };
+
+    private List<string> levelOptions = new() { "Poor", "Mediocre", "God" };
     private string selectedSkill = "";
     private string selectedLevel = "";
     private bool isCertified;
     private List<string> availableSkillOptions;
     private List<SkillViewModel> skills = new();
-    
-    protected override void OnInitialized()
+
+    protected override void OnParametersSet()
     {
         availableSkillOptions = new List<string>(skillOptions);
     }
-    
+
     private void ItemSelected()
     {
         OnItemSelected.InvokeAsync(skills);
@@ -71,18 +72,17 @@
         {
             skills.Add(new SkillViewModel { SkillName = selectedSkill, Level = selectedLevel, Certified = isCertified });
         }
-        
+
         availableSkillOptions.Remove(selectedSkill);
         SortSkills();
         ItemSelected();
-        
+
         selectedSkill = string.Empty;
         selectedLevel = string.Empty;
     }
-    
+
     private async Task<IEnumerable<string>> SkillSearch(string value)
     {
-    
         await Task.Delay(5);
 
         if (string.IsNullOrEmpty(value))

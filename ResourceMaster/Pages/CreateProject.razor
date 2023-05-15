@@ -1,10 +1,10 @@
 @page "/createProject"
-@using ResourceMaster.ViewModels;
-@using MudBlazor;
+@using ResourceMaster.ViewModels
+@using MudBlazor
 @using ResourceMaster.Services.CustomerService
-@inject ISnackbar Snackbar;
-@inject ProjectService _ProjectService;
-@inject CustomerService _CustomerService;
+@inject ISnackbar Snackbar
+@inject ProjectService _ProjectService
+@inject CustomerService _CustomerService
 
 <h1>Create new project</h1>
 <br>
@@ -25,13 +25,14 @@
             <MudDatePicker Label="Project end" @bind-Date="_project.projectEnd"/>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-        <MudSelect @bind-Value="_project.Customer" Label="Select customer">
+            <MudSelect @bind-Value="_project.Customer" Label="Select customer">
                 @foreach (CustomerViewModel item in _customerList)
-            {
-                <MudSelectItem Value="@item">@item.CompanyName</MudSelectItem>
-            }
-        </MudSelect>
+                {
+                    <MudSelectItem Value="@item">@item.CompanyName</MudSelectItem>
+                }
+            </MudSelect>
         </MudItem>
+        <SkillSelection skillOptions="@skillOptions" OnItemSelected="skills => _project.Skills = skills"/>
     </MudGrid>
     <MudGrid>
         <MudItem xs="12" Class="my-4 text-center">
@@ -48,9 +49,11 @@
 @code{
     private ProjectViewModel _project = new();
     private List<CustomerViewModel> _customerList = new();
+    private List<string> skillOptions = new();
 
     protected override async Task OnInitializedAsync()
     {
+        skillOptions = new List<string> { "Java", "C#", "SQL", "JavaScript", "Python", "Ruby", "Swift", "PHP", "Kotlin", "TypeScript" }.OrderBy(skill => skill).ToList();
         _customerList = (await _CustomerService.GetAllAsync()).ToList();
     }
 
