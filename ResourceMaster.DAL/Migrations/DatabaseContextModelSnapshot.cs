@@ -17,313 +17,191 @@ namespace ResourceMaster.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.16")
+                .HasAnnotation("ProductVersion", "7.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("ResourceMaster.DAL.Models.Customer", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
-                    b.Property<string>("CompanyName")
+                    b.Property<string>("companyName")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Country")
+                    b.Property<string>("country")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("FirstName")
+                    b.Property<string>("firstName")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("LastName")
+                    b.Property<string>("lastName")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Location")
+                    b.Property<string>("location")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Street")
+                    b.Property<string>("street")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("ZipCode")
+                    b.Property<string>("zipCode")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.HasKey("id");
 
                     b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("ResourceMaster.DAL.Models.Project", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
-                    b.Property<int>("CustomerId")
+                    b.Property<int>("customerid")
                         .HasColumnType("integer");
 
-                    b.Property<DateTimeOffset?>("ProjectEnd")
+                    b.Property<DateTime>("projectEnd")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("ProjectName")
+                    b.Property<string>("projectName")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTimeOffset?>("ProjectStart")
+                    b.Property<DateTime>("projectStart")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("ResourceId")
+                    b.Property<int>("workForce")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.HasKey("id");
 
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("ResourceId");
+                    b.HasIndex("customerid");
 
                     b.ToTable("Projects");
                 });
 
-            modelBuilder.Entity("ResourceMaster.DAL.Models.ProjectSkill", b =>
-                {
-                    b.Property<int>("ProjectSkillId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ProjectSkillId"));
-
-                    b.Property<bool>("IsCertification")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Necessity")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("RequiredWorkHours")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("SkillId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("SkillLevel")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("ProjectSkillId");
-
-                    b.HasIndex("ProjectId");
-
-                    b.HasIndex("SkillId");
-
-                    b.ToTable("ProjectSkills");
-                });
-
             modelBuilder.Entity("ResourceMaster.DAL.Models.Resource", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
-                    b.Property<string>("FirstName")
+                    b.Property<int>("age")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("country")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("LastName")
+                    b.Property<string>("firstName")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.Property<string>("lastName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("location")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("street")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("zipCode")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("id");
 
                     b.ToTable("Resources");
                 });
 
-            modelBuilder.Entity("ResourceMaster.DAL.Models.ResourceProject", b =>
-                {
-                    b.Property<int>("ResourceProjectId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ResourceProjectId"));
-
-                    b.Property<DateTimeOffset>("BookedFrom")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset>("BookedTo")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ResourceId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("ResourceProjectId");
-
-                    b.HasIndex("ProjectId");
-
-                    b.HasIndex("ResourceId");
-
-                    b.ToTable("ResourceProjects");
-                });
-
-            modelBuilder.Entity("ResourceMaster.DAL.Models.ResourceSkill", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("IsCertification")
-                        .HasColumnType("boolean");
-
-                    b.Property<int>("ResourceId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("SkillId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("SkillLevel")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ResourceId");
-
-                    b.HasIndex("SkillId");
-
-                    b.ToTable("ResourceSkills");
-                });
-
             modelBuilder.Entity("ResourceMaster.DAL.Models.Skill", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
-                    b.Property<string>("SkillName")
+                    b.Property<int?>("Projectid")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("Resourceid")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("description")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.Property<bool>("isCertification")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("necessity")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("skillLevel")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("Projectid");
+
+                    b.HasIndex("Resourceid");
 
                     b.ToTable("Skills");
                 });
 
             modelBuilder.Entity("ResourceMaster.DAL.Models.Project", b =>
                 {
-                    b.HasOne("ResourceMaster.DAL.Models.Customer", "Customer")
-                        .WithMany("Project")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ResourceMaster.DAL.Models.Resource", null)
-                        .WithMany("Projects")
-                        .HasForeignKey("ResourceId");
-
-                    b.Navigation("Customer");
-                });
-
-            modelBuilder.Entity("ResourceMaster.DAL.Models.ProjectSkill", b =>
-                {
-                    b.HasOne("ResourceMaster.DAL.Models.Project", "Project")
-                        .WithMany("Skill")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ResourceMaster.DAL.Models.Skill", "Skill")
-                        .WithMany("ProjectSkills")
-                        .HasForeignKey("SkillId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Project");
-
-                    b.Navigation("Skill");
-                });
-
-            modelBuilder.Entity("ResourceMaster.DAL.Models.ResourceProject", b =>
-                {
-                    b.HasOne("ResourceMaster.DAL.Models.Project", "Project")
+                    b.HasOne("ResourceMaster.DAL.Models.Customer", "customer")
                         .WithMany()
-                        .HasForeignKey("ProjectId")
+                        .HasForeignKey("customerid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ResourceMaster.DAL.Models.Resource", "Resource")
-                        .WithMany()
-                        .HasForeignKey("ResourceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Project");
-
-                    b.Navigation("Resource");
-                });
-
-            modelBuilder.Entity("ResourceMaster.DAL.Models.ResourceSkill", b =>
-                {
-                    b.HasOne("ResourceMaster.DAL.Models.Resource", "Resource")
-                        .WithMany("Skills")
-                        .HasForeignKey("ResourceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ResourceMaster.DAL.Models.Skill", "Skill")
-                        .WithMany("ResourceSkills")
-                        .HasForeignKey("SkillId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Resource");
-
-                    b.Navigation("Skill");
-                });
-
-            modelBuilder.Entity("ResourceMaster.DAL.Models.Customer", b =>
-                {
-                    b.Navigation("Project");
-                });
-
-            modelBuilder.Entity("ResourceMaster.DAL.Models.Project", b =>
-                {
-                    b.Navigation("Skill");
-                });
-
-            modelBuilder.Entity("ResourceMaster.DAL.Models.Resource", b =>
-                {
-                    b.Navigation("Projects");
-
-                    b.Navigation("Skills");
+                    b.Navigation("customer");
                 });
 
             modelBuilder.Entity("ResourceMaster.DAL.Models.Skill", b =>
                 {
-                    b.Navigation("ProjectSkills");
+                    b.HasOne("ResourceMaster.DAL.Models.Project", null)
+                        .WithMany("skills")
+                        .HasForeignKey("Projectid");
 
-                    b.Navigation("ResourceSkills");
+                    b.HasOne("ResourceMaster.DAL.Models.Resource", null)
+                        .WithMany("skills")
+                        .HasForeignKey("Resourceid");
+                });
+
+            modelBuilder.Entity("ResourceMaster.DAL.Models.Project", b =>
+                {
+                    b.Navigation("skills");
+                });
+
+            modelBuilder.Entity("ResourceMaster.DAL.Models.Resource", b =>
+                {
+                    b.Navigation("skills");
                 });
 #pragma warning restore 612, 618
         }

@@ -17,12 +17,12 @@
         <MudTh>Skills</MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd DataLabel="First name">@context.FirstName</MudTd>
-        <MudTd DataLabel="Last name">@context.LastName</MudTd>
-        <MudTd DataLabel="age">@context.Age</MudTd>
+        <MudTd DataLabel="First name">@context.firstName</MudTd>
+        <MudTd DataLabel="Last name">@context.lastName</MudTd>
+        <MudTd DataLabel="age">@context.age</MudTd>
         <MudTd DataLabel="skills">
-            @(context.Skills != null && context.Skills.Count > 0
-                ? String.Join("; ", context.Skills.Select(x => x.Skill.SkillName)) : "Kein skill vorhanden")
+            @(context.skills != null && context.skills.Count > 0
+                ? context.skills[0].description : "Kein skill vorhanden")
         </MudTd>
     </RowTemplate>
     <PagerContent>
@@ -46,11 +46,11 @@
     {
         if (string.IsNullOrWhiteSpace(searchString))
             return true;
-        if (element.Skills[0].Skill.SkillName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (element.skills[0].description.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (element.FirstName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (element.firstName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (element.LastName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (element.lastName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         return false;
     }

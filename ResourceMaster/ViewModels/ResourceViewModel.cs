@@ -4,15 +4,13 @@ namespace ResourceMaster.ViewModels;
 
 public class ResourceViewModel
 {
-    public int Id { get; set; }
-    public int Age { get; set; }
-    public string FirstName { get; set; } = default!;
-    public string LastName { get; set; } = default!;
-    public string Street { get; set; } = default!;
-    public string ZipCode { get; set; } = default!;
-    public string Location { get; set; } = default!;
-    public Countries Country { get; set; }
-    public List<SkillInformationViewModel> Skills { get; set; } = default!;
-    
-    public List<Project> Projects { get; set; } = default!;
+    public int id { get; set; }
+    public int age { get; set; }
+    public string firstName { get; set; }
+    public string lastName { get; set; }
+    public string street { get; set; }
+    public string zipCode { get; set; }
+    public string location { get; set; }
+    public Countries country { get; set; }
+    public List<Skill> skills { get; set; }
 }

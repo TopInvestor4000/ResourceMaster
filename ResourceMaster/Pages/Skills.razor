@@ -1,0 +1,149 @@
+@using MudBlazor
+@using ResourceMaster.DAL.Models
+<MudGrid>
+        <MudItem xs="12" sm="4">
+            <MudPaper Elevation="1">
+                <MudTextField Value="_noSelectedFilter" Label="Search NO CAN" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" ValueChanged="@((string value) => OnFilterChanged(value, true))" Immediate="true" />
+                <MudList Clickable="true" Class="list-container">
+                    @foreach (var item in _filteredNoSelected)
+                    {
+                        <MudListItem Clickable="true" OnClick="@((e) => Select(item, e))">@item.description</MudListItem>
+                    }
+                </MudList>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="4" Direction="Direction.Column">
+            <MudPaper>
+                <MudButton Variant="Variant.Filled"
+                           Size="Size.Large"
+                           Color="Color.Tertiary"
+                           OnClick="SelectAll"
+                           FullWidth="true"
+                           Padding="py-1">
+                    Select all
+                </MudButton>
+                <MudButton Variant="Variant.Filled"
+                           Size="Size.Large"
+                           Color="Color.Secondary"
+                           OnClick="DeselectAll"
+                           FullWidth="true"
+                           Padding="py-1">
+                    Deselect all
+                </MudButton>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="4">
+            <MudPaper Elevation="1">
+                <MudTextField Value="_selectedFilter" Label="Search CAN" Variant="Variant.Outlined" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" ValueChanged="@((string value) => OnFilterChanged(value, false))" Immediate="true" />
+                <MudList Clickable="true" Class="list-container">
+                    @foreach (var item in _filteredSelected)
+                    {
+                        <MudListItem Clickable="true" OnClick="@((e) => Deselect(item, e))">@item.description</MudListItem>
+                    }
+                </MudList>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+
+@code {
+    
+    private List<Skill> _filteredNoSelected = new();
+    private List<Skill> _filteredSelected = new();
+    
+    private List<Skill> skillsTest = new()
+    {
+        new Skill("Java", false, "senior", "yes"),
+        new Skill("JavaScript", false, "senior", "yes"),
+        new Skill("CSS", false, "senior", "yes"),
+        new Skill("Kubernetes", false, "senior", "yes"),
+    };
+
+    private List<Skill> _noSelected = new();
+    private List<Skill> _selected = new();
+    private string _noSelectedFilter = "";
+    private string _selectedFilter = "";
+    
+    [Parameter]
+    public EventCallback<List<Skill>> OnItemSelected { get; set; }
+
+    protected override void OnInitialized()
+    {
+        _noSelected.AddRange(skillsTest);
+        SortLists();
+        UpdateFilteredList();
+    }
+
+    private void SortLists()
+    {
+        _noSelected.Sort();
+        _selected.Sort();
+    }
+
+    private void UpdateFilteredList()
+    {
+        _filteredNoSelected = _noSelected.Where(x => x.description.IndexOf(_noSelectedFilter, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
+        _filteredSelected = _selected.Where(x => x.description.IndexOf(_selectedFilter, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
+    }
+
+    private void OnFilterChanged(string value, bool isNoSelected)
+    {
+        if (isNoSelected)
+        {
+            _noSelectedFilter = value;
+        }
+        else
+        {
+            _selectedFilter = value;
+        }
+
+        UpdateFilteredList();
+        StateHasChanged();
+    }
+    
+    private void Select(Skill s, MouseEventArgs e)
+    {
+        _noSelected.Remove(s);
+        _selected.Add(s);
+        SortLists();
+        UpdateFilteredList();
+    }
+
+    private void Deselect(Skill s, MouseEventArgs e)
+    {
+        _selected.Remove(s);
+        _noSelected.Add(s);
+        SortLists();
+        UpdateFilteredList();
+    }
+
+    private void SelectAll()
+    {
+        _selected.AddRange(_noSelected);
+        _noSelected.Clear();
+        SortLists();
+        UpdateFilteredList();
+    }
+
+    private void DeselectAll()
+    {
+        _noSelected.AddRange(_selected);
+        _selected.Clear();
+        SortLists();
+        UpdateFilteredList();
+        ItemSelected();
+    }
+    
+    private void ItemSelected()
+    {
+        OnItemSelected.InvokeAsync(_selected);
+    }
+    
+}
+
+<style>
+.list-container {
+    min-height: 50px;
+    height:  auto;
+    overflow-y: auto;
+}
+</style>
