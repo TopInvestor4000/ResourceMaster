@@ -2,7 +2,7 @@
 <MudListItem>
     <MudGrid>
         <MudItem xs="12" sm="5" md="5">
-            <MudText><b>Skill:</b> @skill.SkillName | <b>Level:</b> @skill.Level | <b>Certified:</b> @(skill.Certified ? "Yes" : "No")</MudText>
+            <MudText><b>Skill:</b> @skill.Skill.SkillName | <b>Level:</b> @skill.SkillLevel | <b>Certified:</b> @(skill.IsCertification ? "Yes" : "No")</MudText>
         </MudItem>
     </MudGrid>
 </MudListItem>
@@ -11,6 +11,6 @@
 @code {
 
     [Parameter]
-    public SkillViewModel skill { get; set; }
+    public SkillInformationViewModel skill { get; set; }
 
 }

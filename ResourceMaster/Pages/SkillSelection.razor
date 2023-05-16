@@ -44,7 +44,7 @@
 @code {
 
     [Parameter]
-    public EventCallback<List<SkillViewModel>> OnItemSelected { get; set; }
+    public EventCallback<List<SkillInformationViewModel>> OnItemSelected { get; set; }
 
     [Parameter]
     public List<string> skillOptions { get; set; }
@@ -54,7 +54,7 @@
     private string selectedLevel = "";
     private bool isCertified;
     private List<string> availableSkillOptions;
-    private List<SkillViewModel> skills = new();
+    private List<SkillInformationViewModel> skills = new();
 
     protected override void OnParametersSet()
     {
@@ -70,7 +70,7 @@
     {
         if (!string.IsNullOrEmpty(selectedSkill) && !string.IsNullOrEmpty(selectedLevel))
         {
-            skills.Add(new SkillViewModel { SkillName = selectedSkill, Level = selectedLevel, Certified = isCertified });
+            skills.Add(new SkillInformationViewModel { Skill = new SkillViewModel{SkillName = selectedSkill}, SkillLevel = selectedLevel, IsCertification = isCertified });
         }
 
         availableSkillOptions.Remove(selectedSkill);
@@ -90,10 +90,10 @@
         return availableSkillOptions.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
     }
 
-    private void RemoveSkill(SkillViewModel skill)
+    private void RemoveSkill(SkillInformationViewModel skill)
     {
         skills.Remove(skill);
-        availableSkillOptions.Add(skill.SkillName);
+        availableSkillOptions.Add(skill.Skill.SkillName);
         SortSkills();
         ItemSelected();
     }

@@ -18,9 +18,9 @@
         <MudTh></MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd DataLabel="projectName">@context.projectName</MudTd>
+        <MudTd DataLabel="projectName">@context.ProjectName</MudTd>
         <MudTd DataLabel="projectStart">@context.ProjectStart</MudTd>
-        <MudTd DataLabel="projectEnd">@context.projectEnd</MudTd>
+        <MudTd DataLabel="projectEnd">@context.ProjectEnd</MudTd>
         <MudTd>
             <MudButton Color="Color.Primary" OnClick="@(() => OpenProjectDetail(@context.Id))">Detail</MudButton>
         </MudTd>
@@ -49,11 +49,11 @@
     {
         if (string.IsNullOrWhiteSpace(searchString))
             return true;
-        if (element.projectName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (element.ProjectName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (element.ProjectStart != null && element.ProjectStart.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (element.projectEnd != null && element.projectEnd.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (element.ProjectEnd != null && element.ProjectEnd.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         return false;
     }

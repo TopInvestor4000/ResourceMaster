@@ -9,5 +9,5 @@ public class Project
 
 
     public Customer Customer { get; set; }
-    public List<Skill> Skill { get; set; }
+    public List<ProjectSkill> Skill { get; set; }
 }

@@ -23,7 +23,7 @@
         <MudTd DataLabel="age">@context.Age</MudTd>
         <MudTd DataLabel="skills">
             @(context.Skills != null && context.Skills.Count > 0
-                ? string.Join(", ", context.Skills.Select(s => s.SkillName))
+                ? string.Join(", ", context.Skills.Select(s => s.Skill.SkillName))
                 : "Kein Skill vorhanden")
         </MudTd>
     </RowTemplate>
@@ -39,19 +39,19 @@
 
     private List<ResourceViewModel> resources = new List<ResourceViewModel>();
 
-    private List<SkillViewModel> skillList1 = new()
+    private List<SkillInformationViewModel> skillList1 = new()
     {
-        new SkillViewModel()
+        new SkillInformationViewModel()
     };
 
-    private List<SkillViewModel> skillListProject = new()
+    private List<SkillInformationViewModel> skillListProject = new()
     {
-      new SkillViewModel()
+      new SkillInformationViewModel()
     };
 
-    private List<SkillViewModel> skillList2 = new()
+    private List<SkillInformationViewModel> skillList2 = new()
     {
-        new SkillViewModel(),
+        new SkillInformationViewModel(),
     };
     //private ProjectViewModel currentProject;
 
