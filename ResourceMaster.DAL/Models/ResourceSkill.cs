@@ -12,6 +12,6 @@ namespace ResourceMaster.DAL.Models
         public int Id { get; set; }
 
         public int ResourceId { get; set; }
-        public Resource Resource { get; set; }
+        public Resource Resource { get; set; } = default!;
     }
 }

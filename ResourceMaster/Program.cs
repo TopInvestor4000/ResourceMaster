@@ -37,10 +37,11 @@ builder.Services.AddScoped<SkillService, SkillService>();
 builder.Services.AddScoped<MatchingService, MatchingService>();
 
 // Apply migrations
-var dbContext = builder.Services.BuildServiceProvider().GetService<DatabaseContext>();
-dbContext.Database.Migrate();
+DatabaseContext? dbContext = builder?.Services?.BuildServiceProvider()?.GetService<DatabaseContext>();
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+dbContext?.Database.Migrate();
 
-var app = builder.Build();
+var app = builder?.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

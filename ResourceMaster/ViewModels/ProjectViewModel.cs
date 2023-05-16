@@ -5,10 +5,10 @@ namespace ResourceMaster.ViewModels;
 public class ProjectViewModel
 {
     public int Id { get; set; }
-    public string ProjectName { get; set; }
-    public CustomerViewModel Customer { get; set; }
-    public int workForce { get; set; }
-    public DateTime? ProjectStart { get; set; }
-    public DateTime? ProjectEnd { get; set; }
-    public List<SkillInformationViewModel> Skills { get; set; }
+    public string ProjectName { get; set; } = default!;
+    public CustomerViewModel Customer { get; set; } = default!;
+    public int workForce { get; set; } = default!;
+    public DateTime? ProjectStart { get; set; } = default!;
+    public DateTime? ProjectEnd { get; set; } = default!;
+    public List<SkillInformationViewModel> Skills { get; set; } = default!;
 }
