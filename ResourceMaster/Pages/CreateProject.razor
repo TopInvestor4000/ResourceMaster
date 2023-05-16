@@ -1,12 +1,10 @@
 @page "/createProject"
-@using ResourceMaster.DAL.Models;
-@using ResourceMaster.DAL.Repositories.CustomerRepository;
-@using ResourceMaster.ViewModels;
-@using MudBlazor;
+@using ResourceMaster.ViewModels
+@using MudBlazor
 @using ResourceMaster.Services.CustomerService
-@inject ISnackbar Snackbar;
-@inject ProjectService _ProjectService;
-@inject ICustomerRepository _customerRepository;
+@inject ISnackbar Snackbar
+@inject ProjectService _ProjectService
+@inject CustomerService _CustomerService
 
 <h1>Create new project</h1>
 <br>
@@ -14,26 +12,27 @@
 <MudForm onsubmit="@HandleSubmit" Model="_project">
     <MudGrid>
         <MudItem xs="12" sm="6" md="4">
-            <MudTextField @bind-Value="_project.projectName" Label="Project name" id="projectName" Variant="Variant.Outlined"/>
+            <MudTextField @bind-Value="_project.ProjectName" Label="Project name" id="projectName" Variant="Variant.Outlined"/>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
             <MudTextField @bind-Value="_project.workForce" Label="Workforce" id="workforce" Variant="Variant.Outlined" Min="0" Max="999"/>
         </MudItem>
         <br/>
         <MudItem xs="12" sm="6" md="4">
-            <MudDatePicker Label="Project start" @bind-Date="_project.projectStart"/>
+            <MudDatePicker Label="Project start" @bind-Date="_project.ProjectStart"/>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-            <MudDatePicker Label="Project end" @bind-Date="_project.projectEnd"/>
+            <MudDatePicker Label="Project end" @bind-Date="_project.ProjectEnd"/>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-        <MudSelect @bind-Value="_project.customer" Label="Select customer">
-                @foreach (Customer item in _customerList)
-            {
-                <MudSelectItem Value="@item">@item.companyName</MudSelectItem>
-            }
-        </MudSelect>
+            <MudSelect @bind-Value="_project.Customer" Label="Select customer">
+                @foreach (CustomerViewModel item in _customerList)
+                {
+                    <MudSelectItem Value="@item">@item.CompanyName</MudSelectItem>
+                }
+            </MudSelect>
         </MudItem>
+        <SkillSelection skillOptions="@skillOptions" OnItemSelected="skills => _project.Skills = skills"/>
     </MudGrid>
     <MudGrid>
         <MudItem xs="12" Class="my-4 text-center">
@@ -49,17 +48,19 @@
 
 @code{
     private ProjectViewModel _project = new();
-    private List<Customer> _customerList = new();
+    private List<CustomerViewModel> _customerList = new();
+    private List<string> skillOptions = new();
 
     protected override async Task OnInitializedAsync()
     {
-        _customerList = (await _customerRepository.GetAllAsync()).ToList();
+        skillOptions = new List<string> { "Java", "C#", "SQL", "JavaScript", "Python", "Ruby", "Swift", "PHP", "Kotlin", "TypeScript" }.OrderBy(skill => skill).ToList();
+        _customerList = (await _CustomerService.GetAllAsync()).ToList();
     }
 
 
     private async Task HandleSubmit()
     {
-        Snackbar.Add("Successfully added " + _project.projectName);
+        Snackbar.Add("Successfully added " + _project.ProjectName);
         await _ProjectService.AddAsync(_project);
     }
 

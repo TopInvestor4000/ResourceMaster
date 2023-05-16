@@ -31,14 +31,14 @@ namespace ResourceMaster.Test.ServiceTest
         {
             new Customer()
             {
-                id = 1,
-                firstName = "Peter",
-                lastName = "Meier",
-                street = "Löwengasse 5",
-                zipCode = "3000",
-                location = "Zürich",
-                country = "Schweiz",
-                companyName = "Bond Agency"
+                Id = 1,
+                FirstName = "Peter",
+                LastName = "Meier",
+                Street = "Löwengasse 5",
+                ZipCode = "3000",
+                Location = "Zürich",
+                Country = "Schweiz",
+                CompanyName = "Bond Agency"
             },
         };
 
@@ -47,14 +47,14 @@ namespace ResourceMaster.Test.ServiceTest
 
             var expectedViewModels = customerList.Select(table => new CustomerViewModel()
             {
-                id = table.id,
-                firstName = table.firstName,
-                lastName = table.lastName,
-                street = table.street,
-                zipCode = table.zipCode,
-                location = table.location,
-                country = (Countries)Enum.Parse(typeof(Countries), table.country),
-                companyName = table.companyName,
+                Id = table.Id,
+                FirstName = table.FirstName,
+                LastName = table.LastName,
+                Street = table.Street,
+                ZipCode = table.ZipCode,
+                Location = table.Location,
+                Country = (Countries)Enum.Parse(typeof(Countries), table.Country),
+                CompanyName = table.CompanyName,
             });
 
             // Act
@@ -70,14 +70,14 @@ namespace ResourceMaster.Test.ServiceTest
             // Arrange
             var customerViewModel = new CustomerViewModel()
             {
-                id = 1,
-                firstName = "James",
-                lastName = "Bond",
-                street = "Löwengasse 5",
-                zipCode = "3000",
-                location = "Zürich",
-                country = Countries.Switzerland,
-                companyName = "Bond Agency",
+                Id = 1,
+                FirstName = "James",
+                LastName = "Bond",
+                Street = "Löwengasse 5",
+                ZipCode = "3000",
+                Location = "Zürich",
+                Country = Countries.Switzerland,
+                CompanyName = "Bond Agency",
             };
 
             _mockRepository.Setup(repo => repo.AddAsync(It.IsAny<Customer>()))

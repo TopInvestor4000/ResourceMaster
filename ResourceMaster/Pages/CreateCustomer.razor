@@ -5,30 +5,30 @@
 @inject CustomerService CustomerService;
 @inject ISnackbar Snackbar;
 
-<h1>Create new applicant</h1>
+<h1>Create new customer</h1>
 
 <MudForm onsubmit="@HandleSubmit" Model="_customer">
     <MudGrid>
         <MudItem xs="12" sm="6" md="4">
-            <MudTextField T="string" @bind-value="_customer.companyName" Label="name of corporation" id="corporation" Variant="Variant.Outlined"/>
+            <MudTextField T="string" @bind-value="_customer.CompanyName" Label="name of corporation" id="corporation" Variant="Variant.Outlined"/>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-            <MudTextField T="string" @bind-value="_customer.firstName" Label="firstname" id="firstname" Variant="Variant.Outlined"></MudTextField>
+            <MudTextField T="string" @bind-value="_customer.FirstName" Label="firstname" id="firstname" Variant="Variant.Outlined"></MudTextField>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-            <MudTextField T="string" @bind-value="_customer.lastName" Label="lastname" id="lastname" Variant="Variant.Outlined"></MudTextField>
+            <MudTextField T="string" @bind-value="_customer.LastName" Label="lastname" id="lastname" Variant="Variant.Outlined"></MudTextField>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-            <MudTextField T="string" @bind-value="_customer.street" Label="street" id="street" Variant="Variant.Outlined"></MudTextField>
+            <MudTextField T="string" @bind-value="_customer.Street" Label="street" id="street" Variant="Variant.Outlined"></MudTextField>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-            <MudTextField T="string" @bind-Value="_customer.zipCode" Label="zip code" id="zipCode" Variant="Variant.Outlined"></MudTextField>
+            <MudTextField T="string" @bind-Value="_customer.ZipCode" Label="zip code" id="zipCode" Variant="Variant.Outlined"></MudTextField>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-            <MudTextField T="string" @bind-value="_customer.location" Label="location" id="location" Variant="Variant.Outlined"></MudTextField>
+            <MudTextField T="string" @bind-value="_customer.Location" Label="location" id="location" Variant="Variant.Outlined"></MudTextField>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-            <MudAutocomplete T="Countries" @bind-Value="_customer.country" Label="Country" Variant="Variant.Outlined" SearchFunc="FilterCountries"/>
+            <MudAutocomplete T="Countries" @bind-Value="_customer.Country" Label="Country" Variant="Variant.Outlined" SearchFunc="FilterCountries"/>
         </MudItem>
     </MudGrid>
     <MudGrid>
@@ -51,7 +51,7 @@
     private async Task HandleSubmit()
     {
         await CustomerService.AddAsync(_customer);
-        Snackbar.Add("Successfully added " + _customer.companyName);
+        Snackbar.Add("Successfully added " + _customer.CompanyName);
     }
 
 

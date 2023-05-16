@@ -6,6 +6,7 @@ using ResourceMaster.DAL.Repositories.ProjectRepository;
 using ResourceMaster.DAL.Repositories.ResourceRepository;
 using ResourceMaster.DAL.Repositories.SkillRepository;
 using ResourceMaster.Services.CustomerService;
+using ResourceMaster.Services.MatchingService;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,12 +34,14 @@ builder.Services.AddScoped<CustomerService, CustomerService>();
 builder.Services.AddScoped<ProjectService, ProjectService>();
 builder.Services.AddScoped<ResourceService, ResourceService>();
 builder.Services.AddScoped<SkillService, SkillService>();
+builder.Services.AddScoped<MatchingService, MatchingService>();
 
 // Apply migrations
-var dbContext = builder.Services.BuildServiceProvider().GetService<DatabaseContext>();
-dbContext.Database.Migrate();
+DatabaseContext? dbContext = builder?.Services?.BuildServiceProvider()?.GetService<DatabaseContext>();
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+dbContext?.Database.Migrate();
 
-var app = builder.Build();
+var app = builder?.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
