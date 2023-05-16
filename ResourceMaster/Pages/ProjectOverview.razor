@@ -3,9 +3,8 @@
 @using ResourceMaster.ViewModels
 @using MudBlazor
 @inject ProjectService ProjectService;
-@inject NavigationManager UriHelper
 
-<MudTable Items="@projects" Bordered="@true" Striped="true" Filter="new Func<ProjectViewModel,bool>(FilterFunc1)" @bind-SelectedItem="selectedProject">
+<MudTable Items="@porjects" Bordered="@true" Striped="true" Filter="new Func<ProjectViewModel,bool>(FilterFunc1)" @bind-SelectedItem="selectedProject">
     <ToolBarContent>
         <MudText Typo="Typo.h6">Project Overview</MudText>
         <MudSpacer />
@@ -15,32 +14,25 @@
         <MudTh>Project name</MudTh>
         <MudTh>Project start</MudTh>
         <MudTh>Project end</MudTh>
-        <MudTh></MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="projectName">@context.projectName</MudTd>
-        <MudTd DataLabel="projectStart">@context.ProjectStart</MudTd>
+        <MudTd DataLabel="projectStart">@context.projectStart</MudTd>
         <MudTd DataLabel="projectEnd">@context.projectEnd</MudTd>
-        <MudTd>
-            <MudButton Color="Color.Primary" OnClick="@(() => OpenProjectDetail(@context.Id))">Detail</MudButton>
-        </MudTd>
     </RowTemplate>
     <PagerContent>
         <MudTablePager />
     </PagerContent>
 </MudTable>
-    
 
 @code {
     private string filter = "";
     private ProjectViewModel selectedProject;
-    private IEnumerable<ProjectViewModel> projects = new List<ProjectViewModel>();
-
-
+    private IEnumerable<ProjectViewModel> porjects = new List<ProjectViewModel>();
 
     protected override async Task OnInitializedAsync()
     {
-        projects = await ProjectService.GetAllAsync();
+        porjects = await ProjectService.GetAllAsync();
     }
 
     private bool FilterFunc1(ProjectViewModel element) => FilterFunc(element, filter);
@@ -51,15 +43,10 @@
             return true;
         if (element.projectName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (element.ProjectStart != null && element.ProjectStart.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (element.projectStart != null && element.projectStart.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (element.projectEnd != null && element.projectEnd.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         return false;
-    }
-
-    private void OpenProjectDetail(int projectId)
-    {
-        UriHelper.NavigateTo($"/projectMatches/{projectId}");
     }
 }

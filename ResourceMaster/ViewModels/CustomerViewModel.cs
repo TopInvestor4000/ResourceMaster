@@ -2,12 +2,12 @@ namespace ResourceMaster.ViewModels;
 
 public class CustomerViewModel
 {
-    public int Id { get; set; }
-    public string CompanyName { get; set; }
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public string Street { get; set; }
-    public string ZipCode { get; set; }
-    public string Location { get; set; }
-    public Countries Country { get; set; }
+    public int id { get; set; }
+    public string companyName { get; set; }
+    public string firstName { get; set; }
+    public string lastName { get; set; }
+    public string street { get; set; }
+    public string zipCode { get; set; }
+    public string location { get; set; }
+    public Countries country { get; set; }
 }

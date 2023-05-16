@@ -2,12 +2,11 @@ namespace ResourceMaster.DAL.Models;
 
 public class Project
 {
-    public int Id { get; set; }
-    public string ProjectName { get; set; }
-    public DateTime? ProjectStart { get; set; }
-    public DateTime? ProjectEnd { get; set; }
-
-
-    public Customer Customer { get; set; }
-    public List<Skill> Skill { get; set; }
+    public int id { get; set; }
+    public string projectName { get; set; }
+    public Customer customer { get; set; }
+    public int workForce { get; set; }
+    public DateTime? projectStart { get; set; }
+    public DateTime? projectEnd { get; set; }
+    public List<Skill> skills { get; set; }
 }

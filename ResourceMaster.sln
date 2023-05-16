@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResourceMaster", "ResourceM
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResourceMaster.DAL", "ResourceMaster.DAL\ResourceMaster.DAL.csproj", "{8DDFAE06-B747-4B61-AB4D-41145B515265}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResourceMaster.Test", "ResourceMaster.Test\ResourceMaster.Test.csproj", "{B573AE05-47D1-4C98-A5B4-F8450581283E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceMaster.Test", "ResourceMaster.Test\ResourceMaster.Test.csproj", "{B573AE05-47D1-4C98-A5B4-F8450581283E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
