@@ -29,5 +29,10 @@ namespace ResourceMaster.Services.CustomerService
             var newEntry = resource.Adapt<Resource>();
             await _repository.AddAsync(newEntry);
         }
+
+        public async Task<ResourceViewModel> GetSingleResource(int id)
+        {
+           return (await _repository.GetSingle(id)).Adapt<ResourceViewModel>();
+        }
     }
 }

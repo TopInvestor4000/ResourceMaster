@@ -18,6 +18,10 @@ namespace ResourceMaster.DAL.Repositories.ResourceRepository
         {
             return await _context.Resources.ToListAsync();
         }
+        public async Task<Resource> GetSingle(int id)
+        {
+            return await _context.Resources.Include(x => x.Skills).SingleAsync(x => x.Id == id);
+        }
 
         public async Task AddAsync(Resource customer)
         {
