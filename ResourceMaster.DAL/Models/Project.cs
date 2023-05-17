@@ -7,7 +7,6 @@ public class Project
     public DateTime? ProjectStart { get; set; } 
     public DateTime? ProjectEnd { get; set; }
 
-
     public Customer Customer { get; set; } = default!;
-    public List<ProjectSkill> Skill { get; set; } = default!;
+    public List<ProjectSkill> Skills { get; set; } = default!;
 }
