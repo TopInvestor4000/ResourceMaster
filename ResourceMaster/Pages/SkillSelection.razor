@@ -31,14 +31,7 @@
         </MudStack>
     </MudPaper>
 </MudItem>
-<MudList>
-    @foreach (var skill in skills)
-    {
-        <SkillElement skill="@skill"></SkillElement>
-        <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => RemoveSkill(skill))">Delete</MudButton>
-        <br/>
-    }
-</MudList>
+<SkillElement skills="@skills" removedSKill="skill => RemoveSkill(skill)"></SkillElement>
 
 @code {
 
