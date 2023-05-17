@@ -4,7 +4,7 @@ using Bogus;
 
 public class SeedSkill
 {
-    public List<Skill> SeedSkills(int num)
+    public List<Skill> SeedSkills()
     {
         var skills = new List<Skill>();
         foreach (var s in _skillNames)

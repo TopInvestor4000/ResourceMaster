@@ -18,7 +18,7 @@ public class SeedData
     {
         await _context.Customers.AddRangeAsync(_seedCustomer.SeedCustomers(300));
         await _context.Projects.AddRangeAsync(_seedProject.SeedProjects(100));
-        await _context.Skills.AddRangeAsync(_seedSkill.SeedSkills(50));
+        await _context.Skills.AddRangeAsync(_seedSkill.SeedSkills());
         await _context.SaveChangesAsync();
     }
     
