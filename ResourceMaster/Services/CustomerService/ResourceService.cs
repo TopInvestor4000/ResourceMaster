@@ -1,4 +1,5 @@
-﻿using ResourceMaster.DAL.Models;
+﻿using Mapster;
+using ResourceMaster.DAL.Models;
 using ResourceMaster.DAL.Repositories.ResourceRepository;
 using ResourceMaster.ViewModels;
 
@@ -17,44 +18,15 @@ namespace ResourceMaster.Services.CustomerService
 
         public async Task<IEnumerable<ResourceViewModel>> GetAllAsync( )
         {
-
             _logger.LogInformation("GetAllAsync Method called");
             var customerList =  await _repository.GetAllAsync();
-            List<ResourceViewModel> resultList = new List<ResourceViewModel>();
-            foreach (var table in customerList)
-            {
-                var viewModel = new ResourceViewModel()
-                {
-                    id = table.id,
-                    age = table.age,
-                    firstName = table.firstName,
-                    lastName = table.lastName,
-                    street = table.street,
-                    zipCode = table.zipCode,
-                    location = table.location,
-                    country = (Countries)Enum.Parse(typeof(Countries), table.country),
-                    skills = table.skills,
-                };
-                resultList.Add(viewModel);
-            }
+            var resultList = customerList.Adapt<List<ResourceViewModel>>();
             return resultList;
         }
 
         public async Task AddAsync(ResourceViewModel resource)
         {
-            var newEntry = new Resource()
-            {
-                    id = resource.id,
-                    age = resource.age,
-                    firstName = resource.firstName,
-                    lastName = resource.lastName,
-                    street = resource.street,
-                    zipCode = resource.zipCode,
-                    location = resource.location,
-                    country = resource.country.ToString(),
-                    skills = resource.skills,
-            };
-
+            var newEntry = resource.Adapt<Resource>();
             await _repository.AddAsync(newEntry);
         }
     }

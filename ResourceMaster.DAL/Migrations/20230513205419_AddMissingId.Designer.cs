@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ResourceMaster.DAL.Data;
@@ -11,9 +12,10 @@ using ResourceMaster.DAL.Data;
 namespace ResourceMaster.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230513205419_AddMissingId")]
+    partial class AddMissingId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +23,21 @@ namespace ResourceMaster.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("ProjectSkill", b =>
+                {
+                    b.Property<int>("ProjectsId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SkillId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("ProjectsId", "SkillId");
+
+                    b.HasIndex("SkillId");
+
+                    b.ToTable("ProjectSkill");
+                });
 
             modelBuilder.Entity("ResourceMaster.DAL.Models.Customer", b =>
                 {
@@ -74,14 +91,14 @@ namespace ResourceMaster.Migrations
                     b.Property<int>("CustomerId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTimeOffset?>("ProjectEnd")
+                    b.Property<DateTime?>("ProjectEnd")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("ProjectName")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTimeOffset?>("ProjectStart")
+                    b.Property<DateTime?>("ProjectStart")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int?>("ResourceId")
@@ -104,13 +121,6 @@ namespace ResourceMaster.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ProjectSkillId"));
 
-                    b.Property<bool>("IsCertification")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Necessity")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<int>("ProjectId")
                         .HasColumnType("integer");
 
@@ -119,10 +129,6 @@ namespace ResourceMaster.Migrations
 
                     b.Property<int>("SkillId")
                         .HasColumnType("integer");
-
-                    b.Property<string>("SkillLevel")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.HasKey("ProjectSkillId");
 
@@ -162,10 +168,10 @@ namespace ResourceMaster.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ResourceProjectId"));
 
-                    b.Property<DateTimeOffset>("BookedFrom")
+                    b.Property<DateTime>("BookedFrom")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTimeOffset>("BookedTo")
+                    b.Property<DateTime>("BookedTo")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("ProjectId")
@@ -193,6 +199,10 @@ namespace ResourceMaster.Migrations
 
                     b.Property<bool>("IsCertification")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("Necessity")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("ResourceId")
                         .HasColumnType("integer");
@@ -230,6 +240,36 @@ namespace ResourceMaster.Migrations
                     b.ToTable("Skills");
                 });
 
+            modelBuilder.Entity("ResourceSkill", b =>
+                {
+                    b.Property<int>("ResourcesId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("SkillsId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("ResourcesId", "SkillsId");
+
+                    b.HasIndex("SkillsId");
+
+                    b.ToTable("ResourceSkill");
+                });
+
+            modelBuilder.Entity("ProjectSkill", b =>
+                {
+                    b.HasOne("ResourceMaster.DAL.Models.Project", null)
+                        .WithMany()
+                        .HasForeignKey("ProjectsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ResourceMaster.DAL.Models.Skill", null)
+                        .WithMany()
+                        .HasForeignKey("SkillId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ResourceMaster.DAL.Models.Project", b =>
                 {
                     b.HasOne("ResourceMaster.DAL.Models.Customer", "Customer")
@@ -248,13 +288,13 @@ namespace ResourceMaster.Migrations
             modelBuilder.Entity("ResourceMaster.DAL.Models.ProjectSkill", b =>
                 {
                     b.HasOne("ResourceMaster.DAL.Models.Project", "Project")
-                        .WithMany("Skill")
+                        .WithMany()
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ResourceMaster.DAL.Models.Skill", "Skill")
-                        .WithMany("ProjectSkills")
+                        .WithMany()
                         .HasForeignKey("SkillId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -286,13 +326,13 @@ namespace ResourceMaster.Migrations
             modelBuilder.Entity("ResourceMaster.DAL.Models.ResourceSkill", b =>
                 {
                     b.HasOne("ResourceMaster.DAL.Models.Resource", "Resource")
-                        .WithMany("Skills")
+                        .WithMany()
                         .HasForeignKey("ResourceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ResourceMaster.DAL.Models.Skill", "Skill")
-                        .WithMany("ResourceSkills")
+                        .WithMany()
                         .HasForeignKey("SkillId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -302,28 +342,29 @@ namespace ResourceMaster.Migrations
                     b.Navigation("Skill");
                 });
 
+            modelBuilder.Entity("ResourceSkill", b =>
+                {
+                    b.HasOne("ResourceMaster.DAL.Models.Resource", null)
+                        .WithMany()
+                        .HasForeignKey("ResourcesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ResourceMaster.DAL.Models.Skill", null)
+                        .WithMany()
+                        .HasForeignKey("SkillsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ResourceMaster.DAL.Models.Customer", b =>
                 {
                     b.Navigation("Project");
                 });
 
-            modelBuilder.Entity("ResourceMaster.DAL.Models.Project", b =>
-                {
-                    b.Navigation("Skill");
-                });
-
             modelBuilder.Entity("ResourceMaster.DAL.Models.Resource", b =>
                 {
                     b.Navigation("Projects");
-
-                    b.Navigation("Skills");
-                });
-
-            modelBuilder.Entity("ResourceMaster.DAL.Models.Skill", b =>
-                {
-                    b.Navigation("ProjectSkills");
-
-                    b.Navigation("ResourceSkills");
                 });
 #pragma warning restore 612, 618
         }

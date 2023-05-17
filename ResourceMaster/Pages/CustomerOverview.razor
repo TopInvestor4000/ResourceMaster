@@ -17,10 +17,10 @@
         <MudTh>country</MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd DataLabel="companyName">@context.companyName</MudTd>
-        <MudTd DataLabel="firstName">@context.firstName</MudTd>
-        <MudTd DataLabel="lastName">@context.lastName</MudTd>
-        <MudTd DataLabel="country">@context.country</MudTd>
+        <MudTd DataLabel="companyName">@context.CompanyName</MudTd>
+        <MudTd DataLabel="firstName">@context.FirstName</MudTd>
+        <MudTd DataLabel="lastName">@context.LastName</MudTd>
+        <MudTd DataLabel="country">@context.Country</MudTd>
     </RowTemplate>
     <PagerContent>
         <MudTablePager />
@@ -43,11 +43,11 @@
     {
         if (string.IsNullOrWhiteSpace(searchString))
             return true;
-        if (element.companyName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (element.CompanyName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (element.firstName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (element.FirstName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (element.lastName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (element.LastName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         return false;
     }
