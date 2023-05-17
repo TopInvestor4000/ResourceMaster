@@ -1,16 +1,46 @@
 @using ResourceMaster.ViewModels
-<MudListItem>
-    <MudGrid>
-        <MudItem xs="12" sm="5" md="5">
-            <MudText><b>Skill:</b> @skill.Skill.SkillName | <b>Level:</b> @skill.SkillLevel | <b>Certified:</b> @(skill.IsCertification ? "Yes" : "No")</MudText>
-        </MudItem>
-    </MudGrid>
-</MudListItem>
-<MudDivider/>
+@using MudBlazor
+<MudItem  xs="12" sm="6">
+    <MudList>
+        @foreach (var skill in skills)
+        {
+            <MudListItem>
+                <MudGrid>
+                    <MudItem xs="10" sm="8" md="8">
+                        <MudText>
+                            <b>Skill:</b> @skill.Skill.SkillName
+                        </MudText>
+                    
+                        <MudText>
+                            <b>Level:</b> @skill.SkillLevel
+                        </MudText>
+                    
+                    
+                        <MudText>
+                            <b>Certified:</b> @(skill.IsCertification ? "Yes" : "No")
+                        </MudText>
+                    </MudItem>
+                    <MudItem xs="2" sm="4" md="4" Style="display: flex; justify-content: flex-end;">
+                        <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => RemoveSkill(skill))">Delete</MudButton>
+                    </MudItem>
+                </MudGrid>
+            </MudListItem>
+            <MudDivider/>
+        }
+    </MudList>
+</MudItem>
 
 @code {
 
     [Parameter]
-    public SkillInformationViewModel skill { get; set; }
+    public List<SkillInformationViewModel> skills { get; set; }
+
+    [Parameter]
+    public EventCallback<SkillInformationViewModel> removedSKill { get; set; }
+
+    private void RemoveSkill(SkillInformationViewModel skill)
+    {
+        removedSKill.InvokeAsync(skill);
+    }
 
 }
