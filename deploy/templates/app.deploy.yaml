@@ -7,7 +7,7 @@ spec:
   selector:
     matchLabels:
       app: {{ .Values.app.name }}-depl
-  replicas: 1
+  replicas: 2
   revisionHistoryLimit: 2
   template:
     metadata:

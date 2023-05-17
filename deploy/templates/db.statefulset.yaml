@@ -1,21 +1,22 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: {{ .Values.db.name }}-depl
+  name: {{ .Values.db.name }}-statefulset
   namespace: {{ .Values.namespace }}
 spec:
+  serviceName: {{ .Values.db.name }}-statefulset
   selector:
     matchLabels:
-      app: {{ .Values.db.name }}-depl
+      app: {{ .Values.db.name }}-statefulset
   replicas: 1
   revisionHistoryLimit: 2
   template:
     metadata:
       labels:
-        app: {{ .Values.db.name }}-depl
+        app: {{ .Values.db.name }}-statefulset
     spec:
       containers:
-      - name: {{ .Values.db.name }}-depl
+      - name: {{ .Values.db.name }}-statefulset
         image: postgres:15
         imagePullPolicy: IfNotPresent
         resources:

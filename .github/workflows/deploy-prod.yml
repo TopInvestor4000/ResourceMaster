@@ -35,8 +35,13 @@ jobs:
         echo '${{ secrets.KUBE_CONFIG }}' > ~/.kube/config
       shell: bash
 
-    - name: 'Put KUBECONFIG'
+    - name: 'Apply manifests'
       run: |
         cd deploy
         helm template -f values-prod.yaml --set db.password=${{ secrets.PRODUCTION }} . | kubectl apply -f -
+      shell: bash
+
+    - name: 'Rollout restart'
+      run: |
+        kubectl rollout restart deploy -n resourcemaster-prod
       shell: bash
