@@ -5,6 +5,9 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     name: {{ .Values.app.name }}-svc
+  annotations:
+    traefik.ingress.kubernetes.io/service.sticky.cookie: "true"
+    traefik.ingress.kubernetes.io/service.sticky.cookie.name: "sticky-resource-master"
 spec:
   ports:
   - port: {{ .Values.app.port }}
