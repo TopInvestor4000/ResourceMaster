@@ -58,7 +58,7 @@ public class SeedProject
         Random random = new Random();
         foreach (var p in projects)
         {
-            p.Customer = customerList.ElementAt(random.Next());
+            p.Customer = customerList.ElementAt(random.Next(0,customerList.Count()-1));
         }
     }
 
