@@ -13,7 +13,6 @@ public class SeedCustomer
     private List<Customer> GenerateCustomers(int num)
     {
         var faker = new Faker<Customer>()
-            .RuleFor(t => t.Id, f => f.UniqueIndex)
             .RuleFor(t => t.CompanyName, f => f.Company.CompanyName())
             .RuleFor(t => t.FirstName, f => f.Name.FirstName())
             .RuleFor(t => t.LastName, f => f.Name.LastName())

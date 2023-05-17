@@ -28,7 +28,7 @@
             <MudTextField T="string" @bind-value="_customer.Location" Label="location" id="location" Variant="Variant.Outlined"></MudTextField>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-            <MudAutocomplete T="Countries" @bind-Value="_customer.Country" Label="Country" Variant="Variant.Outlined" SearchFunc="FilterCountries"/>
+            <MudTextField T="string" @bind-Value="_customer.Country" Label="Country" Variant="Variant.Outlined" SearchFunc="FilterCountries"/>
         </MudItem>
     </MudGrid>
     <MudGrid>

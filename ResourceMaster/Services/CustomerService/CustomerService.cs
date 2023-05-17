@@ -21,7 +21,7 @@ namespace ResourceMaster.Services.CustomerService
 
             _logger.LogInformation("GetAllAsync Method called");
             var customerList =  await _repository.GetAllAsync();
-            return customerList.Adapt<List<CustomerViewModel>>();
+            return customerList.Adapt<IEnumerable<CustomerViewModel>>();
         }
 
         public async Task AddAsync(CustomerViewModel customer)
