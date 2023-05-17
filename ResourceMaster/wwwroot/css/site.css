@@ -66,3 +66,23 @@ a, .btn-link {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+.mud-typography.resource-header{
+    font-size: 30px !important;
+    font-weight: bold !important;
+}
+
+.flex-grow {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+}
+
+.flex-grow > div {
+    flex-grow: 1;
+}
+
+.equal-height-second-box{
+     height: 200px;
+     margin-top: 2%;
+}
