@@ -9,6 +9,7 @@ public class SeedProject
         var projects = new List<Project>();
         for (int i = 0; i < num; i++)
         {
+            projects.Add(new Project());
             AddProjectName(projects);
             AddStartDate(projects);
             AddEndDate(projects);
