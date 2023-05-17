@@ -35,9 +35,8 @@
     @foreach (var skill in skills)
     {
         <SkillElement skill="@skill"></SkillElement>
-        <MudItem xs="12" sm="4" md="3">
-            <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => RemoveSkill(skill))">Delete</MudButton>
-        </MudItem>
+        <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => RemoveSkill(skill))">Delete</MudButton>
+        <br/>
     }
 </MudList>
 
@@ -56,7 +55,7 @@
     private List<string> availableSkillOptions;
     private List<SkillInformationViewModel> skills = new();
 
-    protected override void OnParametersSet()
+    protected override void OnInitialized()
     {
         availableSkillOptions = new List<string>(skillOptions);
     }
@@ -70,7 +69,7 @@
     {
         if (!string.IsNullOrEmpty(selectedSkill) && !string.IsNullOrEmpty(selectedLevel))
         {
-            skills.Add(new SkillInformationViewModel { Skill = new SkillViewModel{SkillName = selectedSkill}, SkillLevel = selectedLevel, IsCertification = isCertified });
+            skills.Add(new SkillInformationViewModel { Skill = new SkillViewModel { SkillName = selectedSkill }, SkillLevel = selectedLevel, IsCertification = isCertified });
         }
 
         availableSkillOptions.Remove(selectedSkill);

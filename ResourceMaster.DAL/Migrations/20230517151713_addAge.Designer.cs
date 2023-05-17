@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ResourceMaster.DAL.Data;
@@ -11,9 +12,10 @@ using ResourceMaster.DAL.Data;
 namespace ResourceMaster.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230517151713_addAge")]
+    partial class addAge
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -108,12 +110,13 @@ namespace ResourceMaster.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("Necessity")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("ProjectId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("RequiredWorkHours")
+                    b.Property<int>("RequiredWorkHours")
                         .HasColumnType("integer");
 
                     b.Property<int>("SkillId")
@@ -250,7 +253,7 @@ namespace ResourceMaster.Migrations
             modelBuilder.Entity("ResourceMaster.DAL.Models.ProjectSkill", b =>
                 {
                     b.HasOne("ResourceMaster.DAL.Models.Project", "Project")
-                        .WithMany("Skills")
+                        .WithMany("Skill")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -311,7 +314,7 @@ namespace ResourceMaster.Migrations
 
             modelBuilder.Entity("ResourceMaster.DAL.Models.Project", b =>
                 {
-                    b.Navigation("Skills");
+                    b.Navigation("Skill");
                 });
 
             modelBuilder.Entity("ResourceMaster.DAL.Models.Resource", b =>
