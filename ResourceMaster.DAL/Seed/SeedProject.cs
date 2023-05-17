@@ -6,19 +6,15 @@ public class SeedProject
 {
     public List<Project> SeedProjects(int num)
     {
-        var projects = GenerateProjects(num);
-        AddProjectName(projects);
-        AddStartDate(projects);
-        AddEndDate(projects);
-        return projects;
-    }
-    
-    private List<Project> GenerateProjects(int num)
-    {
-        var faker = new Faker<Project>()
-            .RuleFor(t => t.Id, f => f.UniqueIndex);
+        var projects = new List<Project>();
+        for (int i = 0; i < num; i++)
+        {
+            AddProjectName(projects);
+            AddStartDate(projects);
+            AddEndDate(projects);
+        }
 
-        return faker.Generate(num);
+        return projects;
     }
 
     private void AddProjectName(List<Project> projects)
