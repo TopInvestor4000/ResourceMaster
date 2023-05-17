@@ -5,6 +5,7 @@ using ResourceMaster.DAL.Repositories.CustomerRepository;
 using ResourceMaster.DAL.Repositories.ProjectRepository;
 using ResourceMaster.DAL.Repositories.ResourceRepository;
 using ResourceMaster.DAL.Repositories.SkillRepository;
+using ResourceMaster.DAL.TestData;
 using ResourceMaster.Services.CustomerService;
 using ResourceMaster.Services.MatchingService;
 using Serilog;
@@ -40,6 +41,10 @@ builder.Services.AddScoped<MatchingService, MatchingService>();
 DatabaseContext? dbContext = builder?.Services?.BuildServiceProvider()?.GetService<DatabaseContext>();
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 dbContext?.Database.Migrate();
+
+// Add seed data
+var seedData = new SeedData(dbContext);
+await seedData.AddSeedDataAsync();
 
 var app = builder?.Build();
 
