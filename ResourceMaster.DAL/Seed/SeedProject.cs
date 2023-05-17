@@ -4,7 +4,7 @@ using Bogus;
 
 public class SeedProject
 {
-    public List<Project> SeedProjects(int num)
+    public List<Project> SeedProjects(int num, List<Customer> validCustomers)
     {
         var projects = new List<Project>();
         for (int i = 0; i < num; i++)
@@ -12,6 +12,7 @@ public class SeedProject
             AddProjectName(projects);
             AddStartDate(projects);
             AddEndDate(projects);
+            AddCustomer(projects, validCustomers);
         }
 
         return projects;
@@ -50,7 +51,16 @@ public class SeedProject
             p.ProjectEnd = faker.Date.Between(p.ProjectStart, endDate);
         }
     }
-    
+
+    private void AddCustomer(List<Project> projects, List<Customer> customerList)
+    {
+        Random random = new Random();
+        foreach (var p in projects)
+        {
+            p.Customer = customerList.ElementAt(random.Next());
+        }
+    }
+
     public List<string> projectNames = new()
     {
         "Project Phoenix" , "CyberShield" , "DataQuest" , "TechVision" , "eMarketX" , "WebWorx" , "CodeCrush" ,
