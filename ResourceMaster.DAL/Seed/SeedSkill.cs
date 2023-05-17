@@ -6,27 +6,15 @@ public class SeedSkill
 {
     public List<Skill> SeedSkills(int num)
     {
-        var skills = GenerateSkills(num);
-        AddSkillName(skills);
+        var skills = new List<Skill>();
+        foreach (var s in _skillNames)
+        {
+            var skill = new Skill();
+            skill.SkillName = s;
+            skills.Add(skill);
+        }
         
         return skills;
-    }
-    
-    private List<Skill> GenerateSkills(int num)
-    {
-        var faker = new Faker<Skill>()
-            .RuleFor(t => t.Id, f => f.UniqueIndex);
-
-        return faker.Generate(num);
-    }
-    
-    private void AddSkillName(List<Skill> skills)
-    {
-        Random random = new Random();
-        foreach (var s in skills)
-        {
-            s.SkillName = _skillNames[random.Next(0, _skillNames.Count - 1)];
-        }
     }
 
     private readonly List<string> _skillNames = new() { 

@@ -6,6 +6,8 @@ public class SeedData
 {
     private DatabaseContext _context;
     private SeedCustomer _seedCustomer = new();
+    private SeedProject _seedProject = new();
+    private SeedSkill _seedSkill = new();
 
     public SeedData(DatabaseContext context)
     {
@@ -14,8 +16,9 @@ public class SeedData
     
     public async Task AddSeedDataAsync()
     {
-        var customers = _seedCustomer.SeedCustomers(300);
-        await _context.Customers.AddRangeAsync(customers);
+        await _context.Customers.AddRangeAsync(_seedCustomer.SeedCustomers(300));
+        await _context.Projects.AddRangeAsync(_seedProject.SeedProjects(100));
+        await _context.Skills.AddRangeAsync(_seedSkill.SeedSkills(50));
         await _context.SaveChangesAsync();
     }
     
