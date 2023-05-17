@@ -35,8 +35,13 @@ jobs:
         echo '${{ secrets.KUBE_CONFIG }}' > ~/.kube/config
       shell: bash
 
-    - name: 'Put KUBECONFIG'
+    - name: 'Apply manifests'
       run: |
         cd deploy
         helm template -f values-stage.yaml --set db.password=${{ secrets.STAGING }} . | kubectl apply -f -
+      shell: bash
+
+    - name: 'Rollout restart'
+      run: |
+        kubectl rollout restart deploy -n resourcemaster-stage
       shell: bash
