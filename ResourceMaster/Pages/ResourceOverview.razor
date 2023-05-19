@@ -46,8 +46,8 @@
     {
         if (string.IsNullOrWhiteSpace(searchString))
             return true;
-        if (element.Skills[0].Skill.SkillName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
+        // if (element.Skills[0].Skill.SkillName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        //     return true;
         if (element.FirstName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (element.LastName.Contains(searchString, StringComparison.OrdinalIgnoreCase))

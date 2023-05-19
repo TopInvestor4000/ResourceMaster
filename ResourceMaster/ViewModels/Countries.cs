@@ -393,7 +393,7 @@ public enum Countries
     Yemen,
     [Display(Name = "Zambia")]
     Zambia,
-    [Display(Name = "Zimbabw")]
+    [Display(Name = "Zimbabwe")]
     Zimbabwe
 }
 

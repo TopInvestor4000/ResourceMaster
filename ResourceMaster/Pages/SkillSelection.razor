@@ -15,7 +15,7 @@
         <MudStack Spacing="4" Class="flex-grow">
             <MudStack Row="true" Spacing="4">
                 <MudAutocomplete T="string" Label="Skill" @bind-Value="selectedSkill" SearchFunc="@SkillSearch"/>
-                <MudSelect Label="Skill Level" T="string" @bind-Value="selectedLevel">
+                <MudSelect Label="Skill Level" T="SkillLevel" @bind-Value="selectedLevel">
                     @foreach (var levelOption in levelOptions)
                     {
                         <MudSelectItem Value="@levelOption"/>
@@ -41,9 +41,9 @@
     [Parameter]
     public List<string> skillOptions { get; set; }
 
-    private List<string> levelOptions = new() { "Poor", "Mediocre", "God" };
+    private List<SkillLevel> levelOptions = Enum.GetValues<SkillLevel>().ToList();
     private string selectedSkill = "";
-    private string selectedLevel = "";
+    private SkillLevel selectedLevel = SkillLevel.Poor;
     private bool isCertified;
     private List<string> availableSkillOptions;
     private List<SkillInformationViewModel> skills = new();
@@ -60,7 +60,7 @@
 
     private void AddSkill()
     {
-        if (!string.IsNullOrEmpty(selectedSkill) && !string.IsNullOrEmpty(selectedLevel))
+        if (!string.IsNullOrEmpty(selectedSkill))
         {
             skills.Add(new SkillInformationViewModel { Skill = new SkillViewModel { SkillName = selectedSkill }, SkillLevel = selectedLevel, IsCertification = isCertified });
         }
@@ -70,7 +70,7 @@
         ItemSelected();
 
         selectedSkill = string.Empty;
-        selectedLevel = string.Empty;
+        selectedLevel = SkillLevel.Poor;
     }
 
     private async Task<IEnumerable<string>> SkillSearch(string value)

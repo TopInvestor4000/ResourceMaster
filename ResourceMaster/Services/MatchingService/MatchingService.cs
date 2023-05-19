@@ -5,52 +5,80 @@ namespace ResourceMaster.Services.MatchingService
 {
     public class MatchingService
     {
-        public List<ResourceViewModel> MatchResourcesToProject(ProjectViewModel project,
+        public List<MatchingResourceViewModel> MatchResourcesToProject(ProjectViewModel project,
             List<ResourceViewModel> resources)
         {
             // Create a list to store the matching resources
-            List<ResourceViewModel> matchingResources = new List<ResourceViewModel>();
+            List<MatchingResourceViewModel> matchedResources = new List<MatchingResourceViewModel>();
 
-            // Iterate over each required skill for the project
-            foreach (SkillInformationViewModel requiredSkill in project.Skills)
+            // only check on the skills which haven't been allocated to a resource yet
+            List<SkillInformationViewModel> requiredSkills =
+                project.Skills.Where(x => x.RequiredWorkHours != 0).ToList();
+
+            // Iterate over each resource
+            foreach (ResourceViewModel resource in resources)
             {
-                // Iterate over each resource
-                foreach (ResourceViewModel resource in resources)
+                if (resource.Skills == null)
                 {
-                    // Check if the resource has the required skill
-                    if (resource.Skills.Select(x => x.Skill.SkillName).Contains(requiredSkill.Skill.SkillName))
+                    continue;
+                }
+                
+                List<SkillInformationViewModel> matchingResources = resource.Skills.Intersect(requiredSkills, new SkillInformationViewModelEqualityComparer()).ToList();
+
+                if (matchingResources.Count == 0)
+                {
+                    continue;
+                }
+                
+                MatchingResourceViewModel matchedResource = new();
+                matchedResource.Resource = resource;
+                double overallScore = 0;
+                
+                foreach (var matchingResource in matchingResources)
+                {
+                    var skill = resource.Skills.Single(x => x.Skill.SkillName == matchingResource.Skill.SkillName);
+                    var requiredSkill = requiredSkills.Single(x => x.Skill.SkillName == matchingResource.Skill.SkillName);
+                    
+                    // Calculate the skill match score
+                    double score = CalculateSkillMatchScore(requiredSkill, skill);
+                    overallScore += score;
+
+                    if (score > matchedResource.BestScore)
                     {
-                        // Calculate the skill match score
-                        double skillMatchScore = CalculateSkillMatchScore(requiredSkill, resource);
-
-                        //TODO: Add list of Workers to avoid according to prefrence
-
-                        // Add the resource to the list of matching resources
-                        matchingResources.Add(resource);
+                        matchedResource.BestScore = score;
+                        matchedResource.BestSkill = skill.Skill;
                     }
                 }
+
+                matchedResource.BestOverallScore = overallScore;
+
+                //TODO: Add list of Workers to avoid according to prefrence
+                
+                // Add the resource to the list of matching resources
+                matchedResources.Add(matchedResource);
             }
 
             // Return the top N resources as potential matches for the project
-            return matchingResources.Take(5).DistinctBy(x => x.Id).ToList();
+            // return matchingResources.Take(5).DistinctBy(x => x.Id).ToList();
+            return matchedResources;
         }
 
 
         // sql structure need refactroing before we can properly use these methods
-        private double CalculateSkillMatchScore(SkillInformationViewModel requiredSkill, ResourceViewModel resource)
+        private double CalculateSkillMatchScore(SkillInformationViewModel requiredSkill, SkillInformationViewModel skill)
         {
             // Combine the scores into an overall match score
-            double overallMatchScore = 2 + CalcFactorScore(requiredSkill, resource);
+            // TODO: CalcFactorScore(requiredSkill, resource);
 
-            return overallMatchScore;
+            return (double)skill.SkillLevel / (double)requiredSkill.SkillLevel;
         }
 
 
-        // Right now empty
-        // TODO: check if resource are free and calc with the workload
-        private double CalcFactorScore(SkillInformationViewModel requiredSkill, ResourceViewModel resource)
-        {
-            return 0;
-        }
+        // // Right now empty
+        // // TODO: check if resource are free and calc with the workload
+        // private double CalcFactorScore(SkillInformationViewModel requiredSkill, ResourceViewModel resource)
+        // {
+        //     return 0;
+        // }
     }
 }
