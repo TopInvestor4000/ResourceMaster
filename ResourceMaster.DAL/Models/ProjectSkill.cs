@@ -4,8 +4,6 @@ namespace ResourceMaster.DAL.Models
 {
     public class ProjectSkill : BaseSkill
     {
-        public int ProjectSkillId { get; set; }
-
         public int ProjectId { get; set; }
         public Project Project { get; set; } = default!;
 
