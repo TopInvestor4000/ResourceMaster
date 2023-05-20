@@ -23,14 +23,9 @@
         <MudTd DataLabel="First name">@context.Resource.FirstName</MudTd>
         <MudTd DataLabel="Last name">@context.Resource.LastName</MudTd>
         <MudTd DataLabel="age">@context.Resource.Age</MudTd>
-        <MudTd DataLabel="skills">
-            @(context.Resource.Skills != null && context.Resource.Skills.Count > 0
-                ? string.Join(", ", context.Resource.Skills.Select(s => s.Skill.SkillName))
-                : "Kein Skill vorhanden")
-        </MudTd>
-        <MudTd DataLabel="age">@context.BestSkill</MudTd>
-        <MudTd DataLabel="age">@context.BestScore</MudTd>
-        <MudTd DataLabel="age">@context.BestOverallScore</MudTd>
+        <MudTd DataLabel="Best skill">@context.BestSkill.SkillName</MudTd>
+        <MudTd DataLabel="Best score of best skill">@context.BestScore</MudTd>
+        <MudTd DataLabel="Overall project score">@context.BestOverallScore</MudTd>
     </RowTemplate>
     <PagerContent>
         <MudTablePager />

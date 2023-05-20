@@ -18,7 +18,7 @@ namespace ResourceMaster.Services.MatchingService
             // Iterate over each resource
             foreach (ResourceViewModel resource in resources)
             {
-                if (resource.Skills == null)
+                if (resource.Skills == null || resource.Skills.Count == 0)
                 {
                     continue;
                 }
@@ -70,7 +70,7 @@ namespace ResourceMaster.Services.MatchingService
             // Combine the scores into an overall match score
             // TODO: CalcFactorScore(requiredSkill, resource);
 
-            return (double)skill.SkillLevel / (double)requiredSkill.SkillLevel;
+            return ((double)skill.SkillLevel + Convert.ToDouble(skill.IsCertification)) / ((double)requiredSkill.SkillLevel + Convert.ToDouble(requiredSkill.IsCertification));
         }
 
 
