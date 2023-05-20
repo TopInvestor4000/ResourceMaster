@@ -25,8 +25,7 @@ namespace ResourceMaster.Services.MatchingService
             // Iterate over each resource
             foreach (ResourceViewModel resource in resources)
             {
-                CheckIfResourcesMatchesTheRequiredSkillsAndCalculateScore(resource, requiredSkills, matchedResources);
-                CalcAvailabilityScore(project, resource);
+                CheckIfResourcesMatchesTheRequiredSkillsAndCalculateScore(resource, requiredSkills, matchedResources, project);
             }
 
             // Return the top N resources as potential matches for the project
@@ -35,7 +34,8 @@ namespace ResourceMaster.Services.MatchingService
         }
 
         private void CheckIfResourcesMatchesTheRequiredSkillsAndCalculateScore(ResourceViewModel resource,
-            List<SkillInformationViewModel> requiredSkills, List<MatchingResourceViewModel> matchedResources)
+            List<SkillInformationViewModel> requiredSkills, List<MatchingResourceViewModel> matchedResources,
+            ProjectViewModel project)
         {
             if (resource.Skills == null || resource.Skills.Count == 0)
             {
@@ -51,6 +51,7 @@ namespace ResourceMaster.Services.MatchingService
             }
 
             var matchedResource = CalculateScoreForMatchingSkills(requiredSkills, resource, matchingSkills);
+            matchedResource.BestOverallScore *= CalcAvailabilityScore(project, resource).Result;
 
             // Add the resource to the list of matching resources
             matchedResources.Add(matchedResource);
@@ -99,7 +100,7 @@ namespace ResourceMaster.Services.MatchingService
         {
             var availabilities = await _availabilityService.GetAvailability(resource.Id, project.ProjectStart, project.ProjectEnd);
 
-            int maxTimeSpanAvailable = 0;
+            double maxTimeSpanAvailable = 0;
             
             foreach (var availability in availabilities)
             { 
