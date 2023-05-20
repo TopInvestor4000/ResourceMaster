@@ -22,7 +22,7 @@
         <MudTd DataLabel="age">@context.Age</MudTd>
         <MudTd DataLabel="skills">
             @(context.Skills != null && context.Skills.Count > 0
-                ? String.Join("; ", context.Skills.Select(x => x.Skill.SkillName)) : "Kein skill vorhanden")
+                ? String.Join("; ", context.Skills.Select(x => x.Skill.SkillName)) : "No skills")
         </MudTd>
     </RowTemplate>
     <PagerContent>
