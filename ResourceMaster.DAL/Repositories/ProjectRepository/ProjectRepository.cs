@@ -20,11 +20,13 @@ namespace ResourceMaster.DAL.Repositories.ProjectRepository
 
         public async Task<Project> GetSingle(int id)
         {
+
             return await _context
                 .Projects
                 .Include(x => x.Skills)
               //  .Include(x => x.Resources)
                 .SingleOrDefaultAsync(x => x.Id == id);
+
         }
 
         public async Task AddAsync(Project project)

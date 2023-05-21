@@ -39,6 +39,7 @@ builder.Services.AddScoped<ResourceService, ResourceService>();
 builder.Services.AddScoped<SkillService, SkillService>();
 builder.Services.AddScoped<MatchingService, MatchingService>();
 builder.Services.AddScoped<AvailabilityService, AvailabilityService>();
+
 // Apply migrations
 DatabaseContext? dbContext = builder?.Services?.BuildServiceProvider()?.GetService<DatabaseContext>();
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);

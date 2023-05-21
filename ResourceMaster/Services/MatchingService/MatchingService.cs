@@ -6,6 +6,7 @@ namespace ResourceMaster.Services.MatchingService
     public class MatchingService
     {
         private readonly AvailabilityService _availabilityService;
+
         private readonly ResourceService _resourceService;
 
         public MatchingService(AvailabilityService availabilityService, ResourceService resourceService)
