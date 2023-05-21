@@ -15,17 +15,23 @@
 
 	private List<CalendarItem> _events = new();
 
-	protected override async Task OnInitializedAsync()
-	{
-		var resource = await _resourceService.GetSingle(id);
-		foreach (var project in resource.Projects)
-		{
-			_events.Add(new CalendarItem()
-				{
-					Start = project.ProjectStart,
-					End = project.ProjectEnd,
-					Text = project.ProjectName
-				});
-		}
-	}
+    protected override async Task OnInitializedAsync()
+    {
+        var resource = await _resourceService.GetSingle(id);
+        foreach (var project in resource.ProjectResources.Select(x => x.Project))
+        {
+            var startDate = project.ProjectStart.GetValueOrDefault();
+            var endDate = project.ProjectEnd.GetValueOrDefault();
+
+            for (var date = startDate.Date; date <= endDate.Date; date = date.AddDays(1))
+            {
+                _events.Add(new CalendarItem()
+                    {
+                        Start = date,
+                        End = date.AddDays(1),
+                        Text = project.ProjectName
+                    });
+            }
+        }
+    }
 }

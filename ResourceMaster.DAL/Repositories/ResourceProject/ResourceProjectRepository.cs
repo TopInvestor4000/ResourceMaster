@@ -12,8 +12,12 @@ public class ResourceProjectRepository : IResourceProjectRepository
         _context = context;
     }
     
-    public async Task<IEnumerable<Models.ProjectResource>> GetAvailability(int id, DateTime? from, DateTime? to)
+    public async Task<List<Models.ProjectResource>> GetAvailability(int id, DateTime? from, DateTime? to)
     {
-        return await _context.ProjectResources.Where(x => x.ResourceId == id && !(x.BookedFrom <= from && to <= x.BookedTo || x.BookedFrom >= to || x.BookedTo <= from)).ToListAsync();
+        return _context.ProjectResources
+            .Where(x => x.ResourceId == id && !(x.BookedFrom <= from && to <= x.BookedTo || x.BookedFrom >= to || x.BookedTo <= from))
+            .ToList();
+
+
     }
 }

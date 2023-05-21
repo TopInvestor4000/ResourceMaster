@@ -31,12 +31,19 @@
     </Columns>
 </MudDataGrid>
 
+<MudPaper>
 <h4>Selected Resources:</h4>
-@foreach (var resource in SelectedResources)
-{
-    <div>@resource.FirstName&nbsp;@resource.LastName</div>
-}
-
+<MudCard>
+    @foreach (var resource in SelectedResources)
+    {
+        <MudCard>
+            <MudCardContent>
+                <div>@resource.FirstName&nbsp;@resource.LastName</div>
+            </MudCardContent>
+        </MudCard>
+    }
+</MudCard>
+</MudPaper>
 <button class="btn btn-primary" @onclick="SaveResources">Save</button>
 
 @code {
@@ -53,9 +60,9 @@
     {
         Project = await _projectService.GetSingle(ProjectId);
         AvailableResources = await _matchingService.MatchResourcesToProjectAsync(Project);
-        if(Project?.Resources is not null)
+        if(Project.ProjectResources.Count > 0)
         {
-            SelectedResources.AddRange(Project.Resources);
+            SelectedResources.AddRange(Project.ProjectResources.Select(x => x.Resource));
         }
     }
 
@@ -66,7 +73,18 @@
 
     private async Task SaveResources()
     {
-        Project.Resources = SelectedResources;
+        List<ProjectResourceViewModel> newItems = new();
+        foreach (var selectResource in SelectedResources)
+        {
+            newItems.Add(new ProjectResourceViewModel()
+                {
+                    ResourceId = selectResource.Id,
+                    ProjectId = Project.Id,
+                    BookedFrom = Project.ProjectStart.GetValueOrDefault(),
+                    BookedTo = Project.ProjectEnd.GetValueOrDefault(),
+                });
+        }
+        Project.ProjectResources = newItems;
         await _projectService.Update(Project);
     }
 }

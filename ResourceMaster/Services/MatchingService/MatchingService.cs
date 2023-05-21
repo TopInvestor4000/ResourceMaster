@@ -17,7 +17,7 @@ namespace ResourceMaster.Services.MatchingService
 
         public async Task<List<MatchingResourceViewModel>> MatchResourcesToProjectAsync(ProjectViewModel project)
         {
-            var resources = (await _resourceService.GetAllAsync()).ToList();
+            var resources = (await _resourceService.GetAllWithInclude()).ToList();
             // Create a list to store the matching resources
             List<MatchingResourceViewModel> matchedResources = new List<MatchingResourceViewModel>();
 

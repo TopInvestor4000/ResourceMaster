@@ -13,6 +13,5 @@ public class ResourceViewModel
     public string Location { get; set; } = default!;
     public Countries Country { get; set; }
     public List<SkillInformationViewModel> Skills { get; set; } = default!;
-    
-    public List<Project> Projects { get; set; } = default!;
+    public List<ProjectResourceViewModel> ProjectResources { get; set; } = default!;
 }

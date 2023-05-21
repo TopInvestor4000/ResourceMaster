@@ -37,5 +37,18 @@ namespace ResourceMaster.Services.CustomerService
             var newEntry = resource.Adapt<Resource>();
             await _repository.AddAsync(newEntry);
         }
+
+        public async Task<IEnumerable<ResourceViewModel>> GetAllWithInclude()
+        {
+            var customerList = await _repository.GetAllWithIncludeAsync();
+            try
+            {
+                var resultList = customerList.Adapt<List<ResourceViewModel>>();
+                return resultList;
+            }catch (Exception ex)
+            {
+                return null;
+            }
+        }
     }
 }

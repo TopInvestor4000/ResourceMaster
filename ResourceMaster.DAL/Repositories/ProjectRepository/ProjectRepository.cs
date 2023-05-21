@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ResourceMaster.DAL.Data;
 using ResourceMaster.DAL.Models;
+using System.Runtime.CompilerServices;
 
 namespace ResourceMaster.DAL.Repositories.ProjectRepository
 {
@@ -20,11 +21,10 @@ namespace ResourceMaster.DAL.Repositories.ProjectRepository
 
         public async Task<Project> GetSingle(int id)
         {
-
             return await _context
                 .Projects
-                .Include(x => x.Skills)
-              //  .Include(x => x.Resources)
+                .Include(x => x.Skills).ThenInclude(x => x.Skill)
+                .Include(x => x.ProjectResources).ThenInclude(x => x.Resource)
                 .SingleOrDefaultAsync(x => x.Id == id);
 
         }

@@ -1,3 +1,4 @@
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
 using ResourceMaster.DAL.Data;
@@ -23,7 +24,11 @@ builder.Services.AddServerSideBlazor();
 
 builder.Services.AddMudServices();
 
-builder.Services.AddSingleton<DatabaseContext>();
+builder.Services.AddTransient<DatabaseContext>();
+
+TypeAdapterConfig.GlobalSettings.Default.PreserveReference(true);
+TypeAdapterConfig.GlobalSettings.Default
+    .EnumMappingStrategy(EnumMappingStrategy.ByName);
 
 //Add Repos
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
