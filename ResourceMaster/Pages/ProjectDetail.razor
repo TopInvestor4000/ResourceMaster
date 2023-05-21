@@ -1,0 +1,72 @@
+﻿@page "/project-resources/{projectId:int}"
+@using System.Collections.Generic
+@using System.Linq
+@using MudBlazor
+@using MudBlazor.Extensions
+@using ResourceMaster.Services.CustomerService;
+@using ResourceMaster.Services.MatchingService;
+@using ResourceMaster.ViewModels;
+@inject MatchingService _matchingService;
+@inject ProjectService _projectService;
+@inject ResourceService _resourceService;
+
+<h3>Project Resources</h3>
+
+<h4>Project ID: @ProjectId</h4>
+
+
+<MudDataGrid T="MatchingResourceViewModel" MultiSelection="true" Items="AvailableResources" HideHeader="true" SelectedItemsChanged="SelectedItemsChanged">
+    <Columns>
+        <PropertyColumn Property="x => x.BestSkill" Title="Best Skill" />
+        <PropertyColumn Property="x => x.BestScore" Title="Best Score" />
+        <PropertyColumn Property="x => x.BestOverallScore" Title="Best Overall Score" />
+        <PropertyColumn Property="x => x.Resource" Title="Resource" />
+        <TemplateColumn CellClass="d-flex justify-end">
+            <CellTemplate>
+                <MudStack Row>
+                    <MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Primary">@(SelectedResources.Any(x => x.Id == context.Item.Resource.Id) ? "Hire" : "Fire")</MudButton>
+                </MudStack>
+            </CellTemplate>
+        </TemplateColumn>
+    </Columns>
+</MudDataGrid>
+
+<h4>Selected Resources:</h4>
+@foreach (var resource in SelectedResources)
+{
+    <div>@resource.FirstName&nbsp;@resource.LastName</div>
+}
+
+<button class="btn btn-primary" @onclick="SaveResources">Save</button>
+
+@code {
+    [Parameter]
+    public int ProjectId { get; set; }
+
+    private ProjectViewModel Project{ get; set; }
+
+    private List<MatchingResourceViewModel> AvailableResources { get; set; } = new List<MatchingResourceViewModel>();
+
+    private List<ResourceViewModel> SelectedResources { get; set; } = new List<ResourceViewModel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Project = await _projectService.GetSingle(ProjectId);
+        AvailableResources = await _matchingService.MatchResourcesToProjectAsync(Project);
+        if(Project?.Resources is not null)
+        {
+            SelectedResources.AddRange(Project.Resources);
+        }
+    }
+
+    private void SelectedItemsChanged(HashSet<MatchingResourceViewModel> items)
+    {
+        SelectedResources = items.Select(x => x.Resource).ToList();
+    }
+
+    private async Task SaveResources()
+    {
+        Project.Resources = SelectedResources;
+        await _projectService.Update(Project);
+    }
+}

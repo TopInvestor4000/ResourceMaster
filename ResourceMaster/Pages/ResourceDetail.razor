@@ -1,0 +1,31 @@
+﻿@page "/resourceDetail/{id:int}"
+
+@using Heron.MudCalendar;
+@using ResourceMaster.Services.CustomerService;
+@inject ResourceService _resourceService
+
+<h3>ResourceDetail</h3>
+
+<MudCalendar Items="_events" />
+
+@code {
+
+	[Parameter]
+	public int id { get; set; }
+
+	private List<CalendarItem> _events = new();
+
+	protected override async Task OnInitializedAsync()
+	{
+		var resource = await _resourceService.GetSingle(id);
+		foreach (var project in resource.Projects)
+		{
+			_events.Add(new CalendarItem()
+				{
+					Start = project.ProjectStart,
+					End = project.ProjectEnd,
+					Text = project.ProjectName
+				});
+		}
+	}
+}

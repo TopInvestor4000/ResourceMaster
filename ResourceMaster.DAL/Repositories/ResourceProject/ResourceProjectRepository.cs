@@ -14,6 +14,6 @@ public class ResourceProjectRepository : IResourceProjectRepository
     
     public async Task<IEnumerable<Models.ResourceProject>> GetAvailability(int id, DateTime? from, DateTime? to)
     {
-        return await _context.ResourceProjects.Where(x => x.ResourceId == id && !(x.BookedFrom <= from && to <= x.BookedTo || x.BookedFrom >= to || x.BookedTo <= from)).ToListAsync();
+        return await _context.ResourceProjects.Where(x => x.Resource.Id == id && !(x.BookedFrom <= from && to <= x.BookedTo || x.BookedFrom >= to || x.BookedTo <= from)).ToListAsync();
     }
 }

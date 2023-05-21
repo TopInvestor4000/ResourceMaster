@@ -7,14 +7,17 @@ namespace ResourceMaster.Services.MatchingService
     {
         private readonly AvailabilityService _availabilityService;
 
-        public MatchingService(AvailabilityService availabilityService)
+        private readonly ResourceService _resourceService;
+
+        public MatchingService(AvailabilityService availabilityService, ResourceService resourceService)
         {
             _availabilityService = availabilityService;
+            _resourceService = resourceService;
         }
 
-        public List<MatchingResourceViewModel> MatchResourcesToProject(ProjectViewModel project,
-            List<ResourceViewModel> resources)
+        public async Task<List<MatchingResourceViewModel>> MatchResourcesToProjectAsync(ProjectViewModel project)
         {
+            var resources = (await _resourceService.GetAllAsync()).ToList();
             // Create a list to store the matching resources
             List<MatchingResourceViewModel> matchedResources = new List<MatchingResourceViewModel>();
 
