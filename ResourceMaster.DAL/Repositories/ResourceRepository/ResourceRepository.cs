@@ -16,6 +16,8 @@ namespace ResourceMaster.DAL.Repositories.ResourceRepository
 
         public async Task<IEnumerable<Resource>> GetAllAsync()
         {
+            await _context.Skills.ToListAsync();
+            await _context.ResourceSkills.ToListAsync();
             return await _context.Resources.ToListAsync();
         }
 

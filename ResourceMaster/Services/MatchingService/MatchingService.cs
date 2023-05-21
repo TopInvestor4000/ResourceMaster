@@ -6,7 +6,12 @@ namespace ResourceMaster.Services.MatchingService
     public class MatchingService
     {
         private readonly AvailabilityService _availabilityService;
-        
+
+        public MatchingService(AvailabilityService availabilityService)
+        {
+            _availabilityService = availabilityService;
+        }
+
         public List<MatchingResourceViewModel> MatchResourcesToProject(ProjectViewModel project,
             List<ResourceViewModel> resources)
         {

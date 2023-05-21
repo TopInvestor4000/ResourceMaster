@@ -1,8 +1,5 @@
 ﻿using Mapster;
-using ResourceMaster.DAL.Models;
 using ResourceMaster.DAL.Repositories.ResourceProject;
-using ResourceMaster.DAL.Repositories.ResourceRepository;
-using ResourceMaster.Services.CustomerService;
 using ResourceMaster.ViewModels;
 
 namespace ResourceMaster.Services.CustomerService
@@ -22,14 +19,9 @@ namespace ResourceMaster.Services.CustomerService
         {
             _logger.LogInformation("GetAllAsync Method called");
             var availabilityList =  await _repository.GetAvailability(id, from, to);
-            filterTheAvailablePeriod();
             var resultList = availabilityList.Adapt<List<AvailabilityViewModel>>();
             return resultList;
         }
 
-        private void filterTheAvailablePeriod()
-        {
-            
-        }
     }
 }
