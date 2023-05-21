@@ -20,13 +20,23 @@ namespace ResourceMaster.DAL.Repositories.ProjectRepository
 
         public async Task<Project> GetSingle(int id)
         {
-            return await _context.Projects.SingleOrDefaultAsync(x => x.Id == id);
+            return await _context
+                .Projects
+                .Include(x => x.Skills)
+              //  .Include(x => x.Resources)
+                .SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task AddAsync(Project project)
         {
             project.Customer = _context.Customers.Find(project.Customer.Id);
             await _context.Projects.AddAsync(project);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(Project updatedItem)
+        {
+            _context.Projects.Update(updatedItem);
             await _context.SaveChangesAsync();
         }
     }

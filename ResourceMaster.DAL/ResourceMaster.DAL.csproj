@@ -22,4 +22,8 @@
     <PackageReference Include="Serilog.Sinks.Grafana.Loki" Version="8.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

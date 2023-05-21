@@ -16,7 +16,26 @@ namespace ResourceMaster.DAL.Repositories.ResourceRepository
 
         public async Task<IEnumerable<Resource>> GetAllAsync()
         {
-            return await _context.Resources.ToListAsync();
+            return await _context
+                .Resources
+                .ToListAsync();
+        }
+
+        public async Task<Resource> GetSingle(int id)
+        {
+            try
+            {
+                return await _context
+                             .Resources
+                             .Include(x => x.Projects)
+                             .Include(x => x.Skills)
+                             .SingleAsync(x => x.Id == id);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+         
         }
 
         public async Task AddAsync(Resource customer)

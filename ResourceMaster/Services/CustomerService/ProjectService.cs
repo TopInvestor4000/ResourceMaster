@@ -29,11 +29,17 @@ namespace ResourceMaster.Services.CustomerService
             return project.Adapt<ProjectViewModel>();
 
         }
-
         public async Task AddAsync(ProjectViewModel project)
         {
             var newEntry = project.Adapt<Project>();
             await _repository.AddAsync(newEntry);
+        }
+        public async Task Update(ProjectViewModel project)
+        {
+            var existingEntry = await GetSingle(project.Id);
+            var updatedViewModel = project.Adapt(existingEntry);
+            var updatedItem = updatedViewModel.Adapt<Project>();
+            await _repository.UpdateAsync(updatedItem);
         }
     }
 }

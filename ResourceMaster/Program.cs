@@ -3,6 +3,7 @@ using MudBlazor.Services;
 using ResourceMaster.DAL.Data;
 using ResourceMaster.DAL.Repositories.CustomerRepository;
 using ResourceMaster.DAL.Repositories.ProjectRepository;
+using ResourceMaster.DAL.Repositories.ResourceProject;
 using ResourceMaster.DAL.Repositories.ResourceRepository;
 using ResourceMaster.DAL.Repositories.SkillRepository;
 using ResourceMaster.DAL.TestData;
@@ -29,6 +30,7 @@ builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<IResourceRepository, ResourceRepository>();
 builder.Services.AddScoped<ISkillRepository, SkillRepository>();
+builder.Services.AddScoped<IResourceProjectRepository, ResourceProjectRepository>();
 
 //Add services
 builder.Services.AddScoped<CustomerService, CustomerService>();
@@ -36,7 +38,7 @@ builder.Services.AddScoped<ProjectService, ProjectService>();
 builder.Services.AddScoped<ResourceService, ResourceService>();
 builder.Services.AddScoped<SkillService, SkillService>();
 builder.Services.AddScoped<MatchingService, MatchingService>();
-
+builder.Services.AddScoped<AvailabilityService, AvailabilityService>();
 // Apply migrations
 DatabaseContext? dbContext = builder?.Services?.BuildServiceProvider()?.GetService<DatabaseContext>();
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);

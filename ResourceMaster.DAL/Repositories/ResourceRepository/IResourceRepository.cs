@@ -6,5 +6,6 @@ namespace ResourceMaster.DAL.Repositories.ResourceRepository
     {
         Task AddAsync(Resource customer);
         Task<IEnumerable<Resource>> GetAllAsync();
+        Task<Resource> GetSingle(int id);
     }
 }

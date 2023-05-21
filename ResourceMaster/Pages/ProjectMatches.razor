@@ -44,9 +44,7 @@
         // projectId = int.Parse(RouteData.Values["projectId"].ToString());
         var currentProject = await ProjectService.GetSingle(projectId);
 
-        var allResource = (await ResourceService.GetAllAsync()).ToList();
-
-        resources = (MatchingService.MatchResourcesToProject(currentProject, allResource));
+        resources = (await MatchingService.MatchResourcesToProjectAsync(currentProject));
     }
 
 
