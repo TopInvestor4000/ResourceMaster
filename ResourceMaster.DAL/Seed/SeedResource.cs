@@ -1,6 +1,5 @@
 using Bogus;
 using ResourceMaster.DAL.Models;
-using ResourceMaster.Migrations;
 
 namespace ResourceMaster.DAL.Seed;
 

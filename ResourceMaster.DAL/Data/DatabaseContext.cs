@@ -23,7 +23,7 @@ public class DatabaseContext : DbContext
 
     public DbSet<ProjectSkill> ProjectSkills { get; set; }
 
-    public DbSet<ResourceProject> ResourceProjects { get; set; }
+    public DbSet<ProjectResource> ProjectResources { get; set; }
 
     public DbSet<ResourceSkill> ResourceSkills { get; set; }
 }

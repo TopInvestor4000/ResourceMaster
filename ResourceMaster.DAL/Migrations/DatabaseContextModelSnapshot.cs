@@ -8,7 +8,7 @@ using ResourceMaster.DAL.Data;
 
 #nullable disable
 
-namespace ResourceMaster.Migrations
+namespace ResourceMaster.DAL.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
     partial class DatabaseContextModelSnapshot : ModelSnapshot
@@ -84,16 +84,40 @@ namespace ResourceMaster.Migrations
                     b.Property<DateTime>("ProjectStart")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("ResourceId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
 
+                    b.ToTable("Projects");
+                });
+
+            modelBuilder.Entity("ResourceMaster.DAL.Models.ProjectResource", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("BookedFrom")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("BookedTo")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ResourceId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
                     b.HasIndex("ResourceId");
 
-                    b.ToTable("Projects");
+                    b.ToTable("ProjectResources");
                 });
 
             modelBuilder.Entity("ResourceMaster.DAL.Models.ProjectSkill", b =>
@@ -156,35 +180,6 @@ namespace ResourceMaster.Migrations
                     b.ToTable("Resources");
                 });
 
-            modelBuilder.Entity("ResourceMaster.DAL.Models.ResourceProject", b =>
-                {
-                    b.Property<int>("ResourceProjectId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ResourceProjectId"));
-
-                    b.Property<DateTime>("BookedFrom")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("BookedTo")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ResourceId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("ResourceProjectId");
-
-                    b.HasIndex("ProjectId");
-
-                    b.HasIndex("ResourceId");
-
-                    b.ToTable("ResourceProjects");
-                });
-
             modelBuilder.Entity("ResourceMaster.DAL.Models.ResourceSkill", b =>
                 {
                     b.Property<int>("Id")
@@ -240,11 +235,26 @@ namespace ResourceMaster.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ResourceMaster.DAL.Models.Resource", null)
-                        .WithMany("Projects")
-                        .HasForeignKey("ResourceId");
-
                     b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("ResourceMaster.DAL.Models.ProjectResource", b =>
+                {
+                    b.HasOne("ResourceMaster.DAL.Models.Project", "Project")
+                        .WithMany("ProjectResources")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ResourceMaster.DAL.Models.Resource", "Resource")
+                        .WithMany("ProjectResources")
+                        .HasForeignKey("ResourceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+
+                    b.Navigation("Resource");
                 });
 
             modelBuilder.Entity("ResourceMaster.DAL.Models.ProjectSkill", b =>
@@ -264,25 +274,6 @@ namespace ResourceMaster.Migrations
                     b.Navigation("Project");
 
                     b.Navigation("Skill");
-                });
-
-            modelBuilder.Entity("ResourceMaster.DAL.Models.ResourceProject", b =>
-                {
-                    b.HasOne("ResourceMaster.DAL.Models.Project", "Project")
-                        .WithMany()
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ResourceMaster.DAL.Models.Resource", "Resource")
-                        .WithMany()
-                        .HasForeignKey("ResourceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Project");
-
-                    b.Navigation("Resource");
                 });
 
             modelBuilder.Entity("ResourceMaster.DAL.Models.ResourceSkill", b =>
@@ -311,12 +302,14 @@ namespace ResourceMaster.Migrations
 
             modelBuilder.Entity("ResourceMaster.DAL.Models.Project", b =>
                 {
+                    b.Navigation("ProjectResources");
+
                     b.Navigation("Skills");
                 });
 
             modelBuilder.Entity("ResourceMaster.DAL.Models.Resource", b =>
                 {
-                    b.Navigation("Projects");
+                    b.Navigation("ProjectResources");
 
                     b.Navigation("Skills");
                 });

@@ -26,7 +26,7 @@ namespace ResourceMaster.DAL.Repositories.ResourceRepository
 
                 return await _context
                              .Resources
-                             .Include(x => x.Projects)
+                          //   .Include(x => x.Projects)
                              .Include(x => x.Skills)
                              .SingleAsync(x => x.Id == id);
            
