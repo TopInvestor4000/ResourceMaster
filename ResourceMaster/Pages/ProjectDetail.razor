@@ -15,16 +15,16 @@
 <h4>Project ID: @ProjectId</h4>
 
 
-<MudDataGrid T="MatchingResourceViewModel" MultiSelection="true" Items="AvailableResources" HideHeader="true" SelectedItemsChanged="SelectedItemsChanged">
+<MudDataGrid T="MatchingResourceViewModel" Items="AvailableResources" HideHeader="true">
     <Columns>
-        <PropertyColumn Property="x => x.BestSkill" Title="Best Skill" />
+        <PropertyColumn Property="x => x.BestSkill.SkillName" Title="Best Skill" />
         <PropertyColumn Property="x => x.BestScore" Title="Best Score" />
         <PropertyColumn Property="x => x.BestOverallScore" Title="Best Overall Score" />
-        <PropertyColumn Property="x => x.Resource" Title="Resource" />
+        <PropertyColumn Property="x => x.Resource.FirstName+x.Resource.LastName" Title="Resource" />
         <TemplateColumn CellClass="d-flex justify-end">
             <CellTemplate>
                 <MudStack Row>
-                    <MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Primary">@(SelectedResources.Any(x => x.Id == context.Item.Resource.Id) ? "Hire" : "Fire")</MudButton>
+                    <MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Primary" OnClick="@(e => (AddToSelectList(context.Item)))">@(SelectedResources.Select(x => x.Id).Contains(context.Item.Resource.Id) ? "Fire" : "Hire")</MudButton>
                 </MudStack>
             </CellTemplate>
         </TemplateColumn>
@@ -69,6 +69,18 @@
     private void SelectedItemsChanged(HashSet<MatchingResourceViewModel> items)
     {
         SelectedResources = items.Select(x => x.Resource).ToList();
+    }
+
+    private async Task AddToSelectList(MatchingResourceViewModel item)
+    {
+        if (SelectedResources.Select(x => x.Id).Contains(item.Resource.Id))
+        {
+            SelectedResources.Remove(SelectedResources.SingleOrDefault(x => x.Id == item.Resource.Id));
+        }
+        else
+        {
+            SelectedResources.Add(item.Resource);
+        }
     }
 
     private async Task SaveResources()

@@ -36,10 +36,8 @@ namespace ResourceMaster.Services.CustomerService
         }
         public async Task Update(ProjectViewModel project)
         {
-            var existingEntry = await GetSingle(project.Id);
-            var updatedViewModel = project.Adapt(existingEntry);
-            var updatedItem = updatedViewModel.Adapt<Project>();
-            await _repository.UpdateAsync(updatedItem);
+            var itemToUpdate = project.Adapt<Project>();
+            await _repository.UpdateHires(itemToUpdate);
         }
     }
 }

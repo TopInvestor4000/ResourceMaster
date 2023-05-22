@@ -25,6 +25,7 @@ namespace ResourceMaster.DAL.Repositories.ProjectRepository
                 .Projects
                 .Include(x => x.Skills).ThenInclude(x => x.Skill)
                 .Include(x => x.ProjectResources).ThenInclude(x => x.Resource)
+                .AsNoTracking()
                 .SingleOrDefaultAsync(x => x.Id == id);
 
         }
@@ -36,8 +37,9 @@ namespace ResourceMaster.DAL.Repositories.ProjectRepository
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(Project updatedItem)
+        public async Task UpdateHires(Project updatedItem)
         {
+            _context.ProjectResources.RemoveRange(_context.ProjectResources.Where(x => x.ProjectId == updatedItem.Id));
             _context.Projects.Update(updatedItem);
             await _context.SaveChangesAsync();
         }

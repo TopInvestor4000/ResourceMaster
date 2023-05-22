@@ -7,6 +7,6 @@ namespace ResourceMaster.DAL.Repositories.ProjectRepository
         Task AddAsync(Project project);
         Task<IEnumerable<Project>> GetAllAsync();
         Task<Project> GetSingle(int id);
-        Task UpdateAsync(Project updatedItem);
+        Task UpdateHires(Project updatedItem);
     }
 }
