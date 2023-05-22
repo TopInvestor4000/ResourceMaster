@@ -18,6 +18,7 @@ namespace ResourceMaster.DAL.Repositories.ResourceRepository
         {
             return await _context
                 .Resources
+                .Include(x => x.Skills).ThenInclude(x => x.Skill)
                 .ToListAsync();
         }
 

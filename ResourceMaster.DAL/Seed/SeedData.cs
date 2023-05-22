@@ -30,6 +30,7 @@ public class SeedData
         List<Resource> resources = _context.Resources.ToList();
         List<Skill> skills = _context.Skills.ToList();
         await _context.ResourceSkills.AddRangeAsync(_seedResourceSkill.SeedResourceSkills(resources, skills));
+        await _context.SaveChangesAsync();
     }
     
 }

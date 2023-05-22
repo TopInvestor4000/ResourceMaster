@@ -72,7 +72,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _resource = await ResourceService.GetSingle(44);
         // _allSkills = (await SkillService.GetAllAsync()).ToList();
         // _allSkills.ForEach(element => skillOptions.Add(element.SkillName));
         skillOptions = new List<string> { "Java", "C#", "SQL", "JavaScript", "Python", "Ruby", "Swift", "PHP", "Kotlin", "TypeScript" }.OrderBy(skill => skill).ToList();
