@@ -21,15 +21,13 @@ jobs:
         
       - name: Test
         run:  dotnet test --no-build --verbosity normal
-        
-      - name: Install Playwright
-        run: dotnet tool install --global Microsoft.Playwright.CLI
           
-      - name: Run Playwright tests
+      - name: Install and Run Playwright tests
         run:  | 
+          dotnet tool install --global Microsoft.Playwright.CLI
           dotnet add package Microsoft.Playwright
           dotnet build
-          playwright test
+          dotnet playwright test
 
       - name: Publish test results
         uses: actions/upload-artifact@v2
