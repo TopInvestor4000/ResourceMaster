@@ -19,6 +19,8 @@ jobs:
       - name: 'Checkout GitHub Action'
         uses: actions/checkout@main
         
+      - name: Install Playwright dependencies
+        run: npm install playwright
       - name: Test
         run:  |
           dotnet build --no-incremental
