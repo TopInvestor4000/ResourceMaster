@@ -20,7 +20,9 @@ jobs:
         uses: actions/checkout@main
         
       - name: Test
-        run:  dotnet test --no-build --verbosity normal
+        run:  |
+          dotnet build --no-incremental
+          dotnet test
           
       - name: Install and Run Playwright tests
         run:  | 
