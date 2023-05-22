@@ -4,62 +4,68 @@
 @using MudBlazor
 @inject ProjectService ProjectService;
 @inject NavigationManager UriHelper
+@inject NavigationManager NavigationManager
 
-<MudTable Items="@projects" Bordered="@true" Striped="true" Filter="new Func<ProjectViewModel,bool>(FilterFunc1)" @bind-SelectedItem="selectedProject">
+<MudText Typo="Typo.h6">Project Overview</MudText>
+<MudDataGrid T="ProjectViewModel" Items="@projects" SortMode="SortMode.Multiple" QuickFilter="@_quickFilter">
     <ToolBarContent>
-        <MudText Typo="Typo.h6">Project Overview</MudText>
+        <MudButton OnClick="@GoToNewProject" Variant="Variant.Filled" Color="Color.Primary">Add Item</MudButton>
         <MudSpacer />
         <MudTextField @bind-Value="filter" Placeholder="Filter" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
-    <HeaderContent>
-        <MudTh>Project name</MudTh>
-        <MudTh>Project start</MudTh>
-        <MudTh>Project end</MudTh>
-        <MudTh></MudTh>
-    </HeaderContent>
-    <RowTemplate>
-        <MudTd DataLabel="projectName">@context.ProjectName</MudTd>
-        <MudTd DataLabel="projectStart">@context.ProjectStart</MudTd>
-        <MudTd DataLabel="projectEnd">@context.ProjectEnd</MudTd>
-        <MudTd>
-            <MudButton Color="Color.Primary" OnClick="@(() => OpenProjectDetail(@context.Id))">Detail</MudButton>
-        </MudTd>
-    </RowTemplate>
+    <Columns>
+        <PropertyColumn Property="x => x.ProjectName" Title="Project name" />
+        <PropertyColumn Property="x => x.ProjectStart" Title="Project start" Format="dd/MM/yyyy" />
+        <PropertyColumn Property="x => x.ProjectEnd" Title="Project end" Format="dd/MM/yyyy" />
+        <TemplateColumn StickyRight="true" CellStyle="width:10px">
+            <CellTemplate >
+                <MudIconButton Icon="@Icons.Material.Outlined.Edit" Size="@Size.Small" />
+            </CellTemplate>
+        </TemplateColumn>
+        <TemplateColumn StickyRight="true" CellStyle="width:10px">
+            <CellTemplate>
+                <MudIconButton Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" />
+            </CellTemplate>
+        </TemplateColumn>
+        <TemplateColumn StickyRight="true" CellStyle="width:10px">
+            <CellTemplate>
+                <MudIconButton Icon="@Icons.Material.Outlined.ConnectWithoutContact" Size="@Size.Small" />
+            </CellTemplate>
+        </TemplateColumn>
+    </Columns>
     <PagerContent>
-        <MudTablePager />
+        <MudDataGridPager T="ProjectViewModel" />
     </PagerContent>
-</MudTable>
-    
+</MudDataGrid>
 
 @code {
     private string filter = "";
-    private ProjectViewModel selectedProject;
     private IEnumerable<ProjectViewModel> projects = new List<ProjectViewModel>();
 
+    private Func<ProjectViewModel, bool> _quickFilter => x =>
+    {
+        if (string.IsNullOrWhiteSpace(filter))
+            return true;
 
+        if (x.ProjectName.Contains(filter, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (x.ProjectStart != null && x.ProjectStart.ToString().Contains(filter, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (x.ProjectEnd != null && x.ProjectEnd.ToString().Contains(filter, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    };
+
+    void GoToNewProject()
+    {
+        NavigationManager.NavigateTo("/createProject");
+    }
 
     protected override async Task OnInitializedAsync()
     {
         projects = await ProjectService.GetAllAsync();
-    }
-
-    private bool FilterFunc1(ProjectViewModel element) => FilterFunc(element, filter);
-
-    private bool FilterFunc(ProjectViewModel element, string searchString)
-    {
-        if (string.IsNullOrWhiteSpace(searchString))
-            return true;
-        if (element.ProjectName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (element.ProjectStart != null && element.ProjectStart.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (element.ProjectEnd != null && element.ProjectEnd.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        return false;
-    }
-
-    private void OpenProjectDetail(int projectId)
-    {
-        UriHelper.NavigateTo($"/projectMatches/{projectId}");
     }
 }
