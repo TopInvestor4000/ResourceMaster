@@ -7,6 +7,7 @@ using ResourceMaster.DAL.Repositories.ProjectRepository;
 using ResourceMaster.DAL.Repositories.ResourceProject;
 using ResourceMaster.DAL.Repositories.ResourceRepository;
 using ResourceMaster.DAL.Repositories.SkillRepository;
+using ResourceMaster.DAL.Seed;
 using ResourceMaster.DAL.TestData;
 using ResourceMaster.Services.CustomerService;
 using ResourceMaster.Services.MatchingService;
@@ -52,6 +53,8 @@ dbContext?.Database.Migrate();
 
 // Add seed data
 var seedData = new SeedData(dbContext);
+SeedCleanup cleanup = new SeedCleanup(dbContext);
+await cleanup.CleanData();
 await seedData.AddSeedDataAsync();
 
 var app = builder?.Build();
