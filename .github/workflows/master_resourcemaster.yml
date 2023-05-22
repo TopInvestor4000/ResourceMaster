@@ -26,7 +26,10 @@ jobs:
         run: dotnet tool install --global Microsoft.Playwright.CLI
           
       - name: Run Playwright tests
-        run: playwright test
+        run:  | 
+          dotnet add package Microsoft.Playwright
+          dotnet build
+          playwright test
 
       - name: Publish test results
         uses: actions/upload-artifact@v2
