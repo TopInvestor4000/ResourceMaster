@@ -22,7 +22,7 @@ jobs:
       - name: Setup .NET
         uses: dotnet/setup-dotnet@v1
         with:
-          dotnet-version: '6.0.x'
+          dotnet-version: '6.0.16'
       - name: Test
         run:  dotnet test --no-build --verbosity normal
         
