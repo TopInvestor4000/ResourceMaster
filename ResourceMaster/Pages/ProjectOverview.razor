@@ -3,8 +3,7 @@
 @using ResourceMaster.ViewModels
 @using MudBlazor
 @inject ProjectService ProjectService;
-@inject NavigationManager UriHelper
-@inject NavigationManager NavigationManager
+@inject NavigationManager NavigationManager;
 
 <MudText Typo="Typo.h6">Project Overview</MudText>
 <MudDataGrid T="ProjectViewModel" Items="@projects" SortMode="SortMode.Multiple" QuickFilter="@_quickFilter">
@@ -17,17 +16,17 @@
         <PropertyColumn Property="x => x.ProjectName" Title="Project name" />
         <PropertyColumn Property="x => x.ProjectStart" Title="Project start" Format="dd/MM/yyyy" />
         <PropertyColumn Property="x => x.ProjectEnd" Title="Project end" Format="dd/MM/yyyy" />
-        <TemplateColumn StickyRight="true" CellStyle="width:10px">
+        <TemplateColumn StickyRight="true" CellStyle="width:10px" Filterable="false" Sortable="false">
             <CellTemplate >
                 <MudIconButton Icon="@Icons.Material.Outlined.Edit" Size="@Size.Small" />
             </CellTemplate>
         </TemplateColumn>
-        <TemplateColumn StickyRight="true" CellStyle="width:10px">
+        <TemplateColumn StickyRight="true" CellStyle="width:10px" Filterable="false" Sortable="false">
             <CellTemplate>
                 <MudIconButton Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" />
             </CellTemplate>
         </TemplateColumn>
-        <TemplateColumn StickyRight="true" CellStyle="width:10px">
+        <TemplateColumn StickyRight="true" CellStyle="width:10px" Filterable="false" Sortable="false">
             <CellTemplate>
                 <MudIconButton Icon="@Icons.Material.Outlined.ConnectWithoutContact" Size="@Size.Small" />
             </CellTemplate>

@@ -4,54 +4,80 @@
 @using MudBlazor
 @inject ResourceService ResourceService;
 
-<MudTable Items="@resources" Bordered="@true" Striped="true" Filter="new Func<ResourceViewModel,bool>(FilterFunc1)" @bind-SelectedItem="selectedCustomer">
+<MudDataGrid T="ResourceViewModel" Items="@resources" SortMode="SortMode.Multiple" QuickFilter="@_quickFilter">
     <ToolBarContent>
         <MudText Typo="Typo.h6">Resource Overview</MudText>
         <MudSpacer />
         <MudTextField @bind-Value="filter" Placeholder="Filter" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
-    <HeaderContent>
-        <MudTh>First name</MudTh>
-        <MudTh>Last name</MudTh>
-        <MudTh>Age</MudTh>
-        <MudTh>Skills</MudTh>
-    </HeaderContent>
-    <RowTemplate>
-        <MudTd DataLabel="First name">@context.FirstName</MudTd>
-        <MudTd DataLabel="Last name">@context.LastName</MudTd>
-        <MudTd DataLabel="age">@context.Age</MudTd>
-        <MudTd DataLabel="skills">
-            @(context.Skills != null && context.Skills.Count > 0
-                ? String.Join("; ", context.Skills.Select(x => x.Skill.SkillName)) : "No skills")
-        </MudTd>
-    </RowTemplate>
+    <Columns>
+        <HierarchyColumn T="ResourceViewModel" />
+        <PropertyColumn Property="x => x.Id" Title="ID" />
+        <PropertyColumn Property="x => x.FirstName" Title="First Name" />
+        <PropertyColumn Property="x => x.LastName" Title="Last Name" />
+        <PropertyColumn Property="x => x.Age" Title="Age" />
+        <PropertyColumn Property="x => x.Street" Title="Street" />
+        <PropertyColumn Property="x => x.ZipCode" Title="Zip Code" />
+        <PropertyColumn Property="x => x.Location" Title="Location" />
+        <PropertyColumn Property="x => x.Country" Title="Country" />
+        <TemplateColumn StickyRight="true" CellStyle="width:10px" Filterable="false" Sortable="false">
+            <CellTemplate>
+                <MudIconButton Icon="@Icons.Material.Outlined.Edit" Size="@Size.Small" />
+            </CellTemplate>
+        </TemplateColumn>
+        <TemplateColumn StickyRight="true" CellStyle="width:10px" Filterable="false" Sortable="false">
+            <CellTemplate>
+                <MudIconButton Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" />
+            </CellTemplate>
+        </TemplateColumn>
+        <TemplateColumn StickyRight="true" CellStyle="width:10px" Filterable="false" Sortable="false">
+            <CellTemplate>
+                <MudIconButton Icon="@Icons.Material.Outlined.CalendarMonth" Size="@Size.Small" />
+            </CellTemplate>
+        </TemplateColumn>
+    </Columns>
+    <ChildRowContent>
+        <MudCard>
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">Skill List</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudList Dense="true">
+                @foreach(var skill in context.Item.Skills)
+                {
+                    <MudListItem Text=@skill.Skill.SkillName  />
+                 }
+                </MudList>
+            </MudCardContent>
+        </MudCard>
+    </ChildRowContent>
     <PagerContent>
-        <MudTablePager />
+        <MudDataGridPager T="ResourceViewModel" />
     </PagerContent>
-</MudTable>
+</MudDataGrid>
 
 @code {
     private string filter = "";
-    private ResourceViewModel selectedCustomer;
     private IEnumerable<ResourceViewModel> resources = new List<ResourceViewModel>();
+
+    private Func<ResourceViewModel, bool> _quickFilter => x =>
+    {
+        if (string.IsNullOrWhiteSpace(filter))
+            return true;
+
+        if (x.FirstName.Contains(filter, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (x.LastName.Contains(filter, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    };
 
     protected override async Task OnInitializedAsync()
     {
         resources = await ResourceService.GetAllAsync();
-    }
-
-    private bool FilterFunc1(ResourceViewModel element) => FilterFunc(element, filter);
-
-    private bool FilterFunc(ResourceViewModel element, string searchString)
-    {
-        if (string.IsNullOrWhiteSpace(searchString))
-            return true;
-        // if (element.Skills[0].Skill.SkillName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-        //     return true;
-        if (element.FirstName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (element.LastName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        return false;
     }
 }

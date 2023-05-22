@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace ResourceMaster.ViewModels;
 
@@ -410,5 +411,10 @@ public static class CountriesExtensions
             .GetMember(countries.ToString())[0]
             .GetCustomAttribute<DisplayAttribute>()
             ?.GetName();
+    }
+
+    public static List<string?> GetCountryList(this IEnumerable<Countries> countries)
+    {
+        return countries.Select(c => c.GetDisplayName()).ToList();
     }
 }

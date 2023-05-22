@@ -3,52 +3,104 @@
 @using ResourceMaster.ViewModels
 @using MudBlazor
 @inject CustomerService CustomerService;
+@inject NavigationManager NavigationManager
 
-<MudTable Items="@customers" Bordered="@true" Striped="true" Filter="new Func<CustomerViewModel,bool>(FilterFunc1)" @bind-SelectedItem="selectedCustomer">
+<MudText Typo="Typo.h6">Customer Overview</MudText>
+<MudDataGrid @ref="dataGrid" T="CustomerViewModel" Items="@customers" Filterable="true" QuickFilter="@_quickFilter" ReadOnly="false" EditMode="DataGridEditMode.Form" EditTrigger="DataGridEditTrigger.Manual" CommittedItemChanges="@CommittedItemChanges">
     <ToolBarContent>
-        <MudText Typo="Typo.h6">Customer Overview</MudText>
+        <MudButton OnClick="@AddNewCustomer" Variant="Variant.Filled" Color="Color.Primary">Add Item</MudButton>
         <MudSpacer />
         <MudTextField @bind-Value="filter" Placeholder="Filter" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
-    <HeaderContent>
-        <MudTh>Company name</MudTh>
-        <MudTh>First name</MudTh>
-        <MudTh>Last name</MudTh>
-        <MudTh>country</MudTh>
-    </HeaderContent>
-    <RowTemplate>
-        <MudTd DataLabel="companyName">@context.CompanyName</MudTd>
-        <MudTd DataLabel="firstName">@context.FirstName</MudTd>
-        <MudTd DataLabel="lastName">@context.LastName</MudTd>
-        <MudTd DataLabel="country">@context.Country</MudTd>
-    </RowTemplate>
+    <Columns>
+        <PropertyColumn Property="x => x.Id" Title="Id" Hidden="true" IsEditable=false/>
+        <PropertyColumn Property="x => x.CompanyName" Title="Company name" />
+        <PropertyColumn Property="x => x.FirstName" Title="First name" />
+        <PropertyColumn Property="x => x.LastName" Title="Last name" />
+        <PropertyColumn Property="x => x.Street" Title="Street" />
+        <PropertyColumn Property="x => x.ZipCode" Title="Zip code" />
+        <PropertyColumn Property="x => x.Location" Title="Location" />
+        <PropertyColumn Property="x => x.Country" Title="Country" >
+            <EditTemplate>
+                <MudSelect @bind-Value="context.Item.Country">
+                    @foreach (var country in Enum.GetValues<Countries>().GetCountryList())
+                    {
+                        <MudSelectItem Value="country">@country</MudSelectItem>
+                    }
+                </MudSelect>
+            </EditTemplate>
+          </PropertyColumn>
+        <TemplateColumn StickyRight="true" CellStyle="width:10px" Filterable="false" Sortable="false">
+            <CellTemplate>
+                <MudIconButton Icon="@Icons.Material.Outlined.Edit" Size="@Size.Small" OnClick="context.Actions.StartEditingItem" />
+            </CellTemplate>
+        </TemplateColumn>
+        <TemplateColumn StickyRight="true" CellStyle="width:10px" Filterable="false" Sortable="false">
+            <CellTemplate>
+                <MudIconButton Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" />
+            </CellTemplate>
+        </TemplateColumn>
+    </Columns>
     <PagerContent>
-        <MudTablePager />
+        <MudDataGridPager T="CustomerViewModel" />
     </PagerContent>
-</MudTable>
+</MudDataGrid>
 
 @code {
     private string filter = "";
-    private CustomerViewModel selectedCustomer;
-    private IEnumerable<CustomerViewModel> customers = new List<CustomerViewModel>();
+    private MudDataGrid<CustomerViewModel> dataGrid;
+
+    public List<CustomerViewModel> customers = new List<CustomerViewModel>();
+
+    private Func<CustomerViewModel, bool> _quickFilter => x =>
+    {
+        if (string.IsNullOrWhiteSpace(filter))
+            return true;
+
+        if (x.CompanyName.Contains(filter, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (x.FirstName.Contains(filter, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (x.LastName.Contains(filter, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (x.Street.Contains(filter, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (x.ZipCode.Contains(filter, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (x.Location.Contains(filter, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (x.Country.Contains(filter, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    };
+
+    void CommittedItemChanges(CustomerViewModel item)
+    {
+        //TODO Save new item to db
+        if(item.Id <= 0)
+        {
+            // add to db
+            customers.Add(item);
+        }
+
+        //update item
+    }
+
+    void AddNewCustomer()
+    {
+        dataGrid.SetEditingItemAsync(new CustomerViewModel());
+        //NavigationManager.NavigateTo("/createCustomer");
+    }
 
     protected override async Task OnInitializedAsync()
     {
-        customers = await CustomerService.GetAllAsync();
-    }
-
-    private bool FilterFunc1(CustomerViewModel element) => FilterFunc(element, filter);
-
-    private bool FilterFunc(CustomerViewModel element, string searchString)
-    {
-        if (string.IsNullOrWhiteSpace(searchString))
-            return true;
-        if (element.CompanyName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (element.FirstName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (element.LastName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        return false;
+        customers = (await CustomerService.GetAllAsync()).ToList();
     }
 }
