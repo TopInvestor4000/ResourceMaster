@@ -25,7 +25,13 @@ jobs:
       - name: Install and Run Playwright tests
         run:  | 
           dotnet tool install --global Microsoft.Playwright.CLI
+          
+      - name: Install and Run Playwright tests
+        run:  | 
           dotnet build
+          
+      - name: Install and Run Playwright tests
+        run:  | 
           dotnet playwright test
 
       - name: Publish test results
