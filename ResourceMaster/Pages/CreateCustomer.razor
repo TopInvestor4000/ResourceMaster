@@ -28,7 +28,7 @@
             <MudTextField T="string" @bind-value="_customer.Location" Label="location" id="location" Variant="Variant.Outlined"></MudTextField>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-            <MudAutocomplete T="Countries" @bind-Value="_customer.Country" Label="Country" Variant="Variant.Outlined" SearchFunc="FilterCountries" />
+            <MudAutocomplete T="string" @bind-Value="_customer.Country" Label="Country" Variant="Variant.Outlined" SearchFunc="FilterCountries" />
         </MudItem>
     </MudGrid>
     <MudGrid>
@@ -46,7 +46,7 @@
 
 @code{
     private CustomerViewModel _customer = new();
-    private List<Countries> _countries = Enum.GetValues<Countries>().ToList();
+    private List<string> _countries = Enum.GetValues<Countries>().ToList().ConvertAll(f => f.ToString());
 
     private async Task HandleSubmit()
     {
@@ -55,14 +55,14 @@
     }
 
 
-    private async Task<IEnumerable<Countries>> FilterCountries(string value)
+    private async Task<IEnumerable<string>> FilterCountries(string value)
     {
         if (string.IsNullOrEmpty(value))
         {
             return _countries;
         }
 
-        return await Task.FromResult(_countries.FilterByDisplayName(value));
+        return await Task.FromResult(_countries.Where(x => x.StartsWith(value)));
     }
 
 }
