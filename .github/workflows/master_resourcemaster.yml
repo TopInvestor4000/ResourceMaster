@@ -18,6 +18,9 @@ jobs:
     steps:
       - name: 'Checkout GitHub Action'
         uses: actions/checkout@main
+        
+      - name: Setup .NET
+        uses: dotnet/setup-dotnet@v1
       - name: Test
         run:  dotnet test --no-build --verbosity normal
         
