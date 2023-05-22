@@ -32,7 +32,7 @@ jobs:
           
       - name: Install and Run Playwright tests
         run:  | 
-          dotnet playwright test
+          npx playwright test
 
       - name: Publish test results
         uses: actions/upload-artifact@v2
