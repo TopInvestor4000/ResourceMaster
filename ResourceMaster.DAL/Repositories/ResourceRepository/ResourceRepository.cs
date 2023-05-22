@@ -16,7 +16,19 @@ namespace ResourceMaster.DAL.Repositories.ResourceRepository
 
         public async Task<IEnumerable<Resource>> GetAllAsync()
         {
-            return await _context.Resources.ToListAsync();
+            return await _context
+                .Resources
+                .ToListAsync();
+        }
+
+        public async Task<Resource> GetSingle(int id)
+        {
+                return await _context
+                             .Resources
+                             .Include(x => x.ProjectResources)
+                             .ThenInclude(x => x.Project)
+                             .Include(x => x.Skills)
+                             .SingleAsync(x => x.Id == id);
         }
         public async Task<Resource> GetSingle(int id)
         {
@@ -27,6 +39,15 @@ namespace ResourceMaster.DAL.Repositories.ResourceRepository
         {
             await _context.Resources.AddAsync(customer);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<Resource>> GetAllWithIncludeAsync()
+        {
+            return await _context
+              .Resources
+              .Include(x => x.ProjectResources)
+              .ThenInclude(x => x.Project)
+              .Include(x => x.Skills).ThenInclude(x => x.Skill).ToListAsync();
         }
     }
 }

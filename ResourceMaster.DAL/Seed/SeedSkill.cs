@@ -1,6 +1,6 @@
-namespace ResourceMaster.DAL.TestData;
-using Models;
-using Bogus;
+using ResourceMaster.DAL.Models;
+
+namespace ResourceMaster.DAL.Seed;
 
 public class SeedSkill
 {

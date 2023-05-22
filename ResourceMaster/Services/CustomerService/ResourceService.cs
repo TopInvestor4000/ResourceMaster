@@ -16,12 +16,20 @@ namespace ResourceMaster.Services.CustomerService
             _logger = logger;
         }
 
-        public async Task<IEnumerable<ResourceViewModel>> GetAllAsync( )
+        public async Task<IEnumerable<ResourceViewModel>> GetAllAsync()
         {
             _logger.LogInformation("GetAllAsync Method called");
             var customerList =  await _repository.GetAllAsync();
             var resultList = customerList.Adapt<List<ResourceViewModel>>();
             return resultList;
+        }
+
+        public async Task<ResourceViewModel> GetSingle(int id)
+        {
+            _logger.LogInformation("GetAllAsync Method called");
+            var resource = await _repository.GetSingle(id);
+            var result = resource.Adapt<ResourceViewModel>();
+            return result;
         }
 
         public async Task AddAsync(ResourceViewModel resource)
@@ -30,9 +38,17 @@ namespace ResourceMaster.Services.CustomerService
             await _repository.AddAsync(newEntry);
         }
 
-        public async Task<ResourceViewModel> GetSingleResource(int id)
+        public async Task<IEnumerable<ResourceViewModel>> GetAllWithInclude()
         {
-           return (await _repository.GetSingle(id)).Adapt<ResourceViewModel>();
+            var customerList = await _repository.GetAllWithIncludeAsync();
+            try
+            {
+                var resultList = customerList.Adapt<List<ResourceViewModel>>();
+                return resultList;
+            }catch (Exception ex)
+            {
+                return null;
+            }
         }
     }
 }

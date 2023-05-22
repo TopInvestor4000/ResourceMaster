@@ -14,9 +14,6 @@
         <MudItem xs="12" sm="6" md="4">
             <MudTextField @bind-Value="_project.ProjectName" Label="Project name" id="projectName" Variant="Variant.Outlined"/>
         </MudItem>
-        <MudItem xs="12" sm="6" md="4">
-            <MudTextField @bind-Value="_project.workForce" Label="Workforce" id="workforce" Variant="Variant.Outlined" Min="0" Max="999"/>
-        </MudItem>
         <br/>
         <MudItem xs="12" sm="6" md="4">
             <MudDatePicker Label="Project start" @bind-Date="_project.ProjectStart"/>
