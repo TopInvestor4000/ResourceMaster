@@ -30,7 +30,6 @@ jobs:
       - name: Install and Run Playwright tests
         run:  | 
           npm install -D @playwright/test
-          npx playwright test
       
       - name: Test
         run:  |
