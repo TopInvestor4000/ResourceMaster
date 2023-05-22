@@ -25,9 +25,6 @@ jobs:
       - name: Install Playwright
         run: dotnet tool install --global Microsoft.Playwright.CLI
           
-      - name: Install Playwright browsers
-        run: dotnet playwright install
-          
       - name: Run Playwright tests
         run: dotnet playwright test
 
