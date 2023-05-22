@@ -13,7 +13,13 @@ public class SeedSkill
             skill.SkillName = s;
             skills.Add(skill);
         }
-        
+
+        foreach (var c in _certifications)
+        {
+            var skill = new Skill();
+            skill.SkillName = c;
+            skills.Add(skill);
+        }
         return skills;
     }
 
@@ -26,7 +32,7 @@ public class SeedSkill
         "Sed" , "Shell" , "Smalltalk" , "SQL" , "Swift" , "Tcl" , "TypeScript" , "VB.NET" , "Verilog" , "VHDL" 
     };
     
-        public List<string> certificationList = new()
+    private readonly List<string> _certifications = new()
     {
         "CompTIA A," , "CompTIA Network," , "CompTIA Security," , "CompTIA Cloud," , "CompTIA Linux," ,
         "CompTIA Server," , "CompTIA Project," , "CompTIA Cybersecurity Analyst," , "CompTIA PenTest," ,
@@ -67,12 +73,17 @@ public class SeedSkill
         "IBM Certified System Administrator - DB2"
     };
 
-    public List<string> necessities = new()
+    public bool checkIsCertification(string certificationName)
+    {
+        return _certifications.Contains(certificationName);
+    }
+
+    public readonly List<string> _necessities = new()
     {
         "Not applicable", "Optional", "Mandatory"
     };
     
-    public List<string> skillLevels = new()
+    public readonly List<string> _skillLevels = new()
     {
         "Beginner", "Professional", "Senior"
     };
