@@ -5,10 +5,9 @@ public class SkillInformationViewModel
     public int Id { get; set; }
     public SkillViewModel Skill { get; set; } = default!;
     public SkillLevel SkillLevel { get; set; }
+    public int SkillId { get; set; }
     public bool IsCertification { get; set; }
-    
     public int? RequiredWorkHours { get; set; }
-
     public string? Necessity { get; set; }
 }
 

@@ -1,4 +1,5 @@
-﻿using Mapster;
+﻿using Bogus;
+using Mapster;
 using ResourceMaster.DAL.Models;
 using ResourceMaster.DAL.Repositories.ResourceRepository;
 using ResourceMaster.ViewModels;
@@ -49,6 +50,17 @@ namespace ResourceMaster.Services.CustomerService
             {
                 return null;
             }
+        }
+
+        public async Task UpdateAsync(ResourceViewModel resource)
+        {
+            var newEntry = resource.Adapt<Resource>();
+            await _repository.UpdateAsync(newEntry);
+        }
+
+        public async Task Delete(int id)
+        {
+            await _repository.Delete(id);
         }
     }
 }

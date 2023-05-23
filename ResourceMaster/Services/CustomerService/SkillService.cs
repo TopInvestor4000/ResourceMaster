@@ -16,7 +16,7 @@ namespace ResourceMaster.Services.CustomerService
             _logger = logger;
         }
 
-        public async Task<IEnumerable<SkillViewModel>> GetAllAsync( )
+        public async Task<IEnumerable<SkillViewModel>> GetAllAsync()
         {
             _logger.LogInformation("GetAllAsync Method called");
             var customerList =  await _repository.GetAllAsync();

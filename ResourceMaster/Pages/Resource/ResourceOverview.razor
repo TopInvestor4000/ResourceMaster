@@ -4,6 +4,7 @@
 @using MudBlazor
 @inject ResourceService ResourceService;
 @inject NavigationManager NavigationManager;
+@inject ISnackbar Snackbar;
 
 <MudText Typo="Typo.h6">Resource Overview</MudText>
 <MudDataGrid T="ResourceViewModel" Items="@resources" SortMode="SortMode.Multiple" QuickFilter="@_quickFilter" Virtualize="true" FixedHeader="true" Height="800px">
@@ -18,18 +19,14 @@
         <PropertyColumn Property="x => x.FirstName" Title="First Name" />
         <PropertyColumn Property="x => x.LastName" Title="Last Name" />
         <PropertyColumn Property="x => x.Age" Title="Age" />
-        <PropertyColumn Property="x => x.Street" Title="Street" />
-        <PropertyColumn Property="x => x.ZipCode" Title="Zip Code" />
-        <PropertyColumn Property="x => x.Location" Title="Location" />
-        <PropertyColumn Property="x => x.Country" Title="Country" />
         <TemplateColumn StickyRight="true" CellStyle="width:10px" Filterable="false" Sortable="false">
             <CellTemplate>
-                <MudIconButton Icon="@Icons.Material.Outlined.Edit" Size="@Size.Small" />
+                <MudIconButton Icon="@Icons.Material.Outlined.Edit" Size="@Size.Small" OnClick="(e => (GoToDetail(context.Item.Id)))" />
             </CellTemplate>
         </TemplateColumn>
         <TemplateColumn StickyRight="true" CellStyle="width:10px" Filterable="false" Sortable="false">
             <CellTemplate>
-                <MudIconButton Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" />
+                <MudIconButton Icon="@Icons.Material.Outlined.Delete" OnClick="(e => (DeleteCustomer(context.Item)))" Size="@Size.Small" />
             </CellTemplate>
         </TemplateColumn>
         <TemplateColumn StickyRight="true" CellStyle="width:10px" Filterable="false" Sortable="false">
@@ -59,7 +56,7 @@
 
 @code {
     private string filter = "";
-    private IEnumerable<ResourceViewModel> resources = new List<ResourceViewModel>();
+    private List<ResourceViewModel> resources = new List<ResourceViewModel>();
 
     private Func<ResourceViewModel, bool> _quickFilter => x =>
     {
@@ -80,18 +77,6 @@
         if (x.Age.ToString().Contains(filterLower))
             return true;
 
-        if (x.Street != null && x.Street.ToLowerInvariant().Contains(filterLower))
-            return true;
-
-        if (x.ZipCode != null && x.ZipCode.ToLowerInvariant().Contains(filterLower))
-            return true;
-
-        if (x.Location != null && x.Location.ToLowerInvariant().Contains(filterLower))
-            return true;
-
-        if (x.Country != null && x.Country.GetDisplayName().ToLowerInvariant().Contains(filterLower))
-            return true;
-
         return false;
     };
 
@@ -100,8 +85,20 @@
         NavigationManager.NavigateTo("/createResource");
     }
 
+    async Task GoToDetail(int id)
+    {
+        NavigationManager.NavigateTo($"/createResource/{id}");
+    }
+
     protected override async Task OnInitializedAsync()
     {
-        resources = await ResourceService.GetAllAsync();
+        resources = (await ResourceService.GetAllAsync()).ToList();
+    }
+
+    async Task DeleteCustomer(ResourceViewModel item)
+    {
+        await ResourceService.Delete(item.Id);
+        resources.Remove(item);
+        Snackbar.Add("Successfully deleted " + item.FirstName);
     }
 }

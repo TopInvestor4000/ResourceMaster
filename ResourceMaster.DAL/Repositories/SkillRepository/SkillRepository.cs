@@ -16,7 +16,7 @@ namespace ResourceMaster.DAL.Repositories.SkillRepository
 
         public async Task<IEnumerable<Skill>> GetAllAsync()
         {
-            return await _context.Skills.ToListAsync();
+            return await _context.Skills.AsNoTracking().ToListAsync();
         }
 
         public async Task AddAsync(Skill customer)
