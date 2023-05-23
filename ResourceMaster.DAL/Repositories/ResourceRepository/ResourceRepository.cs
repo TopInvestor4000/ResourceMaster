@@ -14,12 +14,12 @@ namespace ResourceMaster.DAL.Repositories.ResourceRepository
             _context = context;
         }
 
-        public async Task<IEnumerable<Resource>> GetAllAsync()
+        public async Task<IQueryable<Resource>> GetAllAsync()
         {
-            return await _context
+            return  _context
                 .Resources
                 .Include(x => x.Skills).ThenInclude(x => x.Skill)
-                .ToListAsync();
+                .AsSplitQuery();
         }
 
         public async Task<Resource> GetSingle(int id)
