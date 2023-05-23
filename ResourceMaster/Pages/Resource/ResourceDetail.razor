@@ -1,24 +1,39 @@
 ﻿@page "/resourceDetail/{id:int}"
 
 @using Heron.MudCalendar;
+@using MudBlazor
 @using ResourceMaster.Services.CustomerService;
+@using ResourceMaster.ViewModels;
 @inject ResourceService _resourceService
 
 <h3>ResourceDetail</h3>
 
 <MudCalendar Items="_events" />
 
-@code {
+<MudSpacer />
+<h4>Project List</h4>
 
-	[Parameter]
-	public int id { get; set; }
+<MudDataGrid T="ProjectViewModel" Items="@_projectList">
+    <Columns>
+        <PropertyColumn Property="x => x.ProjectName" Title="Project Name" />
+        <PropertyColumn Property="x => x.ProjectStart" Title="Project Start" Format="dd/MM/yyyy" />
+        <PropertyColumn Property="x => x.ProjectEnd" Title="Project End" Format="dd/MM/yyyy" />
+    </Columns>
+</MudDataGrid>
+    @code {
 
-	private List<CalendarItem> _events = new();
+        [Parameter]
+        public int id { get; set; }
 
-    protected override async Task OnInitializedAsync()
-    {
-        var resource = await _resourceService.GetSingle(id);
-        foreach (var project in resource.ProjectResources.Select(x => x.Project))
+        private List<CalendarItem> _events = new();
+
+        private List<ProjectViewModel> _projectList = new();
+
+        protected override async Task OnInitializedAsync()
+        {
+            var resource = await _resourceService.GetSingle(id);
+            _projectList = resource.ProjectResources.Select(x => x.Project).ToList();
+            foreach (var project in resource.ProjectResources.Select(x => x.Project))
         {
             var startDate = project.ProjectStart.GetValueOrDefault();
             var endDate = project.ProjectEnd.GetValueOrDefault();

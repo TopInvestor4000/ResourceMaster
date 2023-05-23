@@ -21,7 +21,7 @@
         <PropertyColumn Property="x => x.Age" Title="Age" />
         <TemplateColumn StickyRight="true" CellStyle="width:10px" Filterable="false" Sortable="false">
             <CellTemplate>
-                <MudIconButton Icon="@Icons.Material.Outlined.Edit" Size="@Size.Small" OnClick="(e => (GoToDetail(context.Item.Id)))" />
+                <MudIconButton Icon="@Icons.Material.Outlined.Edit" Size="@Size.Small" OnClick="(e => (GoToEdit(context.Item.Id)))" />
             </CellTemplate>
         </TemplateColumn>
         <TemplateColumn StickyRight="true" CellStyle="width:10px" Filterable="false" Sortable="false">
@@ -31,7 +31,7 @@
         </TemplateColumn>
         <TemplateColumn StickyRight="true" CellStyle="width:10px" Filterable="false" Sortable="false">
             <CellTemplate>
-                <MudIconButton Icon="@Icons.Material.Outlined.CalendarMonth" Size="@Size.Small" />
+                <MudIconButton Icon="@Icons.Material.Outlined.CalendarMonth" Size="@Size.Small" OnClick="(e => (GoToDetail(context.Item.Id)))" />
             </CellTemplate>
         </TemplateColumn>
     </Columns>
@@ -85,9 +85,14 @@
         NavigationManager.NavigateTo("/createResource");
     }
 
-    async Task GoToDetail(int id)
+    async Task GoToEdit(int id)
     {
         NavigationManager.NavigateTo($"/createResource/{id}");
+    }
+
+    async Task GoToDetail(int id)
+    {
+        NavigationManager.NavigateTo($"/resourceDetail/{id}");
     }
 
     protected override async Task OnInitializedAsync()
