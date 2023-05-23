@@ -4,6 +4,7 @@
 @using MudBlazor
 @inject CustomerService CustomerService;
 @inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar;
 
 <MudText Typo="Typo.h6">Customer Overview</MudText>
 <MudDataGrid @ref="dataGrid" T="CustomerViewModel" Items="@customers" Filterable="true" QuickFilter="@_quickFilter" ReadOnly="false" EditMode="DataGridEditMode.Form" EditTrigger="DataGridEditTrigger.Manual" CommittedItemChanges="@CommittedItemChanges">
@@ -37,7 +38,7 @@
         </TemplateColumn>
         <TemplateColumn StickyRight="true" CellStyle="width:10px" Filterable="false" Sortable="false">
             <CellTemplate>
-                <MudIconButton Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" />
+                <MudIconButton Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" OnClick="@(e => (DeleteCustomer(context.Item)))" />
             </CellTemplate>
         </TemplateColumn>
         <TemplateColumn StickyRight="true" CellStyle="width:10px" Filterable="false" Sortable="false">
@@ -86,16 +87,28 @@
         return false;
     };
 
-    void CommittedItemChanges(CustomerViewModel item)
+    async Task CommittedItemChanges(CustomerViewModel item)
     {
         //TODO Save new item to db
         if(item.Id <= 0)
         {
             // add to db
             customers.Add(item);
+            await CustomerService.AddAsync(item);
+            Snackbar.Add("Successfully added " + item.CompanyName);
         }
+        else
+        {
+            await CustomerService.UpdateCustomer(item);
+            Snackbar.Add("Successfully updated " + item.CompanyName);
+        }
+    }
 
-        //update item
+    async Task DeleteCustomer(CustomerViewModel item)
+    {
+        await CustomerService.DeleteCustomer(item);
+        customers.Remove(item);
+        Snackbar.Add("Successfully updated " + item.CompanyName);
     }
 
     void AddNewCustomer()

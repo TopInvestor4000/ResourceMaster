@@ -29,5 +29,17 @@ namespace ResourceMaster.Services.CustomerService
             var newEntry = customer.Adapt<Customer>();
             await _repository.AddAsync(newEntry);
         }
+
+        public async Task UpdateCustomer(CustomerViewModel customer)
+        {
+            var newEntry = customer.Adapt<Customer>();
+            await _repository.Update(newEntry);
+        }
+
+        public async Task DeleteCustomer(CustomerViewModel customer)
+        {
+            var itemToDelte = customer.Adapt<Customer>();
+            await _repository.Delete(itemToDelte);
+        }
     }
 }
