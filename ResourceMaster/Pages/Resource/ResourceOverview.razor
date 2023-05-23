@@ -5,6 +5,7 @@
 @inject ResourceService ResourceService;
 @inject NavigationManager NavigationManager;
 
+<MudText Typo="Typo.h6">Resource Overview</MudText>
 <MudDataGrid T="ResourceViewModel" Items="@resources" SortMode="SortMode.Multiple" QuickFilter="@_quickFilter" Virtualize="true" FixedHeader="true" Height="800px">
     <ToolBarContent>
         <MudButton OnClick="@GoToNewResource" Variant="Variant.Filled" Color="Color.Primary">Add Item</MudButton>
