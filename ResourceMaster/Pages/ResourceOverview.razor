@@ -3,10 +3,11 @@
 @using ResourceMaster.ViewModels
 @using MudBlazor
 @inject ResourceService ResourceService;
+@inject NavigationManager NavigationManager;
 
-<MudDataGrid T="ResourceViewModel" Items="@resources" SortMode="SortMode.Multiple" QuickFilter="@_quickFilter">
+<MudDataGrid T="ResourceViewModel" Items="@resources" SortMode="SortMode.Multiple" QuickFilter="@_quickFilter" Virtualize="true" FixedHeader="true" Height="800px">
     <ToolBarContent>
-        <MudText Typo="Typo.h6">Resource Overview</MudText>
+        <MudButton OnClick="@GoToNewResource" Variant="Variant.Filled" Color="Color.Primary">Add Item</MudButton>
         <MudSpacer />
         <MudTextField @bind-Value="filter" Placeholder="Filter" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
@@ -45,17 +46,14 @@
             </MudCardHeader>
             <MudCardContent>
                 <MudList Dense="true">
-                @foreach(var skill in context.Item.Skills)
-                {
-                    <MudListItem Text=@skill.Skill.SkillName  />
-                 }
+                    @foreach (var skill in context.Item.Skills)
+                    {
+                        <MudListItem Text=@skill.Skill.SkillName />
+                    }
                 </MudList>
             </MudCardContent>
         </MudCard>
     </ChildRowContent>
-    <PagerContent>
-        <MudDataGridPager T="ResourceViewModel" />
-    </PagerContent>
 </MudDataGrid>
 
 @code {
@@ -67,14 +65,39 @@
         if (string.IsNullOrWhiteSpace(filter))
             return true;
 
-        if (x.FirstName.Contains(filter, StringComparison.OrdinalIgnoreCase))
+        var filterLower = filter.ToLowerInvariant();
+
+        if (x.Id.ToString().Contains(filterLower))
             return true;
 
-        if (x.LastName.Contains(filter, StringComparison.OrdinalIgnoreCase))
+        if (x.FirstName != null && x.FirstName.ToLowerInvariant().Contains(filterLower))
+            return true;
+
+        if (x.LastName != null && x.LastName.ToLowerInvariant().Contains(filterLower))
+            return true;
+
+        if (x.Age.ToString().Contains(filterLower))
+            return true;
+
+        if (x.Street != null && x.Street.ToLowerInvariant().Contains(filterLower))
+            return true;
+
+        if (x.ZipCode != null && x.ZipCode.ToLowerInvariant().Contains(filterLower))
+            return true;
+
+        if (x.Location != null && x.Location.ToLowerInvariant().Contains(filterLower))
+            return true;
+
+        if (x.Country != null && x.Country.GetDisplayName().ToLowerInvariant().Contains(filterLower))
             return true;
 
         return false;
     };
+
+    void GoToNewResource()
+    {
+        NavigationManager.NavigateTo("/createResource");
+    }
 
     protected override async Task OnInitializedAsync()
     {

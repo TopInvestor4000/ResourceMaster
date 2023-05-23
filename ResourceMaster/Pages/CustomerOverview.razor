@@ -40,6 +40,11 @@
                 <MudIconButton Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" />
             </CellTemplate>
         </TemplateColumn>
+        <TemplateColumn StickyRight="true" CellStyle="width:10px" Filterable="false" Sortable="false">
+            <CellTemplate>
+                <MudIconButton Icon="@Icons.Material.Outlined.CalendarMonth" Size="@Size.Small" />
+            </CellTemplate>
+        </TemplateColumn>
     </Columns>
     <PagerContent>
         <MudDataGridPager T="CustomerViewModel" />
