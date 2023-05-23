@@ -43,7 +43,7 @@
         </TemplateColumn>
         <TemplateColumn StickyRight="true" CellStyle="width:10px" Filterable="false" Sortable="false">
             <CellTemplate>
-                <MudIconButton Icon="@Icons.Material.Outlined.CalendarMonth" Size="@Size.Small" />
+                <MudIconButton Icon="@Icons.Material.Outlined.CalendarMonth" Size="@Size.Small" OnClick="@(e => (NavigateToCustomerCalendar(context.Item.Id)))" />
             </CellTemplate>
         </TemplateColumn>
     </Columns>
@@ -115,6 +115,11 @@
     {
         dataGrid.SetEditingItemAsync(new CustomerViewModel());
         //NavigationManager.NavigateTo("/createCustomer");
+    }
+
+    async Task NavigateToCustomerCalendar(int id)
+    {
+        NavigationManager.NavigateTo($"/customerCalendar/{id}");
     }
 
     protected override async Task OnInitializedAsync()

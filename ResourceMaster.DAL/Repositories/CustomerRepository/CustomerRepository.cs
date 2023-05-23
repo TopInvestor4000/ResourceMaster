@@ -37,5 +37,13 @@ namespace ResourceMaster.DAL.Repositories.CustomerRepository
             _context.Customers.Remove(itemToDelte);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<Customer> GetSingle(int id)
+        {
+            return await _context.Customers
+                .Include(x => x.Project)
+                .AsNoTracking()
+                .SingleAsync(x => x.Id == id);
+        }
     }
 }
