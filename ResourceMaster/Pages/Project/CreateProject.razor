@@ -81,8 +81,9 @@ else
         }
         else
         {
+            await _ProjectService.Update(_project);
             Snackbar.Add("Successfully added " + _project.ProjectName);
-            await _ProjectService.AddAsync(_project);
+          
         } 
     }
     
