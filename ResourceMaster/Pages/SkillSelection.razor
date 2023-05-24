@@ -14,7 +14,7 @@
     <MudPaper Class="pa-4 equal-height-second-box">
         <MudStack Spacing="4" Class="flex-grow">
             <MudStack Row="true" Spacing="4">
-                <MudAutocomplete T="string" Label="Skill" @bind-Value="selectedSkill" SearchFunc="@SkillSearch"/>
+                <MudAutocomplete T="SkillViewModel" Label="Skill" @bind-Value="selectedSkill" SearchFunc="@SkillSearch"/>
                 <MudSelect Label="Skill Level" T="SkillLevel" @bind-Value="selectedLevel">
                     @foreach (var levelOption in levelOptions)
                     {
@@ -39,18 +39,20 @@
     public EventCallback<List<SkillInformationViewModel>> OnItemSelected { get; set; }
 
     [Parameter]
-    public List<string> skillOptions { get; set; }
+    public List<SkillViewModel> skillOptions { get; set; }
+
+    [Parameter]
+    public List<SkillInformationViewModel> skills { get; set; }
 
     private List<SkillLevel> levelOptions = Enum.GetValues<SkillLevel>().ToList();
-    private string selectedSkill = "";
+    private SkillViewModel selectedSkill = new();
     private SkillLevel selectedLevel = SkillLevel.Poor;
     private bool isCertified;
-    private List<string> availableSkillOptions;
-    private List<SkillInformationViewModel> skills = new();
+    private List<SkillViewModel> availableSkillOptions;
 
     protected override void OnInitialized()
     {
-        availableSkillOptions = new List<string>(skillOptions);
+        availableSkillOptions = new List<SkillViewModel>(skillOptions);
     }
 
     private void ItemSelected()
@@ -60,32 +62,32 @@
 
     private void AddSkill()
     {
-        if (!string.IsNullOrEmpty(selectedSkill))
+        if (!string.IsNullOrEmpty(selectedSkill.SkillName))
         {
-            skills.Add(new SkillInformationViewModel { Skill = new SkillViewModel { SkillName = selectedSkill }, SkillLevel = selectedLevel, IsCertification = isCertified });
+            skills.Add(new SkillInformationViewModel { Skill = selectedSkill, SkillLevel = selectedLevel, IsCertification = isCertified });
         }
 
         availableSkillOptions.Remove(selectedSkill);
         SortSkills();
         ItemSelected();
 
-        selectedSkill = string.Empty;
+        selectedSkill = new();
         selectedLevel = SkillLevel.Poor;
     }
 
-    private async Task<IEnumerable<string>> SkillSearch(string value)
+    private async Task<IEnumerable<SkillViewModel>> SkillSearch(string value)
     {
         await Task.Delay(5);
 
         if (string.IsNullOrEmpty(value))
             return availableSkillOptions;
-        return availableSkillOptions.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+        return availableSkillOptions.Where(x => x.SkillName.Contains(value, StringComparison.InvariantCultureIgnoreCase));
     }
 
     private void RemoveSkill(SkillInformationViewModel skill)
     {
         skills.Remove(skill);
-        availableSkillOptions.Add(skill.Skill.SkillName);
+        availableSkillOptions.Add(skill.Skill);
         SortSkills();
         ItemSelected();
     }
