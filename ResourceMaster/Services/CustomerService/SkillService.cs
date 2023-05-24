@@ -27,7 +27,18 @@ namespace ResourceMaster.Services.CustomerService
         public async Task AddAsync(SkillViewModel skill)
         {
             var newEntry = skill.Adapt<Skill>();
-            await _repository.AddAsync(newEntry);
+            await _repository.AddUpdate(newEntry);
+        }
+
+        public async Task UpdateSkill(SkillViewModel skill)
+        {
+            var newEntry = skill.Adapt<Skill>();
+            await _repository.AddUpdate(newEntry);
+        }
+
+        public async Task DeleteSkill(int id)
+        {
+            await _repository.DeleteAsync(id);
         }
     }
 }

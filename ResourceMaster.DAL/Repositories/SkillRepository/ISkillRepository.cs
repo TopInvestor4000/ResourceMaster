@@ -4,7 +4,8 @@ namespace ResourceMaster.DAL.Repositories.SkillRepository
 {
     public interface ISkillRepository
     {
-        Task AddAsync(Skill customer);
+        Task AddUpdate(Skill skill);
+        Task DeleteAsync(int id);
         Task<IEnumerable<Skill>> GetAllAsync();
     }
 }

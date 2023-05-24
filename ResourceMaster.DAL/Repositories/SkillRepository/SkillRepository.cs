@@ -14,15 +14,22 @@ namespace ResourceMaster.DAL.Repositories.SkillRepository
             _context = context;
         }
 
+        public async Task AddUpdate(Skill skill)
+        {
+            _context.Skills.Update(skill);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            _context.Skills.Remove(_context.Skills.Single(x => x.Id == id));
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<Skill>> GetAllAsync()
         {
             return await _context.Skills.AsNoTracking().ToListAsync();
         }
 
-        public async Task AddAsync(Skill customer)
-        {
-            await _context.Skills.AddAsync(customer);
-            await _context.SaveChangesAsync();
-        }
     }
 }
