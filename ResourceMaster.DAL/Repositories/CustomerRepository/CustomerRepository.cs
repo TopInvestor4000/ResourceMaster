@@ -24,18 +24,21 @@ namespace ResourceMaster.DAL.Repositories.CustomerRepository
             await _context.Customers.AddAsync(customer);
 
             await _context.SaveChangesAsync();
+            _context.ChangeTracker.Clear();
         }
 
         public async Task Update(Customer customer)
         {
              _context.Customers.Update(customer);
             await _context.SaveChangesAsync();
+            _context.ChangeTracker.Clear();
         }
 
         public async Task Delete(Customer itemToDelte)
         {
             _context.Customers.Remove(itemToDelte);
             await _context.SaveChangesAsync();
+            _context.ChangeTracker.Clear();
         }
 
         public async Task<Customer> GetSingle(int id)

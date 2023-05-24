@@ -41,6 +41,7 @@ namespace ResourceMaster.DAL.Repositories.ProjectRepository
             project.Customer = _context.Customers.Find(project.Customer.Id);
             await _context.Projects.AddAsync(project);
             await _context.SaveChangesAsync();
+            _context.ChangeTracker.Clear();
         }
 
         public async Task UpdateHires(Project updatedItem)
@@ -48,6 +49,7 @@ namespace ResourceMaster.DAL.Repositories.ProjectRepository
             _context.ProjectResources.RemoveRange(_context.ProjectResources.Where(x => x.ProjectId == updatedItem.Id));
             _context.Projects.Update(updatedItem);
             await _context.SaveChangesAsync();
+            _context.ChangeTracker.Clear();
         }
     }
 }

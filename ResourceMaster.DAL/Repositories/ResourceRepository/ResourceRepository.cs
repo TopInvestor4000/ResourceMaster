@@ -38,6 +38,7 @@ namespace ResourceMaster.DAL.Repositories.ResourceRepository
         {
             await _context.Resources.AddAsync(resource);
             await _context.SaveChangesAsync();
+            _context.ChangeTracker.Clear();
         }
 
         public async Task<List<Resource>> GetAllWithIncludeAsync()
@@ -60,6 +61,7 @@ namespace ResourceMaster.DAL.Repositories.ResourceRepository
 
             _context.Resources.Update(resource);
             await _context.SaveChangesAsync();
+            _context.ChangeTracker.Clear();
         }
 
         public async Task Delete(int id)
@@ -69,6 +71,7 @@ namespace ResourceMaster.DAL.Repositories.ResourceRepository
             {
                 _context.Resources.Remove(item);
                 await _context.SaveChangesAsync();
+                _context.ChangeTracker.Clear();
             }
    
         }

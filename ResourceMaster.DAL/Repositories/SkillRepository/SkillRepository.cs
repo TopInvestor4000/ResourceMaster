@@ -18,12 +18,14 @@ namespace ResourceMaster.DAL.Repositories.SkillRepository
         {
             _context.Skills.Update(skill);
             await _context.SaveChangesAsync();
+            _context.ChangeTracker.Clear();
         }
 
         public async Task DeleteAsync(int id)
         {
             _context.Skills.Remove(_context.Skills.Single(x => x.Id == id));
             await _context.SaveChangesAsync();
+            _context.ChangeTracker.Clear();
         }
 
         public async Task<IEnumerable<Skill>> GetAllAsync()
