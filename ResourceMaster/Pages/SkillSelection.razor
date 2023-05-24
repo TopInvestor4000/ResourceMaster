@@ -50,9 +50,20 @@
     private bool isCertified;
     private List<SkillViewModel> availableSkillOptions;
 
-    protected override void OnInitialized()
+    protected override void OnParametersSet()
     {
         availableSkillOptions = new List<SkillViewModel>(skillOptions);
+        if (skills != null)
+        {
+            foreach (var skill in skills)
+            {
+                availableSkillOptions.Remove(skill.Skill);
+            }
+        }
+        else
+        {
+            skills = new();
+        }
     }
 
     private void ItemSelected()
