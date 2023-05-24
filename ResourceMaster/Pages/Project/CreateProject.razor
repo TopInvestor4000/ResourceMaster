@@ -6,6 +6,7 @@
 @inject ISnackbar Snackbar
 @inject ProjectService _ProjectService
 @inject CustomerService _CustomerService
+@inject SkillService _SkillService
 
 @if (IsEditPage)
 {
@@ -40,7 +41,7 @@ else
                 }
             </MudSelect>
         </MudItem>
-        <SkillSelection skillOptions="@skillOptions" OnItemSelected="skills => _project.Skills = skills"/>
+        <SkillSelection skills="@_project.Skills" skillOptions="@_skillOptions" OnItemSelected="skills => _project.Skills = skills"/>
     </MudGrid>
     <MudGrid>
         <MudItem xs="12" Class="my-4 text-center">
@@ -57,15 +58,16 @@ else
 @code{
     [Parameter]
     public int Id { get; set; }
-    public bool IsEditPage => Id > 0;
+
+    private bool IsEditPage => Id > 0;
 
     private ProjectViewModel _project = new();
     private List<CustomerViewModel> _customerList = new();
-    private List<string> skillOptions = new();
+    private List<SkillViewModel> _skillOptions = new();
 
     protected override async Task OnInitializedAsync()
     {
-        skillOptions = new List<string> { "Java", "C#", "SQL", "JavaScript", "Python", "Ruby", "Swift", "PHP", "Kotlin", "TypeScript" }.OrderBy(skill => skill).ToList();
+        _skillOptions = (await _SkillService.GetAllAsync()).ToList();
         _customerList = (await _CustomerService.GetAllAsync()).ToList();
     }
 

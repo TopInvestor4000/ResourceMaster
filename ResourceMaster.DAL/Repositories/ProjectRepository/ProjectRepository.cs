@@ -31,6 +31,7 @@ namespace ResourceMaster.DAL.Repositories.ProjectRepository
                 .Projects
                 .Include(x => x.Skills).ThenInclude(x => x.Skill)
                 .Include(x => x.ProjectResources).ThenInclude(x => x.Resource)
+                .Include(x => x.Customer)
                 .AsNoTracking()
                 .SingleOrDefaultAsync(x => x.Id == id);
         }
