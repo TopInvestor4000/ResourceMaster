@@ -14,6 +14,12 @@ namespace ResourceMaster.DAL.Repositories.ProjectRepository
             _context = context;
         }
 
+        public async Task Delete(Project itemToDelte)
+        {
+            _context.Projects.Remove(itemToDelte);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<Project>> GetAllAsync()
         {
             return await _context.Projects.ToListAsync();
@@ -27,7 +33,6 @@ namespace ResourceMaster.DAL.Repositories.ProjectRepository
                 .Include(x => x.ProjectResources).ThenInclude(x => x.Resource)
                 .AsNoTracking()
                 .SingleOrDefaultAsync(x => x.Id == id);
-
         }
 
         public async Task AddAsync(Project project)

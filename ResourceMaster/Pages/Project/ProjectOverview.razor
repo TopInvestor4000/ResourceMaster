@@ -1,16 +1,17 @@
 @page "/projectOverview"
-@using ResourceMaster.Services.CustomerService
 @using ResourceMaster.ViewModels
 @using MudBlazor
+@using ResourceMaster.Services.CustomerService
 @inject ProjectService ProjectService;
 @inject NavigationManager NavigationManager;
+@inject ISnackbar Snackbar;
 
 <MudText Typo="Typo.h6">Project Overview</MudText>
-<MudDataGrid T="ProjectViewModel" Items="@projects" SortMode="SortMode.Multiple" QuickFilter="@_quickFilter">
+<MudDataGrid T="ProjectViewModel" Items="@_projects" SortMode="SortMode.Multiple" QuickFilter="@_quickFilter">
     <ToolBarContent>
         <MudButton OnClick="@GoToNewProject" Variant="Variant.Filled" Color="Color.Primary">Add Item</MudButton>
         <MudSpacer />
-        <MudTextField @bind-Value="filter" Placeholder="Filter" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        <MudTextField @bind-Value="_filter" Placeholder="Filter" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
     <Columns>
         <PropertyColumn Property="x => x.ProjectName" Title="Project name" />
@@ -18,17 +19,17 @@
         <PropertyColumn Property="x => x.ProjectEnd" Title="Project end" Format="dd/MM/yyyy" />
         <TemplateColumn StickyRight="true" CellStyle="width:10px" Filterable="false" Sortable="false">
             <CellTemplate >
-                <MudIconButton Icon="@Icons.Material.Outlined.Edit" Size="@Size.Small" />
+                <MudIconButton Icon="@Icons.Material.Outlined.Edit" Size="@Size.Small" OnClick="() => GoToEdit(context.Item.Id)"/>
             </CellTemplate>
         </TemplateColumn>
         <TemplateColumn StickyRight="true" CellStyle="width:10px" Filterable="false" Sortable="false">
             <CellTemplate>
-                <MudIconButton Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" />
+                <MudIconButton Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" OnClick="() => DeleteProject(context.Item)" />
             </CellTemplate>
         </TemplateColumn>
         <TemplateColumn StickyRight="true" CellStyle="width:10px" Filterable="false" Sortable="false">
             <CellTemplate>
-                <MudIconButton Icon="@Icons.Material.Outlined.ConnectWithoutContact" Size="@Size.Small" />
+                <MudIconButton Icon="@Icons.Material.Outlined.ConnectWithoutContact" Size="@Size.Small" OnClick="() => GoToMatching(context.Item.Id)"/>
             </CellTemplate>
         </TemplateColumn>
     </Columns>
@@ -38,21 +39,21 @@
 </MudDataGrid>
 
 @code {
-    private string filter = "";
-    private IEnumerable<ProjectViewModel> projects = new List<ProjectViewModel>();
+    private string _filter = "";
+    private List<ProjectViewModel> _projects = new();
 
     private Func<ProjectViewModel, bool> _quickFilter => x =>
     {
-        if (string.IsNullOrWhiteSpace(filter))
+        if (string.IsNullOrWhiteSpace(_filter))
             return true;
 
-        if (x.ProjectName.Contains(filter, StringComparison.OrdinalIgnoreCase))
+        if (x.ProjectName.Contains(_filter, StringComparison.OrdinalIgnoreCase))
             return true;
 
-        if (x.ProjectStart != null && x.ProjectStart.ToString().Contains(filter, StringComparison.OrdinalIgnoreCase))
+        if (x.ProjectStart != null && x.ProjectStart.ToString().Contains(_filter, StringComparison.OrdinalIgnoreCase))
             return true;
 
-        if (x.ProjectEnd != null && x.ProjectEnd.ToString().Contains(filter, StringComparison.OrdinalIgnoreCase))
+        if (x.ProjectEnd != null && x.ProjectEnd.ToString().Contains(_filter, StringComparison.OrdinalIgnoreCase))
             return true;
 
         return false;
@@ -65,6 +66,25 @@
 
     protected override async Task OnInitializedAsync()
     {
-        projects = await ProjectService.GetAllAsync();
+        _projects = (await ProjectService.GetAllAsync()).ToList();
     }
+
+    async Task DeleteProject(ProjectViewModel item)
+    {
+        await ProjectService.DeleteProject(item);
+        _projects.Remove(item);
+        Snackbar.Add("Successfully updated " + item.ProjectName);
+    }
+    
+    async Task GoToEdit(int id)
+    {
+        NavigationManager.NavigateTo($"/createProject/{id}");
+        
+    }
+
+    async Task GoToMatching(int id)
+    {
+        NavigationManager.NavigateTo($"/project-resources/{id}");
+    }
+
 }

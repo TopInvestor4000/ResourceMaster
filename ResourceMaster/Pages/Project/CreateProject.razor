@@ -1,4 +1,5 @@
 @page "/createProject"
+@page "/createProject/{id:int}"
 @using ResourceMaster.ViewModels
 @using MudBlazor
 @using ResourceMaster.Services.CustomerService
@@ -6,7 +7,17 @@
 @inject ProjectService _ProjectService
 @inject CustomerService _CustomerService
 
-<h1>Create new project</h1>
+@if (IsEditPage)
+{
+    <h1>Update project</h1>
+}
+
+else
+{
+    <h1>Create new project</h1>
+}
+
+
 <br>
 <h3>Project</h3>
 <MudForm onsubmit="@HandleSubmit" Model="_project">
@@ -44,6 +55,10 @@
 </MudForm>
 
 @code{
+    [Parameter]
+    public int Id { get; set; }
+    public bool IsEditPage => Id > 0;
+
     private ProjectViewModel _project = new();
     private List<CustomerViewModel> _customerList = new();
     private List<string> skillOptions = new();
@@ -57,8 +72,24 @@
 
     private async Task HandleSubmit()
     {
-        Snackbar.Add("Successfully added " + _project.ProjectName);
-        await _ProjectService.AddAsync(_project);
+        if (IsEditPage)
+        {
+            await _ProjectService.Update(_project);
+            Snackbar.Add("Successfully updated " + _project.ProjectName);
+        }
+        else
+        {
+            Snackbar.Add("Successfully added " + _project.ProjectName);
+            await _ProjectService.AddAsync(_project);
+        } 
+    }
+    
+    protected override async Task OnParametersSetAsync()
+    {
+        if (IsEditPage)
+        {
+            _project = await _ProjectService.GetSingle(Id);
+        }
     }
 
 }

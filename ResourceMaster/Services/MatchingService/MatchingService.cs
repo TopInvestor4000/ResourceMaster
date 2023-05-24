@@ -114,7 +114,7 @@ namespace ResourceMaster.Services.MatchingService
             { 
                 maxTimeSpanAvailable += getAvailableTimeSpan(project.ProjectStart, availability.BookedFrom, project.ProjectEnd, availability.BookedTo);
             }
-            return maxTimeSpanAvailable;
+            return maxTimeSpanAvailable == 0 && availabilities.Count() == 0 ? (project.ProjectEnd.GetValueOrDefault(DateTime.MaxValue) - project.ProjectStart.GetValueOrDefault(DateTime.MinValue)).Days : maxTimeSpanAvailable;
         }
 
         private int getAvailableTimeSpan(DateTime? projectStart, DateTime bookedFrom, DateTime? projectEnd, DateTime bookedTo)

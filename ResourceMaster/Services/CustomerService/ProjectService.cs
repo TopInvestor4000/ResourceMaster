@@ -39,5 +39,10 @@ namespace ResourceMaster.Services.CustomerService
             var itemToUpdate = project.Adapt<Project>();
             await _repository.UpdateHires(itemToUpdate);
         }
+        public async Task DeleteProject(ProjectViewModel project)
+        {
+            var itemToDelte = project.Adapt<Project>();
+            await _repository.Delete(itemToDelte);
+        }
     }
 }
