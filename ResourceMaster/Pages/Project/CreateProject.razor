@@ -4,9 +4,10 @@
 @using MudBlazor
 @using ResourceMaster.Services.CustomerService
 @inject ISnackbar Snackbar
-@inject ProjectService _ProjectService
-@inject CustomerService _CustomerService
-@inject SkillService _SkillService
+@inject ProjectService ProjectService
+@inject CustomerService CustomerService
+@inject SkillService SkillService
+@inject NavigationManager NavigationManager
 
 @if (IsEditPage)
 {
@@ -67,8 +68,8 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        _skillOptions = (await _SkillService.GetAllAsync()).ToList();
-        _customerList = (await _CustomerService.GetAllAsync()).ToList();
+        _skillOptions = (await SkillService.GetAllAsync()).ToList();
+        _customerList = (await CustomerService.GetAllAsync()).ToList();
     }
 
 
@@ -76,14 +77,14 @@ else
     {
         if (IsEditPage)
         {
-            await _ProjectService.Update(_project);
+            await ProjectService.Update(_project);
             Snackbar.Add("Successfully updated " + _project.ProjectName);
         }
         else
         {
-            await _ProjectService.Update(_project);
+            await ProjectService.Update(_project);
             Snackbar.Add("Successfully added " + _project.ProjectName);
-          
+            NavigationManager.NavigateTo("/projectOverview");
         } 
     }
     
@@ -91,7 +92,7 @@ else
     {
         if (IsEditPage)
         {
-            _project = await _ProjectService.GetSingle(Id);
+            _project = await ProjectService.GetSingle(Id);
         }
     }
 

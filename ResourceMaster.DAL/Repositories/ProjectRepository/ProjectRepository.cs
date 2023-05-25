@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ResourceMaster.DAL.Data;
 using ResourceMaster.DAL.Models;
-using System.Runtime.CompilerServices;
 
 namespace ResourceMaster.DAL.Repositories.ProjectRepository
 {

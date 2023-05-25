@@ -1,11 +1,8 @@
 ﻿@page "/project-resources/{projectId:int}"
-@using System.Collections.Generic
-@using System.Linq
+@using ResourceMaster.Services.MatchingService
+@using ResourceMaster.Services.CustomerService
+@using ResourceMaster.ViewModels
 @using MudBlazor
-@using MudBlazor.Extensions
-@using ResourceMaster.Services.CustomerService;
-@using ResourceMaster.Services.MatchingService;
-@using ResourceMaster.ViewModels;
 @inject MatchingService _matchingService;
 @inject ProjectService _projectService;
 @inject ResourceService _resourceService;
