@@ -57,7 +57,7 @@
         {
             foreach (var skill in skills)
             {
-                availableSkillOptions.Remove(skill.Skill);
+                availableSkillOptions.RemoveAll(x => x.SkillName == skill.Skill.SkillName);
             }
         }
         else
