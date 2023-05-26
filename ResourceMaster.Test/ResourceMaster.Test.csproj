@@ -26,4 +26,9 @@
     <ProjectReference Include="..\ResourceMaster\ResourceMaster.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ServiceTest\" />
+    <Folder Include="UITest\" />
+  </ItemGroup>
+
 </Project>
