@@ -79,6 +79,7 @@ else
         {
             await ProjectService.Update(_project);
             Snackbar.Add("Successfully updated " + _project.ProjectName);
+            NavigationManager.NavigateTo("/projectOverview");
         }
         else
         {
