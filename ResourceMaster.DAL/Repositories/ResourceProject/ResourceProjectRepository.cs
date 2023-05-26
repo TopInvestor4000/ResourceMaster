@@ -16,6 +16,7 @@ public class ResourceProjectRepository : IResourceProjectRepository
     {
         return _context.ProjectResources
             .Where(x => x.ResourceId == id && !(x.BookedFrom <= from && to <= x.BookedTo || x.BookedFrom >= to || x.BookedTo <= from))
+            .AsNoTracking()
             .ToList();
 
 

@@ -75,8 +75,8 @@ namespace ResourceMaster.Services.MatchingService
 
             foreach (var matchingResource in matchingSkills)
             {
-                var skill = resource.Skills.Single(x => x.Skill.SkillName == matchingResource.Skill.SkillName);
-                var requiredSkill = requiredSkills.Single(x => x.Skill.SkillName == matchingResource.Skill.SkillName);
+                var skill = resource.Skills.Where(x => x.Skill.SkillName == matchingResource.Skill.SkillName).First();
+                var requiredSkill = requiredSkills.Where(x => x.Skill.SkillName == matchingResource.Skill.SkillName).First();
 
                 // Calculate the skill match score
                 double score = CalculateSkillMatchScore(requiredSkill, skill);

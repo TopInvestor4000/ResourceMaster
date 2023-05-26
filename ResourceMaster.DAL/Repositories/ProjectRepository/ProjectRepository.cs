@@ -45,6 +45,7 @@ namespace ResourceMaster.DAL.Repositories.ProjectRepository
 
         public async Task UpdateHires(Project updatedItem)
         {
+            _context.ChangeTracker.Clear();
             _context.ProjectResources.RemoveRange(_context.ProjectResources.Where(x => x.ProjectId == updatedItem.Id));
             _context.Projects.Update(updatedItem);
             await _context.SaveChangesAsync();
