@@ -1,6 +1,18 @@
 # Resource Master
 
-## Deployment
+## Installation Steps
+
+```bash
+# build and push the application image
+docker build . --tag <registry>/<image>:<tag>
+docker push <registry>/<image>:<tag>
+
+# setup a values.yaml for your setup
+# deploy using the provided helm chart
+helm install resourcemaster . -f values.yaml --set db.password=<db-password>
+```
+
+## PM4 Deployment Setup
 
 ### Environment
 
@@ -13,31 +25,9 @@ item, choose your namespace and then copy/download in the top right of the
 page.
 
 Handy tools for managing the cluster and fiddling with our resources are:
-- kubectl
-- helm
-- k9s
-
-### Migrate
-
-```bash
-cd ResourceMaster.DAL
-dotnet ef migrations add <NameOfTheMigration>
-```
-
-### Resources
-
-The `deploy` directory is the chart for `stage` and `prod` environment with
-according values files for each.
-
-Helm is only used as a templating engine in this case.
-Until GitOps is put in place deploy manually with either helm or render the
-templates and then deploy with kubectl.
-
-```bash
-# for example render the stage tempates with db.password BLA
-# the namespace should be set everywhere, but still be careful what was set
-helm template -f values-stage.yaml --set db.password=BLA . | k apply -f -
-```
+- `kubectl`
+- `helm`
+- `k9s`
 
 ### Logging
 
@@ -64,3 +54,27 @@ In this example the huge number is a timestamp (`date +%s%N`).
 
 In the `explore` panel running a code query with `{foo="bar2"}` should now return
 this stream.
+
+## Development
+
+### Migrate
+
+```bash
+cd ResourceMaster.DAL
+dotnet ef migrations add <NameOfTheMigration>
+```
+
+### Resources
+
+The `deploy` directory is the chart for `stage` and `prod` environment with
+according values files for each.
+
+Helm is only used as a templating engine in this case.
+Until GitOps is put in place deploy manually with either helm or render the
+templates and then deploy with kubectl.
+
+```bash
+# for example render the stage tempates with db.password BLA
+# the namespace should be set everywhere, but still be careful what was set
+helm template -f values-stage.yaml --set db.password=BLA . | k apply -f -
+```
