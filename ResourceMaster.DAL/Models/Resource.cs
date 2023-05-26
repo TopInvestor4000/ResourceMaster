@@ -7,6 +7,6 @@ public class Resource
     public string LastName { get; set; } = default!;
     public int Age { get; set; } = default!;
     public List<ResourceSkill> Skills { get; set; } = default!;
-    public List<Project> Projects { get; set; } = default!;
+    public List<ProjectResource> ProjectResources { get; set; } = default!;
 
 }

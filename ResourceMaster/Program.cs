@@ -1,10 +1,14 @@
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
 using ResourceMaster.DAL.Data;
 using ResourceMaster.DAL.Repositories.CustomerRepository;
 using ResourceMaster.DAL.Repositories.ProjectRepository;
+using ResourceMaster.DAL.Repositories.ResourceProject;
 using ResourceMaster.DAL.Repositories.ResourceRepository;
 using ResourceMaster.DAL.Repositories.SkillRepository;
+using ResourceMaster.DAL.Seed;
+using ResourceMaster.DAL.TestData;
 using ResourceMaster.Services.CustomerService;
 using ResourceMaster.Services.MatchingService;
 using Serilog;
@@ -21,13 +25,18 @@ builder.Services.AddServerSideBlazor();
 
 builder.Services.AddMudServices();
 
-builder.Services.AddSingleton<DatabaseContext>();
+builder.Services.AddTransient<DatabaseContext>();
+
+TypeAdapterConfig.GlobalSettings.Default.PreserveReference(true);
+TypeAdapterConfig.GlobalSettings.Default
+    .EnumMappingStrategy(EnumMappingStrategy.ByName);
 
 //Add Repos
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<IResourceRepository, ResourceRepository>();
 builder.Services.AddScoped<ISkillRepository, SkillRepository>();
+builder.Services.AddScoped<IResourceProjectRepository, ResourceProjectRepository>();
 
 //Add services
 builder.Services.AddScoped<CustomerService, CustomerService>();
@@ -35,11 +44,18 @@ builder.Services.AddScoped<ProjectService, ProjectService>();
 builder.Services.AddScoped<ResourceService, ResourceService>();
 builder.Services.AddScoped<SkillService, SkillService>();
 builder.Services.AddScoped<MatchingService, MatchingService>();
+builder.Services.AddScoped<AvailabilityService, AvailabilityService>();
 
 // Apply migrations
 DatabaseContext? dbContext = builder?.Services?.BuildServiceProvider()?.GetService<DatabaseContext>();
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 dbContext?.Database.Migrate();
+
+// Add seed data
+var seedData = new SeedData(dbContext);
+SeedCleanup cleanup = new SeedCleanup(dbContext);
+await cleanup.CleanData();
+await seedData.AddSeedDataAsync();
 
 var app = builder?.Build();
 

@@ -1,0 +1,135 @@
+@page "/createResource"
+@page "/createResource/{id:int}"
+@using ResourceMaster.ViewModels
+@using MudBlazor
+@using ResourceMaster.Services.CustomerService
+@inject ISnackbar Snackbar;
+@inject ResourceService _ResourceService;
+@inject SkillService _SkillService;
+
+@if (IsEditPage)
+{
+    <h1>Update applicant</h1>
+}
+
+else
+{
+    <h1>Create new applicant</h1>
+}
+
+<br>
+<MudCard>
+    <MudCardContent>
+        <MudTextField @bind-Value="_resource.FirstName" Label="First Name" />
+        <MudTextField @bind-Value="_resource.LastName" Label="Last Name" />
+        <MudTextField @bind-Value="_resource.Age" Label="Age" />
+    </MudCardContent>
+    <MudCardContent>
+              <MudToolBar>
+                <MudIconButton Icon="@Icons.Material.Outlined.Add" OnClick="AddSkill" />
+            </MudToolBar>
+        <MudTable Items="@_resource.Skills" Hover="true" Breakpoint="Breakpoint.None" Dense="true">
+            <HeaderContent>
+                <MudTh>Skill</MudTh>
+                <MudTh>Skill Level</MudTh>
+                <MudTh>Is Certfied</MudTh>
+                <MudTh></MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Skill">
+                    <MudSelect TValue="SkillViewModel" @bind-Value="context.SkillId" Label="Skill Level">
+                        @foreach (var skillLevel in _allSkills)
+                        {
+                            <MudSelectItem TValue="SkillViewModel" Value="skillLevel.Id" >@skillLevel.SkillName</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudTd>
+                <MudTd DataLabel="Skill Level">
+                    <MudSelect TValue="SkillLevel" @bind-Value="context.SkillLevel" Label="Skill Level">
+                        @foreach (SkillLevel skillLevel in Enum.GetValues(typeof(SkillLevel)))
+                        {
+                            <MudSelectItem TValue="SkillLevel" Value="skillLevel">@skillLevel.ToString()</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudTd>
+                <MudTd DataLabel="Is Certification">
+                    <MudCheckBox @bind-Checked="context.IsCertification" Label="Is Certification" />
+                </MudTd>
+                
+                <MudTd>
+                    <MudIconButton Icon="@Icons.Material.Outlined.Remove" OnClick="(e => (RemoveSkill(context)))" />
+                </MudTd>
+            </RowTemplate>
+        </MudTable>
+    </MudCardContent>
+    <MudGrid>
+        <MudItem xs="12" Class="my-4 text-center">
+            <MudButton Variant="Variant.Filled"
+                       Size="Size.Large"
+                       Color="Color.Primary"
+                       OnClick="@HandleSubmit">
+                Add applicant
+            </MudButton>
+        </MudItem>
+    </MudGrid>
+</MudCard>
+
+
+@code{
+    [Parameter]
+    public int Id { get; set; }
+    public bool IsEditPage { get => Id > 0; }
+
+    private ResourceViewModel _resource = new();
+    private List<Countries> _countries = Enum.GetValues<Countries>().ToList();
+
+    private List<SkillViewModel> _allSkills = new();
+    private List<string> skillOptions = new();
+
+    private async Task HandleSubmit()
+    {
+        if (IsEditPage)
+        {
+            await _ResourceService.UpdateAsync(_resource);
+            Snackbar.Add("Successfully added " + _resource.FirstName + " " + _resource.LastName);
+        }
+        else
+        {
+            await _ResourceService.AddAsync(_resource);
+            Snackbar.Add("Successfully updated " + _resource.FirstName + " " + _resource.LastName);
+        } 
+    }
+
+    private async Task<IEnumerable<Countries>> FilterCountries(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return _countries;
+        }
+
+        return await Task.FromResult(_countries.FilterByDisplayName(value));
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _allSkills = (await _SkillService.GetAllAsync()).ToList();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (IsEditPage)
+        {
+            _resource = await _ResourceService.GetSingle(Id);
+        }
+    }
+
+    public async Task AddSkill()
+    {
+        _resource.Skills.Add(new SkillInformationViewModel());
+    }
+
+    public async Task RemoveSkill(SkillInformationViewModel skill)
+    {
+        _resource.Skills.Remove(skill);
+    }
+}

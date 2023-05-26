@@ -1,0 +1,129 @@
+@page "/customerOverview"
+@using ResourceMaster.Services.CustomerService
+@using ResourceMaster.ViewModels
+@using MudBlazor
+@inject CustomerService CustomerService;
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar;
+
+<MudText Typo="Typo.h6">Customer Overview</MudText>
+<MudDataGrid @ref="dataGrid" T="CustomerViewModel" Items="@customers" Filterable="true" QuickFilter="@_quickFilter" ReadOnly="false" EditMode="DataGridEditMode.Form" EditTrigger="DataGridEditTrigger.Manual" CommittedItemChanges="@CommittedItemChanges">
+    <ToolBarContent>
+        <MudButton OnClick="@AddNewCustomer" Variant="Variant.Filled" Color="Color.Primary">Add Item</MudButton>
+        <MudSpacer />
+        <MudTextField @bind-Value="filter" Placeholder="Filter" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <Columns>
+        <PropertyColumn Property="x => x.Id" Title="Id" Hidden="true" IsEditable=false/>
+        <PropertyColumn Property="x => x.CompanyName" Title="Company name" />
+        <PropertyColumn Property="x => x.FirstName" Title="First name" />
+        <PropertyColumn Property="x => x.LastName" Title="Last name" />
+        <PropertyColumn Property="x => x.Street" Title="Street" />
+        <PropertyColumn Property="x => x.ZipCode" Title="Zip code" />
+        <PropertyColumn Property="x => x.Location" Title="Location" />
+        <PropertyColumn Property="x => x.Country" Title="Country" >
+            <EditTemplate>
+                <MudSelect @bind-Value="context.Item.Country">
+                    @foreach (var country in Enum.GetValues<Countries>().GetCountryList())
+                    {
+                        <MudSelectItem Value="country">@country</MudSelectItem>
+                    }
+                </MudSelect>
+            </EditTemplate>
+          </PropertyColumn>
+        <TemplateColumn StickyRight="true" CellStyle="width:10px" Filterable="false" Sortable="false">
+            <CellTemplate>
+                <MudIconButton Icon="@Icons.Material.Outlined.Edit" Size="@Size.Small" OnClick="context.Actions.StartEditingItem" />
+            </CellTemplate>
+        </TemplateColumn>
+        <TemplateColumn StickyRight="true" CellStyle="width:10px" Filterable="false" Sortable="false">
+            <CellTemplate>
+                <MudIconButton Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" OnClick="@(e => (DeleteCustomer(context.Item)))" />
+            </CellTemplate>
+        </TemplateColumn>
+        <TemplateColumn StickyRight="true" CellStyle="width:10px" Filterable="false" Sortable="false">
+            <CellTemplate>
+                <MudIconButton Icon="@Icons.Material.Outlined.CalendarMonth" Size="@Size.Small" OnClick="@(e => (NavigateToCustomerCalendar(context.Item.Id)))" />
+            </CellTemplate>
+        </TemplateColumn>
+    </Columns>
+    <PagerContent>
+        <MudDataGridPager T="CustomerViewModel" />
+    </PagerContent>
+</MudDataGrid>
+
+@code {
+    private string filter = "";
+    private MudDataGrid<CustomerViewModel> dataGrid;
+
+    public List<CustomerViewModel> customers = new List<CustomerViewModel>();
+
+    private Func<CustomerViewModel, bool> _quickFilter => x =>
+    {
+        if (string.IsNullOrWhiteSpace(filter))
+            return true;
+
+        if (x.CompanyName.Contains(filter, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (x.FirstName.Contains(filter, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (x.LastName.Contains(filter, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (x.Street.Contains(filter, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (x.ZipCode.Contains(filter, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (x.Location.Contains(filter, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        if (x.Country.Contains(filter, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    };
+
+    async Task CommittedItemChanges(CustomerViewModel item)
+    {
+        //TODO Save new item to db
+        if(item.Id <= 0)
+        {
+            // add to db
+            customers.Add(item);
+            await CustomerService.AddAsync(item);
+            Snackbar.Add("Successfully added " + item.CompanyName);
+        }
+        else
+        {
+            await CustomerService.UpdateCustomer(item);
+            Snackbar.Add("Successfully updated " + item.CompanyName);
+        }
+    }
+
+    async Task DeleteCustomer(CustomerViewModel item)
+    {
+        await CustomerService.DeleteCustomer(item);
+        customers.Remove(item);
+        Snackbar.Add("Successfully updated " + item.CompanyName);
+    }
+
+    void AddNewCustomer()
+    {
+        dataGrid.SetEditingItemAsync(new CustomerViewModel());
+        //NavigationManager.NavigateTo("/createCustomer");
+    }
+
+    async Task NavigateToCustomerCalendar(int id)
+    {
+        NavigationManager.NavigateTo($"/customerCalendar/{id}");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        customers = (await CustomerService.GetAllAsync()).ToList();
+    }
+}

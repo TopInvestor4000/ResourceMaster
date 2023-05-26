@@ -1,21 +1,31 @@
 @page "/createProject"
+@page "/createProject/{id:int}"
 @using ResourceMaster.ViewModels
 @using MudBlazor
 @using ResourceMaster.Services.CustomerService
 @inject ISnackbar Snackbar
-@inject ProjectService _ProjectService
-@inject CustomerService _CustomerService
+@inject ProjectService ProjectService
+@inject CustomerService CustomerService
+@inject SkillService SkillService
+@inject NavigationManager NavigationManager
 
-<h1>Create new project</h1>
+@if (IsEditPage)
+{
+    <h1>Update project</h1>
+}
+
+else
+{
+    <h1>Create new project</h1>
+}
+
+
 <br>
 <h3>Project</h3>
 <MudForm onsubmit="@HandleSubmit" Model="_project">
     <MudGrid>
         <MudItem xs="12" sm="6" md="4">
             <MudTextField @bind-Value="_project.ProjectName" Label="Project name" id="projectName" Variant="Variant.Outlined"/>
-        </MudItem>
-        <MudItem xs="12" sm="6" md="4">
-            <MudTextField @bind-Value="_project.workForce" Label="Workforce" id="workforce" Variant="Variant.Outlined" Min="0" Max="999"/>
         </MudItem>
         <br/>
         <MudItem xs="12" sm="6" md="4">
@@ -32,7 +42,7 @@
                 }
             </MudSelect>
         </MudItem>
-        <SkillSelection skillOptions="@skillOptions" OnItemSelected="skills => _project.Skills = skills"/>
+        <SkillSelection skills="@_project.Skills" skillOptions="@_skillOptions" OnItemSelected="skills => _project.Skills = skills"/>
     </MudGrid>
     <MudGrid>
         <MudItem xs="12" Class="my-4 text-center">
@@ -47,21 +57,43 @@
 </MudForm>
 
 @code{
+    [Parameter]
+    public int Id { get; set; }
+
+    private bool IsEditPage => Id > 0;
+
     private ProjectViewModel _project = new();
     private List<CustomerViewModel> _customerList = new();
-    private List<string> skillOptions = new();
+    private List<SkillViewModel> _skillOptions = new();
 
     protected override async Task OnInitializedAsync()
     {
-        skillOptions = new List<string> { "Java", "C#", "SQL", "JavaScript", "Python", "Ruby", "Swift", "PHP", "Kotlin", "TypeScript" }.OrderBy(skill => skill).ToList();
-        _customerList = (await _CustomerService.GetAllAsync()).ToList();
+        _skillOptions = (await SkillService.GetAllAsync()).ToList();
+        _customerList = (await CustomerService.GetAllAsync()).ToList();
     }
 
 
     private async Task HandleSubmit()
     {
-        Snackbar.Add("Successfully added " + _project.ProjectName);
-        await _ProjectService.AddAsync(_project);
+        if (IsEditPage)
+        {
+            await ProjectService.Update(_project);
+            Snackbar.Add("Successfully updated " + _project.ProjectName);
+        }
+        else
+        {
+            await ProjectService.Update(_project);
+            Snackbar.Add("Successfully added " + _project.ProjectName);
+            NavigationManager.NavigateTo("/projectOverview");
+        } 
+    }
+    
+    protected override async Task OnParametersSetAsync()
+    {
+        if (IsEditPage)
+        {
+            _project = await ProjectService.GetSingle(Id);
+        }
     }
 
 }

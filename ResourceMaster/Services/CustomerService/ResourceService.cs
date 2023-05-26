@@ -1,4 +1,5 @@
-﻿using Mapster;
+﻿using Bogus;
+using Mapster;
 using ResourceMaster.DAL.Models;
 using ResourceMaster.DAL.Repositories.ResourceRepository;
 using ResourceMaster.ViewModels;
@@ -16,7 +17,7 @@ namespace ResourceMaster.Services.CustomerService
             _logger = logger;
         }
 
-        public async Task<IEnumerable<ResourceViewModel>> GetAllAsync( )
+        public async Task<IEnumerable<ResourceViewModel>> GetAllAsync()
         {
             _logger.LogInformation("GetAllAsync Method called");
             var customerList =  await _repository.GetAllAsync();
@@ -24,10 +25,42 @@ namespace ResourceMaster.Services.CustomerService
             return resultList;
         }
 
+        public async Task<ResourceViewModel> GetSingle(int id)
+        {
+            _logger.LogInformation("GetAllAsync Method called");
+            var resource = await _repository.GetSingle(id);
+            var result = resource.Adapt<ResourceViewModel>();
+            return result;
+        }
+
         public async Task AddAsync(ResourceViewModel resource)
         {
             var newEntry = resource.Adapt<Resource>();
             await _repository.AddAsync(newEntry);
+        }
+
+        public async Task<IEnumerable<ResourceViewModel>> GetAllWithInclude()
+        {
+            var customerList = await _repository.GetAllWithIncludeAsync();
+            try
+            {
+                var resultList = customerList.Adapt<List<ResourceViewModel>>();
+                return resultList;
+            }catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public async Task UpdateAsync(ResourceViewModel resource)
+        {
+            var newEntry = resource.Adapt<Resource>();
+            await _repository.UpdateAsync(newEntry);
+        }
+
+        public async Task Delete(int id)
+        {
+            await _repository.Delete(id);
         }
     }
 }

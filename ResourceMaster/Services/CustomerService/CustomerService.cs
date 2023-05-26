@@ -18,16 +18,33 @@ namespace ResourceMaster.Services.CustomerService
 
         public async Task<IEnumerable<CustomerViewModel>> GetAllAsync()
         {
-
             _logger.LogInformation("GetAllAsync Method called");
             var customerList =  await _repository.GetAllAsync();
-            return customerList.Adapt<List<CustomerViewModel>>();
+            return customerList.Adapt<IEnumerable<CustomerViewModel>>();
         }
 
         public async Task AddAsync(CustomerViewModel customer)
         {
             var newEntry = customer.Adapt<Customer>();
             await _repository.AddAsync(newEntry);
+        }
+
+        public async Task UpdateCustomer(CustomerViewModel customer)
+        {
+            var newEntry = customer.Adapt<Customer>();
+            await _repository.Update(newEntry);
+        }
+
+        public async Task DeleteCustomer(CustomerViewModel customer)
+        {
+            var itemToDelte = customer.Adapt<Customer>();
+            await _repository.Delete(itemToDelte);
+        }
+
+       public async Task<CustomerViewModel> GetSingle(int id)
+        {
+            Customer customer = await _repository.GetSingle(id);
+            return customer.Adapt<CustomerViewModel>();
         }
     }
 }

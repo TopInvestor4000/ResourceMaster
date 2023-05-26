@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ResourceMaster.DAL.Models
+﻿namespace ResourceMaster.DAL.Models
 {
-    public class ResourceProject
+    public class ProjectResource
     {
-        public int ResourceProjectId { get; set; }
+        public int Id { get; set; }
         public int ResourceId { get; set; }
         public Resource Resource { get; set; }
 

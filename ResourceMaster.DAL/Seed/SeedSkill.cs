@@ -1,85 +1,38 @@
-namespace ResourceMaster.DAL.TestData;
-using Models;
-using Bogus;
+using ResourceMaster.DAL.Models;
 
-public class TestData
+namespace ResourceMaster.DAL.Seed;
+
+public class SeedSkill
 {
-    public List<Customer> GenerateCustomers(int numCustomers)
+    public List<Skill> SeedSkills()
     {
-        var faker = new Faker<Customer>()
-            .RuleFor(t => t.Id, f => f.UniqueIndex)
-            .RuleFor(t => t.CompanyName, f => f.Company.CompanyName())
-            .RuleFor(t => t.FirstName, f => f.Name.FirstName())
-            .RuleFor(t => t.LastName, f => f.Name.LastName())
-            .RuleFor(t => t.Street, f => f.Address.StreetName() + " " + f.Address.StreetAddress())
-            .RuleFor(t => t.Location, f => f.Address.City())
-            .RuleFor(t => t.Country, f => f.Address.Country());
+        var skills = new List<Skill>();
+        foreach (var s in _skillNames)
+        {
+            var skill = new Skill();
+            skill.SkillName = s;
+            skills.Add(skill);
+        }
 
-        return faker.Generate(numCustomers);
+        foreach (var c in _certifications)
+        {
+            var skill = new Skill();
+            skill.SkillName = c;
+            skills.Add(skill);
+        }
+        return skills;
     }
 
-    public List<Project> GenerateProjects(int numTests)
-    {
-        var faker = new Faker<Project>()
-            .RuleFor(t => t.Id, f => f.UniqueIndex);
-
-        return faker.Generate(numTests);
-    }
-    
-    public List<Resource> GenerateResources(int numTests)
-    {
-        var faker = new Faker<Resource>()
-            .RuleFor(t => t.Id, f => f.UniqueIndex)
-            .RuleFor(t => t.FirstName, f => f.Name.FirstName())
-            .RuleFor(t => t.LastName, f => f.Name.LastName())
-            .RuleFor(t => t.Skills, new Func<object, object>(f =>
-            {
-                Random random = new Random();
-                double minNumOfSkillsRatio = 0.4;
-                var numToSelect = random.Next((int)(skillList.Count * minNumOfSkillsRatio), skillList.Count - 1);
-                List<string> selectedElements = new List<string>();
-                
-                for (int i = 0; i < numToSelect; i++)
-                {
-                    var randomIndex = random.Next(0, numToSelect);
-                    var selectedElement = skillList[randomIndex];
-                    selectedElements.Add(selectedElement);
-                }
-                return selectedElements;
-            }));
-        
-        return faker.Generate(numTests);
-    }
-
-    public DateTime startDate()
-    {
-        var startDate = new DateTime(2023, 1, 1);
-        var endDate = new DateTime(2026, 12, 31);
-
-        var faker = new Faker();
-        var startDateWithinPeriod = faker.Date.Between(startDate, endDate);
-        return startDateWithinPeriod;
-    }
-    
-    public DateTime endDate(DateTime startDate)
-    {
-        var endDate = new DateTime(2026, 12, 31);
-
-        var faker = new Faker();
-        var endDateWithinPeriod = faker.Date.Between(startDate, endDate);
-        return endDateWithinPeriod;
-    }
-    
-    public List<string> skillList = new() { 
-        "ActionScript" , "Ada" , "Assembly" , "Awk" , "Bash" , "C" , "C#" , "C,," , "Clojure" , "Cobol" ,
+    private readonly List<string> _skillNames = new() { 
+        "ActionScript" , "Ada" , "Assembly" , "Awk" , "Bash" , "C" , "C#" , "C++" , "Clojure" , "Cobol" ,
         "CoffeeScript" , "Dart" , "Dart" , "Delphi" , "Elixir" , "Erlang" , "F#" , "Forth" , "Fortran" , "Go" ,
         "Groovy" , "Haskell" , "IDL" , "J" , "Java" , "JavaScript" , "Julia" , "Kotlin" , "Kotlin" , "LabVIEW" ,
         "Lisp" , "Lua" , "MATLAB" , "Objective-C" , "Objective-J" , "Oz" , "Pascal" , "Perl" , "PHP" , "PostScript" ,
         "Processing" , "Prolog" , "Python" , "R" , "Ruby" , "RubyMotion" , "Rust" , "Scala" , "Scheme" , "Scratch" ,
         "Sed" , "Shell" , "Smalltalk" , "SQL" , "Swift" , "Tcl" , "TypeScript" , "VB.NET" , "Verilog" , "VHDL" 
     };
-
-    public List<string> certificationList = new()
+    
+    private readonly List<string> _certifications = new()
     {
         "CompTIA A," , "CompTIA Network," , "CompTIA Security," , "CompTIA Cloud," , "CompTIA Linux," ,
         "CompTIA Server," , "CompTIA Project," , "CompTIA Cybersecurity Analyst," , "CompTIA PenTest," ,
@@ -120,26 +73,18 @@ public class TestData
         "IBM Certified System Administrator - DB2"
     };
 
-    public List<string> necessities = new()
+    public bool checkIsCertification(string certificationName)
+    {
+        return _certifications.Contains(certificationName);
+    }
+
+    public readonly List<string> _necessities = new()
     {
         "Not applicable", "Optional", "Mandatory"
     };
     
-    public List<string> skillLevels = new()
+    public readonly List<string> _skillLevels = new()
     {
         "Beginner", "Professional", "Senior"
-    };
-
-    public List<string> projectNames = new()
-    {
-        "Project Phoenix" , "CyberShield" , "DataQuest" , "TechVision" , "eMarketX" , "WebWorx" , "CodeCrush" ,
-        "NetWorks" , "CloudNine" , "Streamline" , "CodeXpress" , "BlueWave" , "SwiftLink" , "Visionary" , "NextGen" ,
-        "Velocity" , "CodeHive" , "TechSavvy" , "Prodigy" , "DigitalDreams" , "AppWorks" , "DataScape" , "CloudGenius" ,
-        "WebWorks" , "CodeWizard" , "NetPro" , "TechFront" , "MindMerge" , "eXcelerate" , "AgileTech" , "CodeBridge" ,
-        "DataMaster" , "CloudWorks" , "WebSphere" , "TechEase" , "FastTrack" , "CodeVerse" , "NetFusion" ,
-        "BrightVision" , "DataSphere" , "CloudStorm" , "WebMatrix" , "TechWave" , "MindWorks" , "AppScape" ,
-        "DataQuest," , "CloudGen" , "WebXcel" , "CodeForce" , "NetScape" , "DataCloud" , "CloudScape" , "WebSync" ,
-        "TechScape" , "CodeSprint" , "NetRush" , "DataWorks" , "CloudScope" , "WebGenius" , "TechFusion" , "AppNexus" ,
-        "CodeGenius" , "DataStream" , "CloudSphere" , "WebSurge" , "TechSonic" , "NetSurge" , "CodeNation"
     };
 }

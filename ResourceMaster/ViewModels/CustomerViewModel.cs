@@ -9,5 +9,6 @@ public class CustomerViewModel
     public string Street { get; set; } = default!;
     public string ZipCode { get; set; } = default!;
     public string Location { get; set; } = default!;
-    public Countries Country { get; set; }
+    public string Country { get; set; } = default!;
+    public List<ProjectViewModel> Project { get; set; } = new();
 }

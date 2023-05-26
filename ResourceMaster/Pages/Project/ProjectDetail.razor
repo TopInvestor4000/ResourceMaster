@@ -1,0 +1,99 @@
+﻿@page "/project-resources/{projectId:int}"
+@using ResourceMaster.Services.MatchingService
+@using ResourceMaster.Services.CustomerService
+@using ResourceMaster.ViewModels
+@using MudBlazor
+@inject MatchingService _matchingService;
+@inject ProjectService _projectService;
+@inject ResourceService _resourceService;
+
+<h3>Project Resources</h3>
+
+<h4>Project ID: @ProjectId</h4>
+
+
+<MudDataGrid T="MatchingResourceViewModel" Items="AvailableResources" HideHeader="true">
+    <Columns>
+        <PropertyColumn Property="x => x.BestSkill.SkillName" Title="Best Skill" />
+        <PropertyColumn Property="x => x.BestScore" Title="Best Score" />
+        <PropertyColumn Property="x => x.BestOverallScore" Title="Best Overall Score" />
+        <PropertyColumn Property="x => x.Resource.FirstName+x.Resource.LastName" Title="Resource" />
+        <TemplateColumn CellClass="d-flex justify-end">
+            <CellTemplate>
+                <MudStack Row>
+                    <MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Primary" OnClick="@(e => (AddToSelectList(context.Item)))">@(SelectedResources.Select(x => x.Id).Contains(context.Item.Resource.Id) ? "Fire" : "Hire")</MudButton>
+                </MudStack>
+            </CellTemplate>
+        </TemplateColumn>
+    </Columns>
+</MudDataGrid>
+
+<MudPaper>
+<h4>Selected Resources:</h4>
+<MudCard>
+    @foreach (var resource in SelectedResources)
+    {
+        <MudCard>
+            <MudCardContent>
+                <div>@resource.FirstName&nbsp;@resource.LastName</div>
+            </MudCardContent>
+        </MudCard>
+    }
+</MudCard>
+</MudPaper>
+<button class="btn btn-primary" @onclick="SaveResources">Save</button>
+
+@code {
+    [Parameter]
+    public int ProjectId { get; set; }
+
+    private ProjectViewModel Project{ get; set; }
+
+    private List<MatchingResourceViewModel> AvailableResources { get; set; } = new List<MatchingResourceViewModel>();
+
+    private List<ResourceViewModel> SelectedResources { get; set; } = new List<ResourceViewModel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Project = await _projectService.GetSingle(ProjectId);
+        AvailableResources = await _matchingService.MatchResourcesToProjectAsync(Project);
+        if(Project.ProjectResources.Count > 0)
+        {
+            SelectedResources.AddRange(Project.ProjectResources.Select(x => x.Resource));
+        }
+    }
+
+    private void SelectedItemsChanged(HashSet<MatchingResourceViewModel> items)
+    {
+        SelectedResources = items.Select(x => x.Resource).ToList();
+    }
+
+    private async Task AddToSelectList(MatchingResourceViewModel item)
+    {
+        if (SelectedResources.Select(x => x.Id).Contains(item.Resource.Id))
+        {
+            SelectedResources.Remove(SelectedResources.SingleOrDefault(x => x.Id == item.Resource.Id));
+        }
+        else
+        {
+            SelectedResources.Add(item.Resource);
+        }
+    }
+
+    private async Task SaveResources()
+    {
+        List<ProjectResourceViewModel> newItems = new();
+        foreach (var selectResource in SelectedResources)
+        {
+            newItems.Add(new ProjectResourceViewModel()
+                {
+                    ResourceId = selectResource.Id,
+                    ProjectId = Project.Id,
+                    BookedFrom = Project.ProjectStart.GetValueOrDefault(),
+                    BookedTo = Project.ProjectEnd.GetValueOrDefault(),
+                });
+        }
+        Project.ProjectResources = newItems;
+        await _projectService.Update(Project);
+    }
+}

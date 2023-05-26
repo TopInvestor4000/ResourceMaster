@@ -1,0 +1,86 @@
+﻿@page "/skillOverview"
+@using ResourceMaster.Services.CustomerService;
+@using ResourceMaster.ViewModels
+@using MudBlazor
+@inject SkillService SkillService
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+
+<MudText Typo="Typo.h6">Skill Overview</MudText>
+<MudDataGrid @ref="dataGrid" T="SkillViewModel" Items="@skills" Filterable="true" QuickFilter="@_quickFilter" ReadOnly="false" EditMode="DataGridEditMode.Form" EditTrigger="DataGridEditTrigger.Manual" CommittedItemChanges="@CommittedItemChanges">
+    <ToolBarContent>
+        <MudButton OnClick="@AddNewSkill" Variant="Variant.Filled" Color="Color.Primary">Add Item</MudButton>
+        <MudSpacer />
+        <MudTextField @bind-Value="filter" Placeholder="Filter" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <Columns>
+        <PropertyColumn Property="x => x.Id" Title="Id" Hidden="true" IsEditable=false/>
+        <PropertyColumn Property="x => x.SkillName" Title="Skill name" />
+        <TemplateColumn StickyRight="true" CellStyle="width:10px" Filterable="false" Sortable="false">
+            <CellTemplate>
+                <MudIconButton Icon="@Icons.Material.Outlined.Edit" Size="@Size.Small" OnClick="context.Actions.StartEditingItem" />
+            </CellTemplate>
+        </TemplateColumn>
+        <TemplateColumn StickyRight="true" CellStyle="width:10px" Filterable="false" Sortable="false">
+            <CellTemplate>
+                <MudIconButton Icon="@Icons.Material.Outlined.Delete" Size="@Size.Small" OnClick="@(e => DeleteSkill(context.Item))" />
+            </CellTemplate>
+        </TemplateColumn>
+    </Columns>
+    <PagerContent>
+        <MudDataGridPager T="SkillViewModel" />
+    </PagerContent>
+</MudDataGrid>
+
+@code {
+    private string filter = "";
+    private MudDataGrid<SkillViewModel> dataGrid;
+
+    public List<SkillViewModel> skills = new List<SkillViewModel>();
+
+    private Func<SkillViewModel, bool> _quickFilter => x =>
+    {
+        if (string.IsNullOrWhiteSpace(filter))
+            return true;
+
+        if (x.SkillName.Contains(filter, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    };
+
+    async Task CommittedItemChanges(SkillViewModel item)
+    {
+        //TODO Save new item to db
+        if (item.Id <= 0)
+        {
+            // add to db
+            skills.Add(item);
+            await SkillService.AddAsync(item);
+            Snackbar.Add("Successfully added " + item.SkillName);
+        }
+        else
+        {
+            await SkillService.UpdateSkill(item);
+            Snackbar.Add("Successfully updated " + item.SkillName);
+        }
+    }
+
+    async Task DeleteSkill(SkillViewModel item)
+    {
+        await SkillService.DeleteSkill(item.Id);
+        skills.Remove(item);
+        Snackbar.Add("Successfully updated " + item.SkillName);
+    }
+
+    void AddNewSkill()
+    {
+        dataGrid.SetEditingItemAsync(new SkillViewModel());
+        //NavigationManager.NavigateTo("/createSkill");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        skills = (await SkillService.GetAllAsync()).ToList();
+    }
+}

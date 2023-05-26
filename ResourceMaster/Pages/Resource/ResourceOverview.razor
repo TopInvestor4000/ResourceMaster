@@ -1,0 +1,109 @@
+ @page "/resourceOverview"
+@using ResourceMaster.Services.CustomerService
+@using ResourceMaster.ViewModels
+@using MudBlazor
+@inject ResourceService ResourceService;
+@inject NavigationManager NavigationManager;
+@inject ISnackbar Snackbar;
+
+<MudText Typo="Typo.h6">Resource Overview</MudText>
+<MudDataGrid T="ResourceViewModel" Items="@resources" SortMode="SortMode.Multiple" QuickFilter="@_quickFilter" Virtualize="true" FixedHeader="true" Height="800px">
+    <ToolBarContent>
+        <MudButton OnClick="@GoToNewResource" Variant="Variant.Filled" Color="Color.Primary">Add Item</MudButton>
+        <MudSpacer />
+        <MudTextField @bind-Value="filter" Placeholder="Filter" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <Columns>
+        <HierarchyColumn T="ResourceViewModel" />
+        <PropertyColumn Property="x => x.Id" Title="ID" />
+        <PropertyColumn Property="x => x.FirstName" Title="First Name" />
+        <PropertyColumn Property="x => x.LastName" Title="Last Name" />
+        <PropertyColumn Property="x => x.Age" Title="Age" />
+        <TemplateColumn StickyRight="true" CellStyle="width:10px" Filterable="false" Sortable="false">
+            <CellTemplate>
+                <MudIconButton Icon="@Icons.Material.Outlined.Edit" Size="@Size.Small" OnClick="(e => (GoToEdit(context.Item.Id)))" />
+            </CellTemplate>
+        </TemplateColumn>
+        <TemplateColumn StickyRight="true" CellStyle="width:10px" Filterable="false" Sortable="false">
+            <CellTemplate>
+                <MudIconButton Icon="@Icons.Material.Outlined.Delete" OnClick="(e => (DeleteCustomer(context.Item)))" Size="@Size.Small" />
+            </CellTemplate>
+        </TemplateColumn>
+        <TemplateColumn StickyRight="true" CellStyle="width:10px" Filterable="false" Sortable="false">
+            <CellTemplate>
+                <MudIconButton Icon="@Icons.Material.Outlined.CalendarMonth" Size="@Size.Small" OnClick="(e => (GoToDetail(context.Item.Id)))" />
+            </CellTemplate>
+        </TemplateColumn>
+    </Columns>
+    <ChildRowContent>
+        <MudCard>
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">Skill List</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudList Dense="true">
+                    @foreach (var skill in context.Item.Skills)
+                    {
+                        <MudListItem Text=@skill.Skill.SkillName />
+                    }
+                </MudList>
+            </MudCardContent>
+        </MudCard>
+    </ChildRowContent>
+</MudDataGrid>
+
+@code {
+    private string filter = "";
+    private List<ResourceViewModel> resources = new List<ResourceViewModel>();
+
+    private Func<ResourceViewModel, bool> _quickFilter => x =>
+    {
+        if (string.IsNullOrWhiteSpace(filter))
+            return true;
+
+        var filterLower = filter.ToLowerInvariant();
+
+        if (x.Id.ToString().Contains(filterLower))
+            return true;
+
+        if (x.FirstName != null && x.FirstName.ToLowerInvariant().Contains(filterLower))
+            return true;
+
+        if (x.LastName != null && x.LastName.ToLowerInvariant().Contains(filterLower))
+            return true;
+
+        if (x.Age.ToString().Contains(filterLower))
+            return true;
+
+        return false;
+    };
+
+    void GoToNewResource()
+    {
+        NavigationManager.NavigateTo("/createResource");
+    }
+
+    async Task GoToEdit(int id)
+    {
+        NavigationManager.NavigateTo($"/createResource/{id}");
+    }
+
+    async Task GoToDetail(int id)
+    {
+        NavigationManager.NavigateTo($"/resourceDetail/{id}");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        resources = (await ResourceService.GetAllAsync()).ToList();
+    }
+
+    async Task DeleteCustomer(ResourceViewModel item)
+    {
+        await ResourceService.Delete(item.Id);
+        resources.Remove(item);
+        Snackbar.Add("Successfully deleted " + item.FirstName);
+    }
+}
