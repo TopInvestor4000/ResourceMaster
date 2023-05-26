@@ -17,11 +17,12 @@ namespace ResourceMaster.DAL.Repositories.ProjectRepository
         {
             _context.Projects.Remove(itemToDelte);
             await _context.SaveChangesAsync();
+            _context.ChangeTracker.Clear();
         }
 
         public async Task<IEnumerable<Project>> GetAllAsync()
         {
-            return await _context.Projects.ToListAsync();
+            return await _context.Projects.AsNoTracking().ToListAsync();
         }
 
         public async Task<Project> GetSingle(int id)
