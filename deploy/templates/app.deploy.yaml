@@ -23,11 +23,11 @@ spec:
             containerPort: {{ .Values.app.port }}
         resources:
           limits:
-            memory: 256Mi
-            cpu: 0.2
+            memory: 1024Mi
+            cpu: 0.4
           requests:
-            memory: 128Mi
-            cpu: 0.1
+            memory: 1000Mi
+            cpu: 0.3
         env:
         - name: POSTGRES_USER
           valueFrom:

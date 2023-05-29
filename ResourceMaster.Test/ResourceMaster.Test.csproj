@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ServiceTest\" />
     <Folder Include="UITest\" />
   </ItemGroup>
 
