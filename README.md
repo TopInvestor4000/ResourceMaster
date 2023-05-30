@@ -78,3 +78,10 @@ templates and then deploy with kubectl.
 # the namespace should be set everywhere, but still be careful what was set
 helm template -f values-stage.yaml --set db.password=BLA . | k apply -f -
 ```
+
+### Quality Assurance
+We check our code quality through the quality checks of sonarcloud:
+https://sonarcloud.io/project/overview?id=TopInvestor4000_ResourceMaster
+
+We also have the opportunity to check security issues through snyk:
+https://app.snyk.io/org/topinvestor4000
