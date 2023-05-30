@@ -43,10 +43,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          dotnet tool install --global dotnet-sonarscanner --version 5.13.0
-          dotnet tool install dotnet-reportgenerator-globaltool -g --version 5.1.21
-          dotnet sonarscanner begin /k:"TopInvestor4000_ResourceMaster" /o:"resourcemaster" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverageReportPaths=".\sonarqubecoverage\SonarQube.xml"
-          dotnet build
-          dotnet test --no-build --collect:"XPlat Code Coverage"
-          reportgenerator "-reports:*\TestResults\*\coverage.cobertura.xml" "-targetdir:sonarqubecoverage" "-reporttypes:SonarQube"
-          dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"TopInvestor4000_ResourceMaster" /o:"resourcemaster" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
+          dotnet tool install --global dotnet-coverage
+          dotnet build --no-incremental
+          dotnet-coverage collect "dotnet test" -f xml -o "coverage.xml"
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
