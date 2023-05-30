@@ -39,7 +39,7 @@ namespace ResourceMaster.Services.CustomerService
             await _repository.AddAsync(newEntry);
         }
 
-        public async Task<IEnumerable<ResourceViewModel>> GetAllWithInclude()
+        public virtual async Task<IEnumerable<ResourceViewModel>> GetAllWithInclude()
         {
             var customerList = await _repository.GetAllWithIncludeAsync();
             try

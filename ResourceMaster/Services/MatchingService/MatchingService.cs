@@ -8,11 +8,14 @@ namespace ResourceMaster.Services.MatchingService
         private readonly AvailabilityService _availabilityService;
 
         private readonly ResourceService _resourceService;
+        
+        private readonly ILogger<MatchingService> _logger;
 
-        public MatchingService(AvailabilityService availabilityService, ResourceService resourceService)
+        public MatchingService(AvailabilityService availabilityService, ResourceService resourceService, ILogger<MatchingService> logger)
         {
             _availabilityService = availabilityService;
             _resourceService = resourceService;
+            _logger = logger;
         }
 
         public async Task<List<MatchingResourceViewModel>> MatchResourcesToProjectAsync(ProjectViewModel project)
@@ -27,6 +30,7 @@ namespace ResourceMaster.Services.MatchingService
 
             if (requiredSkills.Count == 0)
             {
+                _logger.LogInformation("no required skills found");
                 return new List<MatchingResourceViewModel>();
             }
 
@@ -75,8 +79,8 @@ namespace ResourceMaster.Services.MatchingService
 
             foreach (var matchingResource in matchingSkills)
             {
-                var skill = resource.Skills.Where(x => x.Skill.SkillName == matchingResource.Skill.SkillName).First();
-                var requiredSkill = requiredSkills.Where(x => x.Skill.SkillName == matchingResource.Skill.SkillName).First();
+                var skill = resource.Skills.First(x => x.Skill.SkillName == matchingResource.Skill.SkillName);
+                var requiredSkill = requiredSkills.First(x => x.Skill.SkillName == matchingResource.Skill.SkillName);
 
                 // Calculate the skill match score
                 double score = CalculateSkillMatchScore(requiredSkill, skill);
@@ -114,21 +118,32 @@ namespace ResourceMaster.Services.MatchingService
             { 
                 maxTimeSpanAvailable += getAvailableTimeSpan(project.ProjectStart, availability.BookedFrom, project.ProjectEnd, availability.BookedTo);
             }
-            return maxTimeSpanAvailable == 0 && availabilities.Count() == 0 ? (project.ProjectEnd.GetValueOrDefault(DateTime.MaxValue) - project.ProjectStart.GetValueOrDefault(DateTime.MinValue)).Days : maxTimeSpanAvailable;
+            return maxTimeSpanAvailable == 0 && !availabilities.Any() ? (project.ProjectEnd.GetValueOrDefault(DateTime.MaxValue) - project.ProjectStart.GetValueOrDefault(DateTime.MinValue)).Days : maxTimeSpanAvailable;
         }
 
         private int getAvailableTimeSpan(DateTime? projectStart, DateTime bookedFrom, DateTime? projectEnd, DateTime bookedTo)
         {
-            
-            DateTime availabilitySpanStart = (projectStart.GetValueOrDefault(DateTime.MaxValue) - bookedFrom).Days > 0
-                ? projectStart.GetValueOrDefault()
-                : bookedFrom;
-            
-            DateTime availabilitySpanEnd = (projectEnd.GetValueOrDefault(DateTime.MaxValue) - bookedTo).Days > 0
-                ? bookedTo
-                : projectEnd.GetValueOrDefault();
+            DateTime availabilitySpanStart;
+            DateTime availabilitySpanEnd;
+            if ((projectStart.GetValueOrDefault(DateTime.MaxValue) - bookedFrom).Days < 0)
+            {
+                availabilitySpanStart = projectStart.GetValueOrDefault();
+                availabilitySpanEnd = checkSpanEnd(projectEnd.GetValueOrDefault(DateTime.MaxValue), bookedFrom);
+            }
+            else
+            {
+                availabilitySpanStart = bookedFrom;
+                availabilitySpanEnd = checkSpanEnd(projectEnd.GetValueOrDefault(DateTime.MaxValue), bookedTo);
+            }
             
             return (availabilitySpanEnd - availabilitySpanStart).Days;
+        }
+
+        private DateTime checkSpanEnd(DateTime projectEnd, DateTime bookedTo)
+        {
+            return (projectEnd - bookedTo).Days > 0
+                ? bookedTo
+                : projectEnd;
         }
     }
 }
