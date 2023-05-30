@@ -15,7 +15,7 @@ namespace ResourceMaster.Services.CustomerService
             _logger = logger;
         }
 
-        public async Task<IEnumerable<AvailabilityViewModel>> GetAvailability(int id, DateTime? from, DateTime? to)
+        public virtual async Task<IEnumerable<AvailabilityViewModel>> GetAvailability(int id, DateTime? from, DateTime? to)
         {
             _logger.LogInformation("GetAllAsync Method called");
             var availabilityList =  await _repository.GetAvailability(id, from, to);
