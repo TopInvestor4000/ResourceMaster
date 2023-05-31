@@ -74,5 +74,44 @@ namespace ResourceMaster.Tests.Services
             Assert.AreEqual("JAVA", result[0].BestSkill.SkillName);
             Assert.AreEqual(1, result[0].BestOverallScore);
         }
+        
+        [Test]
+        public async Task MatchResources_noResourcesShouldBeInResultingList()
+        {
+            // Arrange
+            var project = new ProjectViewModel
+            {
+                Customer = new CustomerViewModel
+                {
+                    Id = 1, CompanyName = "Company 1", FirstName = "John", LastName = "Doe", Street = "123 Main St",
+                    ZipCode = "12345", Location = "City", Country = "Country", Project = new List<ProjectViewModel>()
+                },
+                Id = 1, ProjectEnd = new DateTime(2000, 10, 15), ProjectName = "Test",
+                ProjectResources = new List<ProjectResourceViewModel>(), ProjectStart = new DateTime(2000, 10, 10),
+                Skills = new List<SkillInformationViewModel>()
+
+            };
+            
+            project.Skills.Add(new SkillInformationViewModel{ Id = 2, IsCertification = true, Necessity = "true", RequiredWorkHours = 10, Skill = new SkillViewModel {Id = 10, SkillName = "JAVA"}, SkillId = 2, SkillLevel = SkillLevel.Beginner});
+            
+            var availableResources = new List<ResourceViewModel>
+            {
+                new() { Id = 1, FirstName = "John", LastName = "Doe", Age = 30, Skills = new()},
+            };
+            
+            availableResources[0].Skills.Add(new SkillInformationViewModel{ Id = 2, IsCertification = true, Necessity = "true", RequiredWorkHours = 10, Skill = new SkillViewModel {Id = 10, SkillName = "PHP"}, SkillId = 2, SkillLevel = SkillLevel.Beginner});
+            
+            _resourceServiceMock
+                .Setup(repo => repo.GetAllWithInclude())
+                .ReturnsAsync(availableResources);
+
+            // Act
+            var result = await _matchingService.MatchResourcesToProjectAsync(project);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOf<IEnumerable<MatchingResourceViewModel>>(result);
+            Assert.AreEqual(0, result.Count());
+        }
     }
 }
